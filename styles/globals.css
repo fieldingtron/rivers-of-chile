@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+p {
+  margin: 1rem 0;
+  line-height: 1.8;
+}
+
+.blog-text ul,
+ol {
+  font-size: 1.5rem;
+  line-height: 2.3;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.blog-text h1 {
+  font-size: 2rem;
+}
+
+.blog-text h2 {
+  font-size: 1.5rem;
+}
+
+.blog-text h3 {
+  font-size: 1.2rem;
+}
+.aligncenter,.alignnone {
+  display: block;
+  margin: 0.5rem auto;
+  max-width: 80vw;
+  height: auto;
+}

@@ -1,5 +1,4 @@
-import Layout from '../components/Layout'
-import Header from '../components/Header'
+import Layout from "../components/Layout"
 import Link from 'next/link'
 import River from '../components/River'
 
@@ -59,7 +58,7 @@ export async function getStaticProps() {
   const json = await response.json()
 
   // console.log('data here')
-  console.log(json.data.posts.nodes)
+  //console.log(json.data.posts.nodes)
 
   return {
     props: {

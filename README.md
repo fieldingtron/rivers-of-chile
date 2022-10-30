@@ -12,4 +12,23 @@
 
 ## Map marking put in and take out
 
-##
+## To-dos
+
+* recover latitude / long data
+* prototype river post page with map with put in labels
+* clean up posts / fill in data like popularity and latitude / long
+
+## Helpful Websites
+
+* <https://faustjs.org/> - Possible framework
+* <https://wpengine.com/atlas/> - backend service
+
+### Styling
+
+* (<https://tailwindgrids.com/>) - to set the grids
+* (<https://tailblocks.cc/>) - block components
+* (<<https://blog.logrocket.com/> -10-best-tailwind-css-component-template-collections/>)  - good resources
+
+### Ideas
+
+* <https://support.getshifter.io/en/articles/2456788-wp-serverless-search>  - Check it out
