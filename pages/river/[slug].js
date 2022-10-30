@@ -27,7 +27,7 @@ export default function RiverPage({ river }) {
           <div className="flex items-center">
           <img
               src='/images/kurt-casey.jpg'
-              className='mx-4 w-10 h-10 object-cover rounded-full hidden sm:block'
+              className='mx-4 w-10 h-10 object-cover rounded-full hidden sm:block' alt="author kurt"
             />
             <h3 className='text-gray-700 font-bold'>Kurt Casey</h3>
           </div>
@@ -78,8 +78,8 @@ export async function getStaticProps({ params }) {
   })
 
   const json = await response.json()
-  console.log('dataxx here')
-  console.log(json.data)
+  //console.log('river data here')
+  //console.log(json.data)
   return {
     props: {
       river: json.data.post,

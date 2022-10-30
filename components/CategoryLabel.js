@@ -18,9 +18,8 @@ function classColor(number) {
 
 export default function CategoryLabel({ children }) {
   let bgcolor = classColor(children)
-  console.log(children)
-
-  console.log(bgcolor)
+  //console.log(children)
+  //console.log(bgcolor)
   return (
     <div className={`px-2 py-1 text-gray-100 ${bgcolor} font-bold rounded`}>
       <Link href={`/class/${children}`}>Class {children}</Link>

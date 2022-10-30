@@ -19,7 +19,7 @@ export default function Header() {
         </Link>
         <nav className='flex flex-wrap md:w-3/5 items-center justify-end text-base md:ml-auto'>
           <Link
-            href='/db/'
+            href='/river/'
             className='mx-5 cursor-pointer uppercase hover:text-indigo-300'
           >
             Rivers Search

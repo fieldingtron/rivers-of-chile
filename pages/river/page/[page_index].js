@@ -1,8 +1,8 @@
-import Layout from "../components/Layout"
+import Layout from "../../../components/Layout"
 import Link from 'next/link'
-import River from '../components/River'
+import River from '../../../components/River'
 
-export default function Home({ posts }) {
+export default function RiverPage({ posts }) {
   //console.log(posts)
   return (
     <Layout>
@@ -22,6 +22,48 @@ export default function Home({ posts }) {
       </Link>
     </Layout>
   )
+}
+
+async function getNumberOfRivers(){
+  const { API_URL } = process.env
+  const response = await fetch(`${API_URL}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `
+      query GetPostsEdges {
+        posts(first: 100, where: {categoryNotIn: "158"}) {
+          nodes {
+            id
+            title
+          }
+        }
+      }`,
+    }),
+  })
+  //console.log('json search')
+  const json = await response.json()
+  //console.log(json.data.posts.nodes)
+  return json.data.posts.nodes.length
+}
+
+export async function getStaticPaths() {
+  const riversPerPage = 6
+  const numRivers = await getNumberOfRivers()
+  console.log(numRivers)
+  const numPages = Math.ceil(numRivers/riversPerPage)
+  const paths = []
+  for (let index = 1; index <= numPages; index++) {
+    paths.push({
+      params: { page_index: index.toString() },
+    })
+  }
+
+  console.log(paths)
+  
+  return { paths, fallback: false }
 }
 
 export async function getStaticProps() {
