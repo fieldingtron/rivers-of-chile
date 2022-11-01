@@ -1,8 +1,11 @@
 import Layout from "../../../components/Layout"
 import Link from 'next/link'
 import River from '../../../components/River'
+import Pagination from "../../../components/Pagination"
 
-export default function RiverPage({ posts }) {
+const POSTS_PER_PAGE = 6
+
+export default function RiverPage({ posts, numPages,currentPage }) {
   //console.log(posts)
   return (
     <Layout>
@@ -15,11 +18,12 @@ export default function RiverPage({ posts }) {
       </div>
 
       <Link
-        href='/blog'
+        href='/river'
         className='block text-center border border-gray-500 text-gray-500 rounded-md py-4 my-5 transition duration ease select-none hover:text-white hover:bg-gray-900 focus:outline-none focus:shadow-outline w-full'
       >
         All Rivers
       </Link>
+      <Pagination currentPage={currentPage} numPages={numPages} />
     </Layout>
   )
 }
@@ -50,10 +54,9 @@ async function getNumberOfRivers(){
 }
 
 export async function getStaticPaths() {
-  const riversPerPage = 6
   const numRivers = await getNumberOfRivers()
-  console.log(numRivers)
-  const numPages = Math.ceil(numRivers/riversPerPage)
+  //console.log(numRivers)
+  const numPages = Math.ceil(numRivers/POSTS_PER_PAGE)
   const paths = []
   for (let index = 1; index <= numPages; index++) {
     paths.push({
@@ -66,7 +69,8 @@ export async function getStaticPaths() {
   return { paths, fallback: false }
 }
 
-export async function getStaticProps() {
+export async function getStaticProps({params}) {
+  const page = parseInt((params && params.page_index ) || 1 )
   const { API_URL } = process.env
   const response = await fetch(`${API_URL}`, {
     method: 'POST',
@@ -100,10 +104,19 @@ export async function getStaticProps() {
 
   // console.log('data here')
   //console.log(json.data.posts.nodes)
+  const rivers = json.data.posts.nodes
+  const numRivers = await getNumberOfRivers()
+
+
+  const numPages = Math.ceil(numRivers/POSTS_PER_PAGE)
+  const pageIndex = page -1 
+  const orderedRivers = rivers.slice(pageIndex * POSTS_PER_PAGE , (pageIndex + 1) * POSTS_PER_PAGE)
+
 
   return {
     props: {
-      posts: json.data.posts.nodes,
+      posts: orderedRivers, numPages  , currentPage: page 
+
     },
   }
 }

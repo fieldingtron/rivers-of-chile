@@ -21,13 +21,13 @@
 ## Helpful Websites
 
 * <https://faustjs.org/> - Possible framework
-* <https://wpengine.com/atlas/> - backend service
+* <https://wpengine.com/atlas/> - backend service wordpress / next.js
 
 ### Styling
 
-* (<https://tailwindgrids.com/>) - to set the grids
-* (<https://tailblocks.cc/>) - block components
-* (<<https://blog.logrocket.com/> -10-best-tailwind-css-component-template-collections/>)  - good resources
+* <https://tailwindgrids.com/> - to set the grids
+* <https://tailblocks.cc/> - block components
+* <https://blog.logrocket.com/> -10-best-tailwind-css-component-template-collections/>)  - good resources
 
 ### Ideas
 

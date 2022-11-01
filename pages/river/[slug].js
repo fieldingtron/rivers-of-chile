@@ -1,9 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import Layout from '../../components/Layout'
-import Link from 'next/link'
-import CategoryLabel from '../../components/CategoryLabel'
-import { getRandomArbitrary, truncate, removeTags,convDate }  from "../../utils"
+import Layout from '@/components/Layout'
+import CategoryLabel from '@/components/CategoryLabel'
+import { getRandomArbitrary, truncate, removeTags,convDate }  from "@/utils/index"
 
 export default function RiverPage({ river }) {
   console.log(river)
