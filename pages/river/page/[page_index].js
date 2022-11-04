@@ -5,15 +5,13 @@ import Pagination from "../../../components/Pagination"
 
 const POSTS_PER_PAGE = 6
 
-export default function RiverPage({ posts, numPages,currentPage }) {
-  //console.log(posts)
+export default function RiverPage({ rivers, numPages,currentPage }) {
   return (
     <Layout>
       <h1 className='text-4xl font-bold border-b-4 p-2'>Popular Rivers</h1>
-
       <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-5'>
-        {posts.map((post, index) => (
-          <River key={index} post={post} />
+        {rivers.map((river, index) => (
+          <River key={index} river={river} />
         ))}
       </div>
 
@@ -38,7 +36,7 @@ async function getNumberOfRivers(){
     body: JSON.stringify({
       query: `
       query GetPostsEdges {
-        posts(first: 100, where: {categoryNotIn: "158"}) {
+        posts(first: 1000, where: {categoryNotIn: "158"}) {
           nodes {
             id
             title
@@ -47,15 +45,12 @@ async function getNumberOfRivers(){
       }`,
     }),
   })
-  //console.log('json search')
   const json = await response.json()
-  //console.log(json.data.posts.nodes)
   return json.data.posts.nodes.length
 }
 
 export async function getStaticPaths() {
   const numRivers = await getNumberOfRivers()
-  //console.log(numRivers)
   const numPages = Math.ceil(numRivers/POSTS_PER_PAGE)
   const paths = []
   for (let index = 1; index <= numPages; index++) {
@@ -64,7 +59,6 @@ export async function getStaticPaths() {
     })
   }
 
-  console.log(paths)
   
   return { paths, fallback: false }
 }
@@ -80,11 +74,17 @@ export async function getStaticProps({params}) {
     body: JSON.stringify({
       query: `
       query GetPostsEdges {
-        posts(first: 100, where: {categoryNotIn: "158"}) {
+        posts(first: 1000, where: {categoryNotIn: "158"}) {
           nodes {
             id
             title
             date
+            categories {
+              nodes {
+                id
+                name
+              }
+            }
             authorId
             slug
             excerpt 
@@ -101,12 +101,8 @@ export async function getStaticProps({params}) {
   })
 
   const json = await response.json()
-
-  // console.log('data here')
-  //console.log(json.data.posts.nodes)
   const rivers = json.data.posts.nodes
   const numRivers = await getNumberOfRivers()
-
 
   const numPages = Math.ceil(numRivers/POSTS_PER_PAGE)
   const pageIndex = page -1 
@@ -115,7 +111,7 @@ export async function getStaticProps({params}) {
 
   return {
     props: {
-      posts: orderedRivers, numPages  , currentPage: page 
+      rivers: orderedRivers, numPages  , currentPage: page 
 
     },
   }

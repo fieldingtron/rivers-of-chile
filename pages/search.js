@@ -15,7 +15,6 @@ export default function SearchPage() {
         />
         <h1 className='text-6xl my-5'>Search Away!</h1>
         <SearchForm/>
-        <h2 className='text-4xl text-gray-400'>Seek and you will find</h2>
       </div>
     </Layout>
   )

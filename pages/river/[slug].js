@@ -3,11 +3,9 @@ import CategoryLabel from '@/components/CategoryLabel'
 import { getRandomArbitrary, truncate, removeTags,convDate }  from "@/utils/index"
 
 export default function RiverPage({ river }) {
-  console.log(river)
 
   const numz = getRandomArbitrary(5)
   const randomURL = `/images/whitewater${numz}-16x9-1024x576.jpg`
-  //console.log(numz)
   const imageURL = river.riverInfo?.imagez?.mediaItemUrl ?? randomURL
 
   return (
@@ -44,8 +42,7 @@ export default function RiverPage({ river }) {
 }
 
 export async function getStaticProps({ params }) {
-  //console.log(params)
-  //console.log('here are parameters')
+
   const { API_URL } = process.env
   const response = await fetch(`${API_URL}`, {
     method: 'POST',
@@ -75,8 +72,6 @@ export async function getStaticProps({ params }) {
   })
 
   const json = await response.json()
-  //console.log('river data here')
-  //console.log(json.data)
   return {
     props: {
       river: json.data.post,
@@ -94,7 +89,7 @@ export async function getStaticPaths() {
     body: JSON.stringify({
       query: `
       query GetPostsEdges {
-        posts(first: 100, where: {categoryNotIn: "158"}) {
+        posts(first: 1000, where: {categoryNotIn: "158"}) {
           nodes {
             title
             date
@@ -106,9 +101,6 @@ export async function getStaticPaths() {
   })
 
   const json = await response.json()
-
-  console.log('data here')
-  console.log(json.data.posts.nodes)
 
   // Get the paths we want to pre-render based on posts
   const paths = json.data.posts.nodes.map((post) => ({

@@ -1,18 +1,22 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import CategoryLabel from './CategoryLabel'
-import { getRandomArbitrary, truncate, removeTags } from '../utils'
+import { getRandomArbitrary, truncate, removeTags,getClassOfRiver } from '../utils'
 
+export default function River({ river }) {
 
-export default function River({ post }) {
+  if (!river) {
+    return null
+  }
   const numz = getRandomArbitrary(5)
   const randomURL = `/images/whitewater${numz}-16x9-1024x576.jpg`
-  //console.log(numz)
-  const imageURL = post.riverInfo?.imagez?.mediaItemUrl ?? randomURL
+  const imageURL = river?.riverInfo?.imagez?.mediaItemUrl ?? randomURL
+
+  const classNum = getClassOfRiver(river)
 
   return (
     <div className=' w-full px-10 py-6 bg-white rounded-lg shadow-md mt-6'>
-      <Link href={`/river/${post.slug}`}>
+      <Link href={`/river/${river.slug}`}>
         <Image
           src={imageURL}
           alt='Chilean River'
@@ -24,24 +28,24 @@ export default function River({ post }) {
 
       <div className='flex justify-between items-center'>
         <span className='text-gray-600 '>
-          {post.riverInfo?.region ?? 'Region 8'}
+          {river.riverInfo?.region ?? 'Region 8'}
         </span>
-        <CategoryLabel>{post.riverInfo?.class ?? 3}</CategoryLabel>
+        <CategoryLabel>{classNum}</CategoryLabel>
       </div>
       <div className='mt-2'>
         <Link
-          href={`/river/${post.slug}`}
+          href={`/river/${river.slug}`}
           className='text-xl text-gray-700 font-bold hover:underline'
         >
-          {post.title}
+          {river.title}
         </Link>
         <div className='mt-2 text-gray-600'>
-          {truncate(removeTags(post.excerpt), 20)}
+          {truncate(removeTags(river.excerpt), 20)}
         </div>
 
         <div className='flex justify-between items-center mt-6'>
           <Link
-            href={`/river/${post.slug}`}
+            href={`/river/${river.slug}`}
             className='text-gray-900 hover:text-blue-600'
           >
             Read More

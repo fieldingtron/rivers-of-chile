@@ -1,5 +1,5 @@
 import Head from 'next/head'
-
+import Search from './Search'
 import Header from './Header'
 
 export default function Layout({ title, description, children }) {
@@ -32,6 +32,8 @@ export default function Layout({ title, description, children }) {
         <meta name='theme-color' content='#ffffff'></meta>
       </Head>
       <Header />
+      <Search />
+      
       <main className='container mx-auto my-7'>{children}</main>
     </>
   )
