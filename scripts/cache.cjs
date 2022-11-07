@@ -1,5 +1,8 @@
 const fs = require('fs')
-const API_URL = "https://riversofchile.com/graphql"
+
+const ENCODED_URL ="aHR0cHM6Ly93cC5yaXZlcnNvZmNoaWxlLmNvbS9ncmFwaHFs"
+
+const API_URL = Buffer.from(ENCODED_URL).toString('base64')
 
 try {
   fs.readdirSync('cache')
