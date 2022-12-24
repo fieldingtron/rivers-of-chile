@@ -9,7 +9,7 @@ p {
 
 .blog-text ul,
 ol {
-  font-size: 1.5rem;
+  /*font-size: 1.5rem;*/
   line-height: 2.3;
   font-weight: bold;
   margin-top: 1rem;
