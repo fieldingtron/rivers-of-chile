@@ -1,5 +1,10 @@
 # Todo Items for first version of Rivers Of Chile
 
+## to make live set 2 DNS records to
+
+* @ A  76.76.21.21
+* www CNAME  cname.vercel-dns.com
+
 ## Standardize Thumbnail Images for Homepage  16 x 9 ratio center crop
 
 * 1440p: 2560×1440
