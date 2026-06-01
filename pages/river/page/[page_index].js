@@ -38,38 +38,22 @@ export async function getStaticPaths() {
   }
 }
 
+import fs from 'fs'
+import path from 'path'
+
 export async function getStaticProps({params}) {
   const page = 1
-  const API_URL = process.env.API_URL || DEFAULT_API_URL
-  const response = await fetch(`${API_URL}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-      query RiverNfo {
-        post(id: "rio-niblinto-de-malleco", idType: SLUG) {
-          id
-            title
-            date
-            authorId
-            content
-            slug
-            excerpt 
-            riverInfo {
-              class
-              imagez {
-                mediaItemUrl
-              }
-            }
-        }
-      } `,
-    }),
-  })
-
-  const json = await response.json()
-  const river = json.data.post ? [json.data.post] : []
+  let river = [];
+  try {
+    const filePath = path.join(process.cwd(), 'data', 'sample-river.json');
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+    const json = JSON.parse(fileContents);
+    if (json.data?.post) {
+      river = [json.data.post];
+    }
+  } catch (error) {
+    console.error('Error reading local sample-river.json', error);
+  }
 
   return {
     props: {

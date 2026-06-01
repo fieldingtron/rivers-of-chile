@@ -43,40 +43,23 @@ export default function RiverPage({ river }) {
   )
 }
 
+import fs from 'fs'
+import path from 'path'
+
 export async function getStaticProps({ params }) {
+  let river = null;
+  try {
+    const filePath = path.join(process.cwd(), 'data', 'sample-river.json');
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+    const json = JSON.parse(fileContents);
+    river = json.data?.post || null;
+  } catch (error) {
+    console.error('Error reading local sample-river.json', error);
+  }
 
-  const API_URL = process.env.API_URL || DEFAULT_API_URL
-  const response = await fetch(`${API_URL}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-      query RiverNfo {
-        post(id: "${params.slug}", idType: SLUG) {
-          id
-            title
-            date
-            authorId
-            content
-            slug
-            excerpt 
-            riverInfo {
-              class
-              imagez {
-                mediaItemUrl
-              }
-            }
-        }
-      } `,
-    }),
-  })
-
-  const json = await response.json()
   return {
     props: {
-      river: json.data.post,
+      river,
     },
   }
 }
