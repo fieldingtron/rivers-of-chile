@@ -43,21 +43,18 @@ import path from 'path'
 
 export async function getStaticProps({params}) {
   const page = 1
-  let river = [];
+  let rivers = [];
   try {
-    const filePath = path.join(process.cwd(), 'data', 'sample-river.json');
+    const filePath = path.join(process.cwd(), 'data', 'home-rivers.json');
     const fileContents = fs.readFileSync(filePath, 'utf8');
-    const json = JSON.parse(fileContents);
-    if (json.data?.post) {
-      river = [json.data.post];
-    }
+    rivers = JSON.parse(fileContents);
   } catch (error) {
-    console.error('Error reading local sample-river.json', error);
+    console.error('Error reading local home-rivers.json', error);
   }
 
   return {
     props: {
-      rivers: river, numPages: 1, currentPage: page 
+      rivers: rivers, numPages: 1, currentPage: page 
     },
   }
 }

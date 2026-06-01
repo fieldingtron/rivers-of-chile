@@ -20,9 +20,12 @@ export default function River({ river }) {
 
   const classNum = getClassOfRiver(river)
 
+  const isSample = river.slug === 'rio-niblinto-de-malleco';
+  const Wrapper = isSample ? Link : 'a';
+
   return (
     <div className=' w-full px-10 py-6 bg-white rounded-lg shadow-md mt-6'>
-      <Link href={`/river/${river.slug}`}>
+      <Wrapper href={`/river/${river.slug}`}>
         <Image
           src={imageURL}
           alt='Chilean River'
@@ -30,7 +33,7 @@ export default function River({ river }) {
           width={640}
           className='mb-4 rounded mx-auto bg-fixed opacity-100 hover:opacity-75 transition duration-300 ease-in-out bg-slate-600'
         />
-      </Link>
+      </Wrapper>
 
       <div className='flex justify-between items-center'>
         <span className='text-gray-600 '>
@@ -39,23 +42,23 @@ export default function River({ river }) {
         <CategoryLabel>{classNum}</CategoryLabel>
       </div>
       <div className='mt-2'>
-        <Link
+        <Wrapper
           href={`/river/${river.slug}`}
           className='text-xl text-gray-700 font-bold hover:underline'
         >
           {river.title}
-        </Link>
+        </Wrapper>
         <div className='mt-2 text-gray-600'>
           {truncate(removeTags(river.excerpt), 20)}
         </div>
 
         <div className='flex justify-between items-center mt-6'>
-          <Link
+          <Wrapper
             href={`/river/${river.slug}`}
             className='text-gray-900 hover:text-blue-600'
           >
             Read More
-          </Link>
+          </Wrapper>
           <div className='flex items-center'>
             <img
               src='/images/kurt-casey.jpg'

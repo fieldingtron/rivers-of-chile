@@ -18,24 +18,24 @@ export default function Header() {
           <span className='ml-2 text-xl'>Rivers Of Chile</span>
         </Link>
         <nav className='flex flex-wrap md:w-3/5 items-center justify-end text-base md:ml-auto'>
-          <Link
-            href='/river/'
+          <a
+            href='https://riversofchile.com/river/'
             className='mx-5 cursor-pointer uppercase hover:text-indigo-300'
           >
             Rivers Search
-          </Link>
-          <Link
-            href='/dedication/'
+          </a>
+          <a
+            href='https://riversofchile.com/dedication/'
             className='mx-5 cursor-pointer uppercase hover:text-indigo-300'
           >
             Dedication
-          </Link>
-          <Link
-            href='/authors/'
+          </a>
+          <a
+            href='https://riversofchile.com/authors/'
             className='mx-5 cursor-pointer uppercase hover:text-indigo-300'
           >
             Authors
-          </Link>
+          </a>
         </nav>
       </div>
     </header>
