@@ -4,6 +4,7 @@ import River from '../../../components/River'
 import Pagination from "../../../components/Pagination"
 
 const POSTS_PER_PAGE = 6
+const DEFAULT_API_URL = 'https://wp.riversofchile.com/graphql'
 
 export default function RiverPage({ rivers, numPages,currentPage }) {
   return (
@@ -27,45 +28,19 @@ export default function RiverPage({ rivers, numPages,currentPage }) {
 }
 
 async function getNumberOfRivers(){
-  const { API_URL } = process.env
-  const response = await fetch(`${API_URL}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-      query GetPostsEdges {
-        posts(first: 1000, where: {categoryNotIn: "158"}) {
-          nodes {
-            id
-            title
-          }
-        }
-      }`,
-    }),
-  })
-  const json = await response.json()
-  return json.data.posts.nodes.length
+  return 1
 }
 
 export async function getStaticPaths() {
-  const numRivers = await getNumberOfRivers()
-  const numPages = Math.ceil(numRivers/POSTS_PER_PAGE)
-  const paths = []
-  for (let index = 1; index <= numPages; index++) {
-    paths.push({
-      params: { page_index: index.toString() },
-    })
+  return { 
+    paths: [{ params: { page_index: '1' } }], 
+    fallback: false 
   }
-
-  
-  return { paths, fallback: false }
 }
 
 export async function getStaticProps({params}) {
-  const page = parseInt((params && params.page_index ) || 1 )
-  const { API_URL } = process.env
+  const page = 1
+  const API_URL = process.env.API_URL || DEFAULT_API_URL
   const response = await fetch(`${API_URL}`, {
     method: 'POST',
     headers: {
@@ -73,19 +48,13 @@ export async function getStaticProps({params}) {
     },
     body: JSON.stringify({
       query: `
-      query GetPostsEdges {
-        posts(first: 1000, where: {categoryNotIn: "158"}) {
-          nodes {
-            id
+      query RiverNfo {
+        post(id: "rio-niblinto-de-malleco", idType: SLUG) {
+          id
             title
             date
-            categories {
-              nodes {
-                id
-                name
-              }
-            }
             authorId
+            content
             slug
             excerpt 
             riverInfo {
@@ -94,25 +63,17 @@ export async function getStaticProps({params}) {
                 mediaItemUrl
               }
             }
-          }
         }
-      }`,
+      } `,
     }),
   })
 
   const json = await response.json()
-  const rivers = json.data.posts.nodes
-  const numRivers = await getNumberOfRivers()
-
-  const numPages = Math.ceil(numRivers/POSTS_PER_PAGE)
-  const pageIndex = page -1 
-  const orderedRivers = rivers.slice(pageIndex * POSTS_PER_PAGE , (pageIndex + 1) * POSTS_PER_PAGE)
-
+  const river = json.data.post ? [json.data.post] : []
 
   return {
     props: {
-      rivers: orderedRivers, numPages  , currentPage: page 
-
+      rivers: river, numPages: 1, currentPage: page 
     },
   }
 }

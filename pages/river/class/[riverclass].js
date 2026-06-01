@@ -3,6 +3,8 @@ import Link from 'next/link'
 import River from '@/components/River'
 import { filterRiversByClass } from "@/utils/index"
 
+const DEFAULT_API_URL = 'https://wp.riversofchile.com/graphql'
+
 export default function ClassRatingHome({ rivers, riverclass }) {
   const categories = [1,2,3,4,5]
   
@@ -45,68 +47,17 @@ export default function ClassRatingHome({ rivers, riverclass }) {
 }
 
 export async function getStaticProps({ params: { riverclass } }) {
-  const { API_URL } = process.env
-  const response = await fetch(`${API_URL}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-      query GetPostsEdges {
-        posts(first: 1000, where: {categoryNotIn: "158"}) {
-          nodes {
-            id
-            title
-            date
-            authorId
-            categories {
-              nodes {
-                id
-                name
-              }
-            }
-            slug
-            excerpt 
-            riverInfo {
-              class
-              imagez {
-                mediaItemUrl
-              }
-            }
-          }
-        }
-      }`,
-    }),
-  })
-
-  const json = await response.json()
-
-  console.log(`searching for RIVER CLASS ${riverclass} among ${json.data.posts.nodes.length} elements`)
-
-  const filteredRivers = filterRiversByClass(riverclass,json.data.posts.nodes)
-  console.log(filteredRivers.length)
-
-
   return {
     props: {
-      rivers: filteredRivers,
-      riverclass : riverclass
+      rivers: [],
+      riverclass: riverclass || "3"
     },
   }
 }
 
-
 export async function getStaticPaths() {
-
-  const riverclasses = [1,2,3,4,5]
-   
-  const paths = riverclasses.map((riverclass) => ({
-    params: { riverclass: riverclass.toString() },
-  }))
-
   return {
-    paths,
+    paths: [],
     fallback: false,
   }
 }

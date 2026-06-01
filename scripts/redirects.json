@@ -1,0 +1,792 @@
+[
+  {
+    "source": "/river/rio-amargo",
+    "destination": "https://riversofchile.com/rio-amargo/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-renaico",
+    "destination": "https://riversofchile.com/rio-renaico/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-cholguan",
+    "destination": "https://riversofchile.com/rio-cholguan/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-huepil",
+    "destination": "https://riversofchile.com/rio-huepil/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-bullileo",
+    "destination": "https://riversofchile.com/rio-bullileo/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-lolco",
+    "destination": "https://riversofchile.com/rio-lolco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/futaleufu-riverkeeper",
+    "destination": "https://riversofchile.com/futaleufu-riverkeeper/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-blanco-del-sur",
+    "destination": "https://riversofchile.com/rio-blanco-del-sur/",
+    "permanent": true
+  },
+  {
+    "source": "/river/whitewater-grand-prix",
+    "destination": "https://riversofchile.com/whitewater-grand-prix/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-pichipinga-or-llaima",
+    "destination": "https://riversofchile.com/rio-pichipinga-or-llaima/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-manio",
+    "destination": "https://riversofchile.com/rio-manio/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-reca",
+    "destination": "https://riversofchile.com/rio-reca/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-huichahue",
+    "destination": "https://riversofchile.com/rio-huichahue/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-el-tigre",
+    "destination": "https://riversofchile.com/rio-el-tigre/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-noroeste",
+    "destination": "https://riversofchile.com/rio-noroeste/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-hielo",
+    "destination": "https://riversofchile.com/rio-hielo/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-blanco-de-calbuco",
+    "destination": "https://riversofchile.com/rio-blanco-de-calbuco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/lower-llancahue",
+    "destination": "https://riversofchile.com/lower-llancahue/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-blanco-del-enco",
+    "destination": "https://riversofchile.com/rio-blanco-del-enco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-polcura",
+    "destination": "https://riversofchile.com/rio-polcura/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-rucue",
+    "destination": "https://riversofchile.com/rio-rucue/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-curacalco",
+    "destination": "https://riversofchile.com/rio-curacalco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-niblinto",
+    "destination": "https://riversofchile.com/rio-niblinto/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-cato",
+    "destination": "https://riversofchile.com/rio-cato/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-chillan",
+    "destination": "https://riversofchile.com/rio-chillan/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-nirementum",
+    "destination": "https://riversofchile.com/rio-nirementum/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-quillaleo",
+    "destination": "https://riversofchile.com/rio-quillaleo/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-codihue",
+    "destination": "https://riversofchile.com/rio-codihue/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-claro-pucon",
+    "destination": "https://riversofchile.com/rio-claro-pucon/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-maier",
+    "destination": "https://riversofchile.com/rio-maier/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-mosco",
+    "destination": "https://riversofchile.com/rio-mosco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-perez",
+    "destination": "https://riversofchile.com/rio-perez/",
+    "permanent": true
+  },
+  {
+    "source": "/river/cancel-hidroaysen",
+    "destination": "https://riversofchile.com/cancel-hidroaysen/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-frey",
+    "destination": "https://riversofchile.com/rio-frey/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-corcovado",
+    "destination": "https://riversofchile.com/rio-corcovado/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-bonito",
+    "destination": "https://riversofchile.com/rio-bonito/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-pilmaiquen",
+    "destination": "https://riversofchile.com/rio-pilmaiquen/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-coihueco",
+    "destination": "https://riversofchile.com/rio-coihueco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-blanco-de-coihueco",
+    "destination": "https://riversofchile.com/rio-blanco-de-coihueco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-iculpe",
+    "destination": "https://riversofchile.com/rio-iculpe/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-hueinahue",
+    "destination": "https://riversofchile.com/rio-hueinahue/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-pangue",
+    "destination": "https://riversofchile.com/rio-pangue/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-las-truchas",
+    "destination": "https://riversofchile.com/rio-las-truchas/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-curaco",
+    "destination": "https://riversofchile.com/rio-curaco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/nublefest-2010-in-chile",
+    "destination": "https://riversofchile.com/nublefest-2010-in-chile/",
+    "permanent": true
+  },
+  {
+    "source": "/river/flying-to-chile-with-kayaks-2011",
+    "destination": "https://riversofchile.com/flying-to-chile-with-kayaks-2011/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-canahue",
+    "destination": "https://riversofchile.com/rio-canahue/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-trafanpulli",
+    "destination": "https://riversofchile.com/rio-trafanpulli/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-bio-bio-el-nacimiento",
+    "destination": "https://riversofchile.com/rio-bio-bio-el-nacimiento/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-bio-bio-lower",
+    "destination": "https://riversofchile.com/rio-bio-bio-lower/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-renegado",
+    "destination": "https://riversofchile.com/rio-renegado/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-dillo",
+    "destination": "https://riversofchile.com/rio-dillo/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-captren",
+    "destination": "https://riversofchile.com/rio-captren/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-blanco-cautin",
+    "destination": "https://riversofchile.com/rio-blanco-cautin/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-calbuco",
+    "destination": "https://riversofchile.com/rio-calbuco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-manso-nahual-huapi",
+    "destination": "https://riversofchile.com/rio-manso-nahual-huapi/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-palena",
+    "destination": "https://riversofchile.com/rio-palena/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-cisnes-piedra-del-gato",
+    "destination": "https://riversofchile.com/rio-cisnes-piedra-del-gato/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-cajon",
+    "destination": "https://riversofchile.com/rio-cajon/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-fuy-lower",
+    "destination": "https://riversofchile.com/rio-fuy-lower/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-blanco-cerro-castillo",
+    "destination": "https://riversofchile.com/rio-blanco-cerro-castillo/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-petrohue-upper",
+    "destination": "https://riversofchile.com/rio-petrohue-upper/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-petrohue-lower",
+    "destination": "https://riversofchile.com/rio-petrohue-lower/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-claro-tinguiririca-2",
+    "destination": "https://riversofchile.com/rio-claro-tinguiririca-2/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-cisnes-upper",
+    "destination": "https://riversofchile.com/rio-cisnes-upper/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-salto-del-tigre",
+    "destination": "https://riversofchile.com/rio-salto-del-tigre/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-resbalon",
+    "destination": "https://riversofchile.com/rio-resbalon/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-cachapoal-upper",
+    "destination": "https://riversofchile.com/rio-cachapoal-upper/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-cachapoal-lower",
+    "destination": "https://riversofchile.com/rio-cachapoal-lower/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-simpson-cajon-de-farrellones",
+    "destination": "https://riversofchile.com/rio-simpson-cajon-de-farrellones/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-simpson-lower",
+    "destination": "https://riversofchile.com/rio-simpson-lower/",
+    "permanent": true
+  },
+  {
+    "source": "/river/quebrada-el-toro",
+    "destination": "https://riversofchile.com/quebrada-el-toro/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-figueroa",
+    "destination": "https://riversofchile.com/rio-figueroa/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-clarillo-tinguiririca",
+    "destination": "https://riversofchile.com/rio-clarillo-tinguiririca/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-pangal",
+    "destination": "https://riversofchile.com/rio-pangal/",
+    "permanent": true
+  },
+  {
+    "source": "/river/estero-lechoso",
+    "destination": "https://riversofchile.com/estero-lechoso/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-teno",
+    "destination": "https://riversofchile.com/rio-teno/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-manihuales",
+    "destination": "https://riversofchile.com/rio-manihuales/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-claro-ibanez",
+    "destination": "https://riversofchile.com/rio-claro-ibanez/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-baker-lower",
+    "destination": "https://riversofchile.com/rio-baker-lower/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-cochrane",
+    "destination": "https://riversofchile.com/rio-cochrane/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-el-canal",
+    "destination": "https://riversofchile.com/rio-el-canal/",
+    "permanent": true
+  },
+  {
+    "source": "/river/estero-del-bosque",
+    "destination": "https://riversofchile.com/estero-del-bosque/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-jeinemeni",
+    "destination": "https://riversofchile.com/rio-jeinemeni/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-los-maitenes",
+    "destination": "https://riversofchile.com/rio-los-maitenes/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-aviles",
+    "destination": "https://riversofchile.com/rio-aviles/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-machin-upper",
+    "destination": "https://riversofchile.com/rio-machin-upper/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-llanquen",
+    "destination": "https://riversofchile.com/rio-llanquen/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-enco",
+    "destination": "https://riversofchile.com/rio-enco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-chalquilvin",
+    "destination": "https://riversofchile.com/rio-chalquilvin/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-futaleufu-terminator-section",
+    "destination": "https://riversofchile.com/rio-futaleufu-terminator-section/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-cautin",
+    "destination": "https://riversofchile.com/rio-cautin/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-laja-2",
+    "destination": "https://riversofchile.com/rio-laja-2/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-ralco",
+    "destination": "https://riversofchile.com/rio-ralco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-tolten",
+    "destination": "https://riversofchile.com/rio-tolten/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-queuco",
+    "destination": "https://riversofchile.com/rio-queuco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-aconcagua-salto-de-soldado",
+    "destination": "https://riversofchile.com/rio-aconcagua-salto-de-soldado/",
+    "permanent": true
+  },
+  {
+    "source": "/river/trancura-lower",
+    "destination": "https://riversofchile.com/trancura-lower/",
+    "permanent": true
+  },
+  {
+    "source": "/river/estero-coilaco",
+    "destination": "https://riversofchile.com/estero-coilaco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/florin-river",
+    "destination": "https://riversofchile.com/florin-river/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-colorado-lontue",
+    "destination": "https://riversofchile.com/rio-colorado-lontue/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-claro-los-quenes",
+    "destination": "https://riversofchile.com/rio-claro-los-quenes/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-claro-tinguiririca",
+    "destination": "https://riversofchile.com/rio-claro-tinguiririca/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-gonzalez",
+    "destination": "https://riversofchile.com/rio-gonzalez/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-volcan-lower",
+    "destination": "https://riversofchile.com/rio-volcan-lower/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-volcan-upper",
+    "destination": "https://riversofchile.com/rio-volcan-upper/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-colorado-aconcagua",
+    "destination": "https://riversofchile.com/rio-colorado-aconcagua/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-llancalil",
+    "destination": "https://riversofchile.com/rio-llancalil/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-sollipulli",
+    "destination": "https://riversofchile.com/rio-sollipulli/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-blanco-de-caburgua",
+    "destination": "https://riversofchile.com/rio-blanco-de-caburgua/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-malleco",
+    "destination": "https://riversofchile.com/rio-malleco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-ventisqueros",
+    "destination": "https://riversofchile.com/rio-ventisqueros/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-san-pedro",
+    "destination": "https://riversofchile.com/rio-san-pedro/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-longavi",
+    "destination": "https://riversofchile.com/rio-longavi/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-cochamo",
+    "destination": "https://riversofchile.com/rio-cochamo/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-blanco-hornopiren",
+    "destination": "https://riversofchile.com/rio-blanco-hornopiren/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-negro",
+    "destination": "https://riversofchile.com/rio-negro/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-diguillin",
+    "destination": "https://riversofchile.com/rio-diguillin/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-clarillo",
+    "destination": "https://riversofchile.com/rio-clarillo/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-colorado",
+    "destination": "https://riversofchile.com/rio-colorado/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-maipo",
+    "destination": "https://riversofchile.com/rio-maipo/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-puesco",
+    "destination": "https://riversofchile.com/rio-puesco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-rininahue",
+    "destination": "https://riversofchile.com/rio-rininahue/",
+    "permanent": true
+  },
+  {
+    "source": "/river/salto-del-nilahue",
+    "destination": "https://riversofchile.com/salto-del-nilahue/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-ancoa",
+    "destination": "https://riversofchile.com/rio-ancoa/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-gol-gol",
+    "destination": "https://riversofchile.com/rio-gol-gol/",
+    "permanent": true
+  },
+  {
+    "source": "/river/manso-gorge-in-argentina",
+    "destination": "https://riversofchile.com/manso-gorge-in-argentina/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-maule",
+    "destination": "https://riversofchile.com/rio-maule/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-espolon",
+    "destination": "https://riversofchile.com/rio-espolon/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-futaleufu-macal-section",
+    "destination": "https://riversofchile.com/rio-futaleufu-macal-section/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-futaleufu-bridge-to-bridge",
+    "destination": "https://riversofchile.com/rio-futaleufu-bridge-to-bridge/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-azul",
+    "destination": "https://riversofchile.com/rio-azul/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-palguin-upper",
+    "destination": "https://riversofchile.com/rio-palguin-upper/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-baker",
+    "destination": "https://riversofchile.com/rio-baker/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rios-queupude-alpehue",
+    "destination": "https://riversofchile.com/rios-queupude-alpehue/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-llizan",
+    "destination": "https://riversofchile.com/rio-llizan/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-michinmahuida",
+    "destination": "https://riversofchile.com/rio-michinmahuida/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-maichin",
+    "destination": "https://riversofchile.com/rio-maichin/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-panqui",
+    "destination": "https://riversofchile.com/rio-panqui/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-nuble",
+    "destination": "https://riversofchile.com/rio-nuble/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-achibueno",
+    "destination": "https://riversofchile.com/rio-achibueno/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-truful-truful",
+    "destination": "https://riversofchile.com/rio-truful-truful/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-carhuello",
+    "destination": "https://riversofchile.com/rio-carhuello/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-quepe",
+    "destination": "https://riversofchile.com/rio-quepe/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-yeso",
+    "destination": "https://riversofchile.com/rio-yeso/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-curringue",
+    "destination": "https://riversofchile.com/rio-curringue/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-llancahue",
+    "destination": "https://riversofchile.com/rio-llancahue/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-nevado",
+    "destination": "https://riversofchile.com/rio-nevado/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-plata",
+    "destination": "https://riversofchile.com/rio-plata/",
+    "permanent": true
+  },
+  {
+    "source": "/river/22-teacups-22-tazas-rio-claro",
+    "destination": "https://riversofchile.com/22-teacups-22-tazas-rio-claro/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-desague",
+    "destination": "https://riversofchile.com/rio-desague/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-turbio",
+    "destination": "https://riversofchile.com/rio-turbio/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-melado",
+    "destination": "https://riversofchile.com/rio-melado/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-blanco-de-maule",
+    "destination": "https://riversofchile.com/rio-blanco-de-maule/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-reyehueco",
+    "destination": "https://riversofchile.com/rio-reyehueco/",
+    "permanent": true
+  },
+  {
+    "source": "/river/river-fuy",
+    "destination": "https://riversofchile.com/river-fuy/",
+    "permanent": true
+  },
+  {
+    "source": "/river/alumine-river-argentina",
+    "destination": "https://riversofchile.com/alumine-river-argentina/",
+    "permanent": true
+  },
+  {
+    "source": "/river/rio-liucura",
+    "destination": "https://riversofchile.com/rio-liucura/",
+    "permanent": true
+  }
+]

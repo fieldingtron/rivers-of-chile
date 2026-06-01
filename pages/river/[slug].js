@@ -2,6 +2,8 @@ import Layout from '@/components/Layout'
 import CategoryLabel from '@/components/CategoryLabel'
 import { getRandomArbitrary, truncate, removeTags,convDate }  from "@/utils/index"
 
+const DEFAULT_API_URL = 'https://wp.riversofchile.com/graphql'
+
 export default function RiverPage({ river }) {
 
   const numz = getRandomArbitrary(5)
@@ -43,7 +45,7 @@ export default function RiverPage({ river }) {
 
 export async function getStaticProps({ params }) {
 
-  const { API_URL } = process.env
+  const API_URL = process.env.API_URL || DEFAULT_API_URL
   const response = await fetch(`${API_URL}`, {
     method: 'POST',
     headers: {
@@ -80,34 +82,12 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const { API_URL } = process.env
-  const response = await fetch(`${API_URL}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-      query GetPostsEdges {
-        posts(first: 1000, where: {categoryNotIn: "158"}) {
-          nodes {
-            title
-            date
-            slug
-          }
-        }
-      }`,
-    }),
-  })
-
-  const json = await response.json()
-
-  // Get the paths we want to pre-render based on posts
-  const paths = json.data.posts.nodes.map((post) => ({
-    params: { slug: post.slug },
-  }))
-
-  // We'll pre-render only these paths at build time.
-  // { fallback: false } means other routes should 404.
-  return { paths, fallback: false }
+  // We'll pre-render only the sample page at build time.
+  // { fallback: false } means other routes should 404 (or be redirected by next.config.js).
+  return { 
+    paths: [
+      { params: { slug: 'rio-niblinto-de-malleco' } }
+    ], 
+    fallback: false 
+  }
 }

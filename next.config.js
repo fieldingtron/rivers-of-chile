@@ -1,19 +1,32 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-}
+const fs = require('fs')
+const path = require('path')
 
-//module.exports = nextConfig
+const domainUrls = (process.env.DOMAIN_URLS || '')
+  .split(',')
+  .map((domain) => domain.trim())
+  .filter(Boolean)
+
+const defaultApiUrl = 'https://wp.riversofchile.com/graphql'
+const imageDomains = domainUrls.length ? domainUrls : ['wp.riversofchile.com']
+
+let generatedRedirects = []
+try {
+  generatedRedirects = JSON.parse(fs.readFileSync(path.join(__dirname, 'scripts', 'redirects.json'), 'utf8'))
+} catch (err) {
+  console.warn('Could not load redirects.json', err.message)
+}
 
 module.exports = {
   reactStrictMode: true,
   env: {
-    API_URL: process.env.API_URL,
+    API_URL: process.env.API_URL || defaultApiUrl,
   },
   images: {
     deviceSizes: [320, 420, 768, 1024, 1200],
     loader: 'default',
-    domains: process.env.DOMAIN_URLS.split(','),
+    domains: imageDomains,
+  },
+  async redirects() {
+    return generatedRedirects
   },
 }

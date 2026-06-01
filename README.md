@@ -1,39 +1,14 @@
-# Todo Items for first version of Rivers Of Chile
+# Rivers of Chile Restructuring Plan
 
-## to make live set 2 DNS records to
+We have implemented the following features and modifications:
 
-* @ A  76.76.21.21
-* www CNAME  cname.vercel-dns.com
+1.  **Vercel Site Modifications**
+    - Configured `<meta name="robots" content="noindex, nofollow" />` in the `<Layout>` component so the site will not be indexed.
+    - Updated `next.config.js` to redirect all river pages to `riversofchile.com` EXCEPT for `rio-niblinto-de-malleco`. The redirects are pre-generated from the old WP GraphQL list and saved to `scripts/redirects.json`.
+    - Modified `getStaticPaths` and `getStaticProps` to build statically and mock all paths except for the specific sample page.
 
-## Standardize Thumbnail Images for Homepage  16 x 9 ratio center crop
-
-* 1440p: 2560×1440
-* 1080p: 1920×1080
-* 720p: 1280×720
-* 1024 x 576
-* 480p: 854×480
-* 360p: 640×360
-* 240p: 426×240
-
-## Map marking put in and take out
-
-## To-dos
-
-* recover latitude / long data
-* prototype river post page with map with put in labels
-* clean up posts / fill in data like popularity and latitude / long
-
-## Helpful Websites
-
-* <https://faustjs.org/> - Possible framework
-* <https://wpengine.com/atlas/> - backend service wordpress / next.js
-
-### Styling
-
-* <https://tailwindgrids.com/> - to set the grids
-* <https://tailblocks.cc/> - block components
-* <https://blog.logrocket.com/> -10-best-tailwind-css-component-template-collections/>)  - good resources
-
-### Ideas
-
-* <https://support.getshifter.io/en/articles/2456788-wp-serverless-search>  - Check it out
+2.  **Strategy for WP Takedown**
+    The WordPress site `wp.riversofchile.com` is protected by Wordfence, which initially blocked scraping. To take it down:
+    - **Step A:** Whitelist the IP of the server running the export, or disable Wordfence temporarily.
+    - **Step B:** Export data using WP Admin (Tools -> Export), or use an automated script (like we tried with GraphQL/REST APIs) to download all content and images into JSON and markdown files.
+    - **Step C:** Configure a 301 redirect map on your new DNS provider or hosting (e.g., Vercel, Netlify) so that requests to `riversofchile.com/` properly route to their new homes.

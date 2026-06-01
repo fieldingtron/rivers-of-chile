@@ -1,15 +1,21 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import CategoryLabel from './CategoryLabel'
-import { getRandomArbitrary, truncate, removeTags,getClassOfRiver } from '../utils'
+import { truncate, removeTags,getClassOfRiver } from '../utils'
+
+const getFallbackImage = (slug) => {
+  const source = slug || 'river'
+  const hash = source.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0)
+  const imageIndex = (hash % 5) + 1
+  return `/images/whitewater${imageIndex}-16x9-1024x576.jpg`
+}
 
 export default function River({ river }) {
 
   if (!river) {
     return null
   }
-  const numz = getRandomArbitrary(5)
-  const randomURL = `/images/whitewater${numz}-16x9-1024x576.jpg`
+  const randomURL = getFallbackImage(river.slug)
   const imageURL = river?.riverInfo?.imagez?.mediaItemUrl ?? randomURL
 
   const classNum = getClassOfRiver(river)

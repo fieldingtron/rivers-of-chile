@@ -31,7 +31,7 @@ export function getClassOfRiver(river){
     return river.riverInfo.class.toString()
   }
   // then search wordpress categories
-  river?.categories.nodes.forEach(cat=>{
+  river?.categories?.nodes?.forEach(cat=>{
     if (cat.name.match("class")){
       const clazz =  cat.name.substring(cat.name.length-2,cat.name.length).trim()
       return clazz
