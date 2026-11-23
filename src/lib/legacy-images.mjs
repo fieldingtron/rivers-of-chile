@@ -62,6 +62,10 @@ export function variantUrl(manifest, variant) {
 export const MAX_DISPLAY_WIDTH = 2400;
 /** Default <img src> / fallback width for in-page photos. */
 export const DEFAULT_SRC_WIDTH = 1200;
+/** In-column photos fill the 1100px content measure. */
+export const CONTENT_SIZES = '(max-width: 1100px) 100vw, 1100px';
+/** Featured / first-standalone photo, up to the 1400px hero measure. */
+export const HERO_SIZES = '(max-width: 1400px) 100vw, 1400px';
 
 /**
  * Sizes a browser may use: every image variant <= 2400px wide, ascending,
@@ -96,6 +100,15 @@ export function featuredImageUrl(manifest, url) {
   const asset = assetFor(manifest, url);
   const pick = asset ? pickDisplay(asset) : undefined;
   return pick ? variantUrl(manifest, pick) : url || undefined;
+}
+
+/** The site logo (rox.webp) was used as a WordPress default featured image. */
+export function isPlaceholderFeatured(url, asset) {
+  const hay = [url, asset?.title, asset?.alt, ...(asset?.variants || []).map((v) => v.key)]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+  return /(?:^|\/)rox(?:[.-]|$)|rox-\d+x\d+/.test(hay);
 }
 
 function rewriteSrcset(value, manifest) {
@@ -159,7 +172,7 @@ export function addResponsiveAttrs(html, manifest) {
     let next = attrs;
     if (!/\ssrcset=/i.test(next)) {
       next += ` srcset="${variants.map((v) => `${variantUrl(manifest, v)} ${v.width}w`).join(', ')}"`;
-      next += ` sizes="(max-width: 1000px) 100vw, 1000px"`;
+      next += ` sizes="${CONTENT_SIZES}"`;
     }
     const fullV = pickDisplay(found);
     if (!/\swidth=/i.test(next) && fullV.width) next += ` width="${fullV.width}"`;
@@ -245,7 +258,7 @@ function enhanceImgTag(tag, manifest, forcedCaption) {
   if (base) attrs = setAttr(attrs, 'src', variantUrl(manifest, base));
   if (variants.length) {
     attrs = setAttr(attrs, 'srcset', variants.map((v) => `${variantUrl(manifest, v)} ${v.width}w`).join(', '));
-    attrs = setAttr(attrs, 'sizes', '(max-width: 1000px) 100vw, 1000px');
+    attrs = setAttr(attrs, 'sizes', CONTENT_SIZES);
     if (base.width) attrs = setAttr(attrs, 'width', String(base.width));
     if (base.height) attrs = setAttr(attrs, 'height', String(base.height));
   }
@@ -363,5 +376,27 @@ export function prepareArticleImages(html, manifest) {
     return `${before ? `<p>${before}</p>\n` : ''}${figure}${rest ? `\n<p>${rest}</p>` : ''}`;
   });
 
-  return out;
+  return applyHeroSizes(out);
+}
+
+/**
+ * If the article starts with a standalone photo (a figure, or a paragraph
+ * that contains only an image), mark it as the hero and use hero sizes.
+ */
+function applyHeroSizes(html) {
+  if (!html) return html;
+  const match = html.match(/^\s*(?:<figure\b[\s\S]*?<\/figure>|<p\b[^>]*>\s*(?:<a\b[^>]*content-photo-link[^>]*>\s*)?<img\b[^>]*\/?>\s*(?:<\/a>)?\s*<\/p>)/i);
+  if (!match) return html;
+  const original = match[0];
+  let updated = original.replace(/\ssizes="[^"]*"/i, ` sizes="${HERO_SIZES}"`);
+  updated = updated.replace(/<(figure|p)\b([^>]*)>/i, (all, tag, attrs) => {
+    if (/\bhero\b/.test(attrs)) return all;
+    if (/\sclass="/i.test(attrs)) return `<${tag}${attrs.replace(/\sclass="/i, ' class="hero ')}>`;
+    return `<${tag}${attrs} class="hero">`;
+  });
+  updated = updated.replace(/<img\b[^>]*>/i, (tag) => {
+    let next = tag.replace(/\sloading="[^"]*"/i, '').replace(/\sfetchpriority="[^"]*"/i, '');
+    return next.replace(/<img\b/i, '<img loading="eager" fetchpriority="high"');
+  });
+  return html.slice(0, match.index) + updated + html.slice(match.index + original.length);
 }

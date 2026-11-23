@@ -6,27 +6,64 @@
   --line: #e5e7eb;
   --accent: #111827;
   --accent-ink: #ffffff;
+
+  /* Shared with Peru Whitewater — see /workspace/shared-layout/spec.md */
+  --content-max: 1100px;
   --header-max: 1180px;
-  --content-max: 1000px;
+  --hero-max: 1400px;
+  --gutter: 1.25rem;
+
+  --font-body: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
+  --font-heading: var(--font-body);
+  --font-features: "kern" 1, "liga" 1, "calt" 1;
+
+  --step-0: clamp(1.0625rem, 0.95rem + 0.5vw, 1.25rem);
+  --step-1: clamp(1.2rem, 1.05rem + 0.65vw, 1.5rem);
+  --step-2: clamp(1.35rem, 1.1rem + 0.9vw, 1.75rem);
+  --step-3: clamp(1.6rem, 1.2rem + 1.2vw, 2.15rem);
+  --step-4: clamp(1.9rem, 1.3rem + 1.7vw, 2.6rem);
+  --step-5: clamp(2.2rem, 1.4rem + 2.2vw, 3.2rem);
+
+  --leading: 1.7;
+  --leading-tight: 1.22;
+  --measure: 70ch;
+  --space-paragraph: 1.15em;
+  --space-heading-top: 1.75em;
+  --space-heading-bottom: 0.55em;
+  --tracking-heading: -0.015em;
+  --tracking-caps: 0.04em;
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: var(--font-features);
+  hanging-punctuation: first allow-end last;
+}
 body {
   margin: 0;
-  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  font-kerning: normal;
+  font-feature-settings: var(--font-features);
   background: var(--bg);
   color: var(--ink);
-  line-height: 1.65;
+  line-height: var(--leading);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  -webkit-font-smoothing: antialiased;
 }
 a { color: #1d4ed8; }
 a:hover { text-decoration-thickness: 2px; }
 img { max-width: 100%; height: auto; }
-main { flex: 1; width: min(var(--content-max), calc(100% - 2.5rem)); margin: 0 auto; padding: 2rem 0 4rem; }
+main {
+  flex: 1;
+  width: min(var(--hero-max), calc(100% - 2 * var(--gutter)));
+  margin: 0 auto;
+  padding: 2rem 0 4rem;
+}
 
 .site-header, .site-footer {
   background: #111827;
@@ -35,7 +72,7 @@ main { flex: 1; width: min(var(--content-max), calc(100% - 2.5rem)); margin: 0 a
 }
 .site-header a, .site-footer a { color: #fff; text-decoration: none; }
 .site-header-inner, .site-footer-inner {
-  width: min(var(--header-max), calc(100% - 2rem));
+  width: min(var(--header-max), calc(100% - 2 * var(--gutter)));
   margin: 0 auto;
   padding: 0.75rem 0;
   display: flex;
@@ -61,16 +98,59 @@ main { flex: 1; width: min(var(--content-max), calc(100% - 2.5rem)); margin: 0 a
 .site-footer p { margin: 0; color: #9ca3af; }
 .site-footer-inner { padding: 1.1rem 0; }
 
-.lede { color: var(--muted); }
+.lede { color: var(--muted); max-width: var(--measure); }
 
 .river-list { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 0.6rem; }
 .river-list a { text-decoration: none; color: inherit; display: block; padding: 0.7rem 0.9rem; background: var(--card); border: 1px solid var(--line); border-radius: 8px; }
 .river-list a:hover { border-color: #111827; }
 .river-list .meta { color: var(--muted); font-size: 0.9rem; }
 
-.prose { font-size: 1.05rem; }
-.prose :where(h1, h2, h3) { line-height: 1.25; }
-.prose :where(p, li) { max-width: none; }
+.prose-header,
+.article-body {
+  width: min(var(--content-max), 100%);
+  margin-inline: auto;
+}
+
+.prose > :not(.hero):not(.article-body):not(.prose-header) {
+  width: min(var(--content-max), 100%);
+  margin-inline: auto;
+}
+
+.prose { font-size: var(--step-0); }
+.prose :where(h1, h2, h3, h4) {
+  font-family: var(--font-heading);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-heading);
+  font-weight: 650;
+  text-wrap: balance;
+}
+.prose h1, .page-title {
+  font-size: var(--step-4);
+  margin: 0 0 var(--space-heading-bottom);
+}
+.prose h2 {
+  font-size: var(--step-3);
+  margin-top: var(--space-heading-top);
+  margin-bottom: var(--space-heading-bottom);
+}
+.prose h3 {
+  font-size: var(--step-2);
+  margin-top: var(--space-heading-top);
+  margin-bottom: var(--space-heading-bottom);
+}
+.prose h4 {
+  font-size: var(--step-1);
+  margin-top: var(--space-heading-top);
+  margin-bottom: var(--space-heading-bottom);
+}
+.prose :where(p, li) {
+  max-width: var(--measure);
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+.prose p { margin: 0 0 var(--space-paragraph); }
+.prose ul, .prose ol { margin: 0 0 var(--space-paragraph); padding-left: 1.25em; }
+
 .meta-line { color: var(--muted); font-size: 0.95rem; margin: 0 0 1.5rem; }
 .summary-grid {
   display: grid;
@@ -79,10 +159,13 @@ main { flex: 1; width: min(var(--content-max), calc(100% - 2.5rem)); margin: 0 a
   margin: 0 0 2rem;
 }
 .summary-grid div { background: var(--card); border: 1px solid var(--line); padding: 0.7rem 0.85rem; border-radius: 8px; }
-.summary-grid dt { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.summary-grid dt {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--muted);
+}
 .summary-grid dd { margin: 0.15rem 0 0; font-weight: 600; }
-
-.page-title { margin-bottom: 0.3rem; letter-spacing: -0.02em; }
 
 .prose .content-figure,
 .prose figure,
@@ -128,4 +211,26 @@ main { flex: 1; width: min(var(--content-max), calc(100% - 2.5rem)); margin: 0 a
   color: var(--muted);
   margin: 0.55rem 0 0;
   line-height: 1.45;
+  max-width: var(--measure);
+}
+
+/* Featured image and a leading standalone body photo use the wider hero measure. */
+.hero,
+.article-body > p:first-child:has(> img:only-child),
+.article-body > p:first-child:has(> a.content-photo-link:only-child),
+.article-body > figure:first-child {
+  width: min(var(--hero-max), calc(100vw - 2 * var(--gutter))) !important;
+  max-width: min(var(--hero-max), calc(100vw - 2 * var(--gutter))) !important;
+  position: relative;
+  left: 50%;
+  translate: -50% 0;
+  margin: 0 0 1.75rem;
+}
+.hero img,
+.article-body > p:first-child:has(> img:only-child) img,
+.article-body > p:first-child:has(> a.content-photo-link:only-child) img,
+.article-body > figure:first-child img {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
 }
