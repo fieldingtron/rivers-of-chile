@@ -53,8 +53,10 @@ so large videos can seek. PDFs and video are stored as-is.
 
 The old-URL → new-key map is `data/images/manifest-v1.json`. The Astro build rewrites
 `<img>`, `srcset`, and featured-image URLs to the public image origin.
-`roc_media` keeps the original WordPress `source_url` and alt text, and records `r2_key`
-(the public path, without `migrated-media/`), `variants`, `sha256`, and `status`.
+`roc_media` keeps the original WordPress `source_url` (shown as “Original WordPress URL”)
+and alt text, and records a live `url` on `riversofchile-images.pages.dev`, `r2_key`
+(the public path, without `migrated-media/`), `variants` (each with its own `url` and
+public `r2_key`), `sha256`, and `status`.
 
 ```sh
 # Read-only GETs against live WordPress. Failures (404s) are listed in .image-migration/download-report.json

@@ -343,8 +343,21 @@ async function main() {
           pending.push({
             id: row.id,
             r2_key: full.key,
+            url: `${PUBLIC_BASE}/${full.key}`,
             sha256: hash,
-            variants: asset.variants,
+            variants: asset.variants.map((variant) => {
+              const key = publicKeyFor(variant.key || variant.r2_key);
+              return {
+                key,
+                r2_key: key,
+                width: variant.width,
+                height: variant.height,
+                bytes: variant.bytes,
+                mime: variant.mime,
+                kind: variant.kind,
+                url: `${PUBLIC_BASE}/${key}`
+              };
+            }),
             status: 'uploaded',
             width: asset.width,
             height: asset.height,
