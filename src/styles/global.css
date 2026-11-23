@@ -47,13 +47,6 @@ main { flex: 1; width: min(var(--max), calc(100% - 2rem)); margin: 0 auto; paddi
 .site-nav a[aria-current="page"] { text-decoration: underline; }
 
 .lede { color: var(--muted); max-width: 40rem; }
-.beta-note {
-  font-size: 0.9rem;
-  background: #f3ead8;
-  border: 1px solid var(--line);
-  padding: 0.6rem 0.8rem;
-  margin-bottom: 1.5rem;
-}
 
 .river-list { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 0.6rem; }
 .river-list a { text-decoration: none; color: inherit; display: block; padding: 0.7rem 0.9rem; background: var(--card); border: 1px solid var(--line); }
