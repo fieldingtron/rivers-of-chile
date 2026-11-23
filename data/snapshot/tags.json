@@ -1,0 +1,730 @@
+[
+  {
+    "wp_id": 89,
+    "status": "published",
+    "slug": "89",
+    "name": "",
+    "count": 1
+  },
+  {
+    "wp_id": 44,
+    "status": "published",
+    "slug": "22-falls",
+    "name": "22 falls",
+    "count": 1
+  },
+  {
+    "wp_id": 154,
+    "status": "published",
+    "slug": "blanco-de-coihueco",
+    "name": "blanco de coihueco",
+    "count": 1
+  },
+  {
+    "wp_id": 100,
+    "status": "published",
+    "slug": "blanco-river",
+    "name": "Blanco River",
+    "count": 1
+  },
+  {
+    "wp_id": 156,
+    "status": "published",
+    "slug": "bonito",
+    "name": "bonito",
+    "count": 1
+  },
+  {
+    "wp_id": 123,
+    "status": "published",
+    "slug": "carburgua",
+    "name": "Carburgua",
+    "count": 1
+  },
+  {
+    "wp_id": 160,
+    "status": "published",
+    "slug": "chile",
+    "name": "chile",
+    "count": 16
+  },
+  {
+    "wp_id": 141,
+    "status": "published",
+    "slug": "chile-kayak",
+    "name": "chile kayak",
+    "count": 1
+  },
+  {
+    "wp_id": 115,
+    "status": "published",
+    "slug": "chile-kayak-guide",
+    "name": "chile kayak guide",
+    "count": 1
+  },
+  {
+    "wp_id": 20,
+    "status": "published",
+    "slug": "chile-whitewater",
+    "name": "chile whitewater",
+    "count": 4
+  },
+  {
+    "wp_id": 55,
+    "status": "published",
+    "slug": "chile-whitewater-guide",
+    "name": "Chile Whitewater guide",
+    "count": 5
+  },
+  {
+    "wp_id": 146,
+    "status": "published",
+    "slug": "chile-whitewater-guide-book",
+    "name": "Chile whitewater guide book",
+    "count": 1
+  },
+  {
+    "wp_id": 85,
+    "status": "published",
+    "slug": "chile-whitewater-guidebook",
+    "name": "Chile whitewater guidebook",
+    "count": 4
+  },
+  {
+    "wp_id": 23,
+    "status": "published",
+    "slug": "chile-whitewater-kayak",
+    "name": "Chile whitewater kayak",
+    "count": 1
+  },
+  {
+    "wp_id": 134,
+    "status": "published",
+    "slug": "chilean-whitewater-river-guide",
+    "name": "chilean whitewater river guide",
+    "count": 1
+  },
+  {
+    "wp_id": 106,
+    "status": "published",
+    "slug": "chillan",
+    "name": "Chillan",
+    "count": 1
+  },
+  {
+    "wp_id": 107,
+    "status": "published",
+    "slug": "clarillo-national-park",
+    "name": "Clarillo National park",
+    "count": 1
+  },
+  {
+    "wp_id": 109,
+    "status": "published",
+    "slug": "clarillo-river",
+    "name": "Clarillo River",
+    "count": 1
+  },
+  {
+    "wp_id": 98,
+    "status": "published",
+    "slug": "cochamo-river",
+    "name": "Cochamo River",
+    "count": 1
+  },
+  {
+    "wp_id": 105,
+    "status": "published",
+    "slug": "diguillin-river",
+    "name": "Diguillin River",
+    "count": 1
+  },
+  {
+    "wp_id": 121,
+    "status": "published",
+    "slug": "futaleufu",
+    "name": "futaleufu",
+    "count": 1
+  },
+  {
+    "wp_id": 81,
+    "status": "published",
+    "slug": "guide",
+    "name": "guide",
+    "count": 8
+  },
+  {
+    "wp_id": 84,
+    "status": "published",
+    "slug": "guide-kayak-chile",
+    "name": "Guide kayak Chile",
+    "count": 1
+  },
+  {
+    "wp_id": 82,
+    "status": "published",
+    "slug": "guidebook",
+    "name": "guidebook",
+    "count": 3
+  },
+  {
+    "wp_id": 101,
+    "status": "published",
+    "slug": "hornopiren",
+    "name": "Hornopiren",
+    "count": 2
+  },
+  {
+    "wp_id": 150,
+    "status": "published",
+    "slug": "hueinahue",
+    "name": "hueinahue",
+    "count": 1
+  },
+  {
+    "wp_id": 153,
+    "status": "published",
+    "slug": "iculpe",
+    "name": "Iculpe",
+    "count": 1
+  },
+  {
+    "wp_id": 80,
+    "status": "published",
+    "slug": "kayak",
+    "name": "kayak",
+    "count": 17
+  },
+  {
+    "wp_id": 19,
+    "status": "published",
+    "slug": "kayak-chile",
+    "name": "kayak chile",
+    "count": 3
+  },
+  {
+    "wp_id": 124,
+    "status": "published",
+    "slug": "kayak-chile-rivers",
+    "name": "kayak chile rivers",
+    "count": 1
+  },
+  {
+    "wp_id": 34,
+    "status": "published",
+    "slug": "kayak-chile-whitewater",
+    "name": "kayak chile whitewater",
+    "count": 16
+  },
+  {
+    "wp_id": 120,
+    "status": "published",
+    "slug": "kayak-guide",
+    "name": "kayak guide",
+    "count": 1
+  },
+  {
+    "wp_id": 143,
+    "status": "published",
+    "slug": "kayak-pucon",
+    "name": "kayak pucon",
+    "count": 1
+  },
+  {
+    "wp_id": 135,
+    "status": "published",
+    "slug": "kayaking-guidebook",
+    "name": "kayaking guidebook",
+    "count": 2
+  },
+  {
+    "wp_id": 148,
+    "status": "published",
+    "slug": "kayaking-south-america",
+    "name": "kayaking south america",
+    "count": 1
+  },
+  {
+    "wp_id": 152,
+    "status": "published",
+    "slug": "kayk",
+    "name": "kayk",
+    "count": 1
+  },
+  {
+    "wp_id": 151,
+    "status": "published",
+    "slug": "lago-maihue",
+    "name": "lago maihue",
+    "count": 1
+  },
+  {
+    "wp_id": 114,
+    "status": "published",
+    "slug": "macal-section",
+    "name": "Macal section",
+    "count": 1
+  },
+  {
+    "wp_id": 112,
+    "status": "published",
+    "slug": "maipo-river",
+    "name": "Maipo River",
+    "count": 1
+  },
+  {
+    "wp_id": 49,
+    "status": "published",
+    "slug": "maule-river",
+    "name": "Maule River",
+    "count": 1
+  },
+  {
+    "wp_id": 103,
+    "status": "published",
+    "slug": "negro-river",
+    "name": "Negro River",
+    "count": 1
+  },
+  {
+    "wp_id": 117,
+    "status": "published",
+    "slug": "palguin-river",
+    "name": "Palguin river",
+    "count": 1
+  },
+  {
+    "wp_id": 108,
+    "status": "published",
+    "slug": "parque-nacional-clarillo",
+    "name": "Parque Nacional Clarillo",
+    "count": 1
+  },
+  {
+    "wp_id": 159,
+    "status": "published",
+    "slug": "pucon",
+    "name": "pucon",
+    "count": 2
+  },
+  {
+    "wp_id": 147,
+    "status": "published",
+    "slug": "pucon-rivers",
+    "name": "pucon rivers",
+    "count": 1
+  },
+  {
+    "wp_id": 125,
+    "status": "published",
+    "slug": "pucon-waterfalls",
+    "name": "pucon waterfalls",
+    "count": 1
+  },
+  {
+    "wp_id": 46,
+    "status": "published",
+    "slug": "pucon-whitewater",
+    "name": "Pucon Whitewater",
+    "count": 3
+  },
+  {
+    "wp_id": 94,
+    "status": "published",
+    "slug": "puesco",
+    "name": "Puesco",
+    "count": 1
+  },
+  {
+    "wp_id": 113,
+    "status": "published",
+    "slug": "puesco-river",
+    "name": "Puesco River",
+    "count": 1
+  },
+  {
+    "wp_id": 119,
+    "status": "published",
+    "slug": "ri%c2%ado-michinmahuida",
+    "name": "Ri­o Michinmahuida",
+    "count": 1
+  },
+  {
+    "wp_id": 37,
+    "status": "published",
+    "slug": "rio-achibueno",
+    "name": "Rio Achibueno",
+    "count": 1
+  },
+  {
+    "wp_id": 22,
+    "status": "published",
+    "slug": "rio-alpehue",
+    "name": "Rio Alpehue",
+    "count": 1
+  },
+  {
+    "wp_id": 51,
+    "status": "published",
+    "slug": "rio-alumine",
+    "name": "Rio Alumine",
+    "count": 1
+  },
+  {
+    "wp_id": 56,
+    "status": "published",
+    "slug": "rio-azul",
+    "name": "Rio Azul",
+    "count": 1
+  },
+  {
+    "wp_id": 24,
+    "status": "published",
+    "slug": "rio-baker",
+    "name": "Rio Baker",
+    "count": 1
+  },
+  {
+    "wp_id": 99,
+    "status": "published",
+    "slug": "rio-blanco",
+    "name": "Rio Blanco",
+    "count": 1
+  },
+  {
+    "wp_id": 142,
+    "status": "published",
+    "slug": "rio-blanco-caburgua",
+    "name": "Rio Blanco Caburgua",
+    "count": 1
+  },
+  {
+    "wp_id": 48,
+    "status": "published",
+    "slug": "rio-blanco-de-maule",
+    "name": "Rio Blanco de Maule",
+    "count": 1
+  },
+  {
+    "wp_id": 93,
+    "status": "published",
+    "slug": "rio-clarillo",
+    "name": "Rio Clarillo",
+    "count": 1
+  },
+  {
+    "wp_id": 43,
+    "status": "published",
+    "slug": "rio-claro-22-saltos",
+    "name": "Rio claro 22 saltos",
+    "count": 1
+  },
+  {
+    "wp_id": 97,
+    "status": "published",
+    "slug": "rio-cochamo",
+    "name": "Rio cochamo",
+    "count": 1
+  },
+  {
+    "wp_id": 155,
+    "status": "published",
+    "slug": "rio-coihueco",
+    "name": "rio coihueco",
+    "count": 1
+  },
+  {
+    "wp_id": 92,
+    "status": "published",
+    "slug": "rio-colorado",
+    "name": "Rio Colorado",
+    "count": 1
+  },
+  {
+    "wp_id": 40,
+    "status": "published",
+    "slug": "rio-curringue",
+    "name": "Rio Curringue",
+    "count": 1
+  },
+  {
+    "wp_id": 122,
+    "status": "published",
+    "slug": "rio-desague",
+    "name": "Rio Desague",
+    "count": 1
+  },
+  {
+    "wp_id": 104,
+    "status": "published",
+    "slug": "rio-diguillin",
+    "name": "Rio Diguillin",
+    "count": 1
+  },
+  {
+    "wp_id": 86,
+    "status": "published",
+    "slug": "rio-espolon",
+    "name": "Rio espolon",
+    "count": 1
+  },
+  {
+    "wp_id": 27,
+    "status": "published",
+    "slug": "rio-futaleufu",
+    "name": "Rio Futaleufú",
+    "count": 3
+  },
+  {
+    "wp_id": 133,
+    "status": "published",
+    "slug": "rio-fuy",
+    "name": "Rio fuy",
+    "count": 1
+  },
+  {
+    "wp_id": 162,
+    "status": "published",
+    "slug": "rio-huepil",
+    "name": "Rio huepil",
+    "count": 1
+  },
+  {
+    "wp_id": 136,
+    "status": "published",
+    "slug": "rio-liucura",
+    "name": "rio Liucura",
+    "count": 1
+  },
+  {
+    "wp_id": 41,
+    "status": "published",
+    "slug": "rio-llancahue",
+    "name": "Rio Llancahue",
+    "count": 1
+  },
+  {
+    "wp_id": 149,
+    "status": "published",
+    "slug": "rio-llancalil",
+    "name": "rio llancalil",
+    "count": 1
+  },
+  {
+    "wp_id": 18,
+    "status": "published",
+    "slug": "rio-llizan",
+    "name": "rio llizan",
+    "count": 1
+  },
+  {
+    "wp_id": 110,
+    "status": "published",
+    "slug": "rio-longavi",
+    "name": "Rio Longavi",
+    "count": 1
+  },
+  {
+    "wp_id": 33,
+    "status": "published",
+    "slug": "rio-maichin",
+    "name": "Rio Maichin",
+    "count": 1
+  },
+  {
+    "wp_id": 90,
+    "status": "published",
+    "slug": "rio-maipo",
+    "name": "rio Maipo",
+    "count": 1
+  },
+  {
+    "wp_id": 139,
+    "status": "published",
+    "slug": "rio-malleco",
+    "name": "Rio Malleco",
+    "count": 1
+  },
+  {
+    "wp_id": 47,
+    "status": "published",
+    "slug": "rio-melado",
+    "name": "Rio Melado",
+    "count": 1
+  },
+  {
+    "wp_id": 102,
+    "status": "published",
+    "slug": "rio-negro",
+    "name": "Rio Negro",
+    "count": 1
+  },
+  {
+    "wp_id": 42,
+    "status": "published",
+    "slug": "rio-nevado",
+    "name": "Rio Nevado",
+    "count": 1
+  },
+  {
+    "wp_id": 36,
+    "status": "published",
+    "slug": "rio-nuble",
+    "name": "Rio nuble",
+    "count": 1
+  },
+  {
+    "wp_id": 116,
+    "status": "published",
+    "slug": "rio-palguin",
+    "name": "Rio Palguin",
+    "count": 1
+  },
+  {
+    "wp_id": 35,
+    "status": "published",
+    "slug": "rio-panqui",
+    "name": "Rio Panqui",
+    "count": 1
+  },
+  {
+    "wp_id": 38,
+    "status": "published",
+    "slug": "rio-quepe",
+    "name": "Rio Quepe",
+    "count": 1
+  },
+  {
+    "wp_id": 21,
+    "status": "published",
+    "slug": "rio-queupude",
+    "name": "Rio Queupude",
+    "count": 1
+  },
+  {
+    "wp_id": 52,
+    "status": "published",
+    "slug": "rio-reyehueco",
+    "name": "Rio Reyehueco",
+    "count": 1
+  },
+  {
+    "wp_id": 144,
+    "status": "published",
+    "slug": "rio-sollipulli",
+    "name": "rio sollipulli",
+    "count": 1
+  },
+  {
+    "wp_id": 45,
+    "status": "published",
+    "slug": "rio-turbio-correntoso",
+    "name": "Rio Turbio Correntoso",
+    "count": 1
+  },
+  {
+    "wp_id": 126,
+    "status": "published",
+    "slug": "rio-ventisqueros",
+    "name": "rio ventisqueros",
+    "count": 1
+  },
+  {
+    "wp_id": 39,
+    "status": "published",
+    "slug": "rio-yeso",
+    "name": "Rio Yeso",
+    "count": 1
+  },
+  {
+    "wp_id": 87,
+    "status": "published",
+    "slug": "riomaule",
+    "name": "RioMaule",
+    "count": 1
+  },
+  {
+    "wp_id": 118,
+    "status": "published",
+    "slug": "river-description",
+    "name": "River description",
+    "count": 1
+  },
+  {
+    "wp_id": 127,
+    "status": "published",
+    "slug": "river-guide",
+    "name": "river guide",
+    "count": 5
+  },
+  {
+    "wp_id": 111,
+    "status": "published",
+    "slug": "river-longavi",
+    "name": "River Longavi",
+    "count": 1
+  },
+  {
+    "wp_id": 88,
+    "status": "published",
+    "slug": "rivers",
+    "name": "Rivers",
+    "count": 1
+  },
+  {
+    "wp_id": 50,
+    "status": "published",
+    "slug": "rivers-of-argentina-chile-guidebook",
+    "name": "rivers of Argentina chile guidebook",
+    "count": 1
+  },
+  {
+    "wp_id": 25,
+    "status": "published",
+    "slug": "rivers-of-chile",
+    "name": "Rivers of Chile",
+    "count": 3
+  },
+  {
+    "wp_id": 32,
+    "status": "published",
+    "slug": "rivers-of-chile-guidebook",
+    "name": "Rivers of Chile guidebook",
+    "count": 18
+  },
+  {
+    "wp_id": 145,
+    "status": "published",
+    "slug": "south-american-kayaking",
+    "name": "south american kayaking",
+    "count": 1
+  },
+  {
+    "wp_id": 161,
+    "status": "published",
+    "slug": "waterfalls",
+    "name": "waterfalls",
+    "count": 1
+  },
+  {
+    "wp_id": 79,
+    "status": "published",
+    "slug": "whitewater",
+    "name": "whitewater",
+    "count": 9
+  },
+  {
+    "wp_id": 140,
+    "status": "published",
+    "slug": "whitewater-andes",
+    "name": "whitewater andes",
+    "count": 1
+  },
+  {
+    "wp_id": 96,
+    "status": "published",
+    "slug": "whitewater-guide",
+    "name": "whitewater guide",
+    "count": 6
+  }
+]

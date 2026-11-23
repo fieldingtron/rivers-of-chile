@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPosts } from '../lib/directus';
+
+const posts = await getPosts();
+const rivers = posts.filter((p) => p.kind === 'river');
+const other = posts.filter((p) => p.kind !== 'river');
+---
+<BaseLayout title="Rivers of Chile" description="A kayaker’s river guide to Chile. This is a noindex beta preview of the headless rebuild.">
+  <p class="beta-note">Beta preview at riversofchile.pages.dev. Search engines are asked not to index this site.</p>
+  <h1 class="page-title">Rivers of Chile</h1>
+  <p class="lede">First-hand river reports, access notes and photographs from Chile’s whitewater, preserved from the original guide and ready for a redesign later.</p>
+
+  <h2>{rivers.length} river guides</h2>
+  <ul class="river-list">
+    {rivers.map((post) => (
+      <li>
+        <a href={`/${post.slug}/`}>
+          <strong>{post.title}</strong>
+          <div class="meta">
+            {post.class_label && <span>Class {post.class_label}</span>}
+            {post.region && <span> · {post.region.replace(/-/g, ' ')}</span>}
+            {post.author_name && <span> · {post.author_name}</span>}
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  {other.length > 0 && (
+    <>
+      <h2>Articles and news</h2>
+      <ul class="river-list">
+        {other.map((post) => (
+          <li>
+            <a href={`/${post.slug}/`}>
+              <strong>{post.title}</strong>
+              <div class="meta">{post.kind}{post.author_name && ` · ${post.author_name}`}</div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
+</BaseLayout>

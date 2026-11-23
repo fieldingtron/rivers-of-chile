@@ -1,0 +1,42 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const {
+  title,
+  description = 'A kayaker’s river guide to Chile: first-hand reports, access notes, and photographs.',
+  canonical = Astro.url.href,
+  image,
+  type = 'website'
+} = Astro.props;
+
+const siteName = 'Rivers of Chile';
+const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="canonical" href={canonical} />
+
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:site_name" content={siteName} />
+{image && <meta property="og:image" content={image} />}
+
+<meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+{image && <meta name="twitter:image" content={image} />}

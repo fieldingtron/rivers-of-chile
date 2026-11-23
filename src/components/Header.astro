@@ -1,0 +1,21 @@
+---
+const path = Astro.url.pathname;
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/category/chile/', label: 'Rivers' },
+  { href: '/map-of-chile/', label: 'Map' },
+  { href: '/history-of-first-descents/', label: 'First descents' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact-us/', label: 'Contact' }
+];
+---
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="/">Rivers of Chile</a>
+    <nav class="site-nav" aria-label="Primary">
+      {links.map((link) => (
+        <a href={link.href} aria-current={path === link.href ? 'page' : undefined}>{link.label}</a>
+      ))}
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPosts, getPages, getCategories, getTags, RESERVED_SLUGS, type PostItem, type PageItem } from '../lib/directus';
+
+export async function getStaticPaths() {
+  const [posts, pages] = await Promise.all([getPosts(), getPages()]);
+  const used = new Set(RESERVED_SLUGS);
+  const pageSlugs = new Set(pages.map((p) => p.slug));
+  const paths: { params: { slug: string }; props: { type: 'post' | 'page'; item: PostItem | PageItem } }[] = [];
+
+  for (const item of [...pages, ...posts]) {
+    if (!item.slug || used.has(item.slug)) continue;
+    used.add(item.slug);
+    paths.push({
+      params: { slug: item.slug },
+      props: { type: pageSlugs.has(item.slug) ? 'page' : 'post', item }
+    });
+  }
+  return paths;
+}
+
+interface Props {
+  type: 'post' | 'page';
+  item: PostItem | PageItem;
+}
+
+const { type, item } = Astro.props;
+const post = type === 'post' ? (item as PostItem) : null;
+const [categories, tags] = post ? await Promise.all([getCategories(), getTags()]) : [[], []];
+const catNames = post
+  ? (post.legacy_categories || []).map((slug) => categories.find((c) => c.slug === slug)).filter(Boolean)
+  : [];
+const tagNames = post
+  ? (post.legacy_tags || []).map((slug) => tags.find((t) => t.slug === slug)).filter(Boolean)
+  : [];
+const description = post?.seo_description || post?.excerpt || (item as PageItem).seo_description || undefined;
+const image = post?.featured_image_url || undefined;
+---
+<BaseLayout
+  title={item.seo_title || item.title}
+  description={description}
+  type={type === 'post' ? 'article' : 'website'}
+  image={image}
+>
+  <article class="prose">
+    <h1 class="page-title">{item.title}</h1>
+    {post && (
+      <p class="meta-line">
+        {post.kind === 'river' && post.class_label && <span>Class {post.class_label}</span>}
+        {post.region && <span> · {post.region.replace(/-/g, ' ')}</span>}
+        {post.author_name && <span> · {post.author_name}</span>}
+        {post.published_at && <span> · {post.published_at.slice(0, 10)}</span>}
+      </p>
+    )}
+    {post && (post.class_label || post.region || post.country || post.season || post.put_in || post.take_out) && (
+      <dl class="summary-grid">
+        {post.class_label && <div><dt>Class</dt><dd>{post.class_label}</dd></div>}
+        {post.region && <div><dt>Region</dt><dd>{post.region.replace(/-/g, ' ')}</dd></div>}
+        {post.country && <div><dt>Country</dt><dd>{post.country}</dd></div>}
+        {post.season && <div><dt>Season</dt><dd>{post.season}</dd></div>}
+        {post.put_in && <div><dt>Put-in</dt><dd>{post.put_in}</dd></div>}
+        {post.take_out && <div><dt>Take-out</dt><dd>{post.take_out}</dd></div>}
+      </dl>
+    )}
+    <div set:html={item.content || ''} />
+    {catNames.length > 0 && (
+      <p class="meta-line">
+        Categories:
+        {catNames.map((c, i) => (
+          <>
+            {i > 0 && ', '}
+            <a href={`/category/${c!.slug}/`}>{c!.name}</a>
+          </>
+        ))}
+      </p>
+    )}
+    {tagNames.length > 0 && (
+      <p class="meta-line">
+        Tags:
+        {tagNames.map((t, i) => (
+          <>
+            {i > 0 && ', '}
+            <a href={`/tag/${t!.slug}/`}>{t!.name}</a>
+          </>
+        ))}
+      </p>
+    )}
+  </article>
+</BaseLayout>

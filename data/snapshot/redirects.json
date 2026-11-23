@@ -1,0 +1,980 @@
+[
+  {
+    "url_from": "/river/rio-macae",
+    "url_to": "/rio-macae/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-niblinto-de-malleco",
+    "url_to": "/rio-niblinto-de-malleco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-amargo",
+    "url_to": "/rio-amargo/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-renaico",
+    "url_to": "/rio-renaico/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-cholguan",
+    "url_to": "/rio-cholguan/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-huepil",
+    "url_to": "/rio-huepil/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-bullileo",
+    "url_to": "/rio-bullileo/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-lolco",
+    "url_to": "/rio-lolco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/futaleufu-riverkeeper",
+    "url_to": "/futaleufu-riverkeeper/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-blanco-del-sur",
+    "url_to": "/rio-blanco-del-sur/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/whitewater-grand-prix",
+    "url_to": "/whitewater-grand-prix/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-pichipinga-or-llaima",
+    "url_to": "/rio-pichipinga-or-llaima/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-manio",
+    "url_to": "/rio-manio/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-reca",
+    "url_to": "/rio-reca/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-huichahue",
+    "url_to": "/rio-huichahue/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-el-tigre",
+    "url_to": "/rio-el-tigre/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-noroeste",
+    "url_to": "/rio-noroeste/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-hielo",
+    "url_to": "/rio-hielo/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-blanco-de-calbuco",
+    "url_to": "/rio-blanco-de-calbuco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/lower-llancahue",
+    "url_to": "/lower-llancahue/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-blanco-del-enco",
+    "url_to": "/rio-blanco-del-enco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-polcura",
+    "url_to": "/rio-polcura/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-rucue",
+    "url_to": "/rio-rucue/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-curacalco",
+    "url_to": "/rio-curacalco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-niblinto",
+    "url_to": "/rio-niblinto/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-cato",
+    "url_to": "/rio-cato/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-chillan",
+    "url_to": "/rio-chillan/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-nirementum",
+    "url_to": "/rio-nirementum/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-quillaleo",
+    "url_to": "/rio-quillaleo/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-codihue",
+    "url_to": "/rio-codihue/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-claro-pucon",
+    "url_to": "/rio-claro-pucon/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-maier",
+    "url_to": "/rio-maier/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-mosco",
+    "url_to": "/rio-mosco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-perez",
+    "url_to": "/rio-perez/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/cancel-hidroaysen",
+    "url_to": "/cancel-hidroaysen/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-frey",
+    "url_to": "/rio-frey/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-corcovado",
+    "url_to": "/rio-corcovado/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-bonito",
+    "url_to": "/rio-bonito/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-pilmaiquen",
+    "url_to": "/rio-pilmaiquen/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-coihueco",
+    "url_to": "/rio-coihueco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-blanco-de-coihueco",
+    "url_to": "/rio-blanco-de-coihueco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-iculpe",
+    "url_to": "/rio-iculpe/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-hueinahue",
+    "url_to": "/rio-hueinahue/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-pangue",
+    "url_to": "/rio-pangue/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-las-truchas",
+    "url_to": "/rio-las-truchas/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-curaco",
+    "url_to": "/rio-curaco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/nublefest-2010-in-chile",
+    "url_to": "/nublefest-2010-in-chile/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/flying-to-chile-with-kayaks-2011",
+    "url_to": "/flying-to-chile-with-kayaks-2011/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-canahue",
+    "url_to": "/rio-canahue/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-trafanpulli",
+    "url_to": "/rio-trafanpulli/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-bio-bio-el-nacimiento",
+    "url_to": "/rio-bio-bio-el-nacimiento/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-bio-bio-lower",
+    "url_to": "/rio-bio-bio-lower/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-renegado",
+    "url_to": "/rio-renegado/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-dillo",
+    "url_to": "/rio-dillo/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-captren",
+    "url_to": "/rio-captren/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-blanco-cautin",
+    "url_to": "/rio-blanco-cautin/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-calbuco",
+    "url_to": "/rio-calbuco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-manso-nahual-huapi",
+    "url_to": "/rio-manso-nahual-huapi/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-palena",
+    "url_to": "/rio-palena/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-cisnes-piedra-del-gato",
+    "url_to": "/rio-cisnes-piedra-del-gato/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-cajon",
+    "url_to": "/rio-cajon/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-fuy-lower",
+    "url_to": "/rio-fuy-lower/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-blanco-cerro-castillo",
+    "url_to": "/rio-blanco-cerro-castillo/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-petrohue-upper",
+    "url_to": "/rio-petrohue-upper/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-petrohue-lower",
+    "url_to": "/rio-petrohue-lower/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-claro-tinguiririca-2",
+    "url_to": "/rio-claro-tinguiririca-2/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-cisnes-upper",
+    "url_to": "/rio-cisnes-upper/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-salto-del-tigre",
+    "url_to": "/rio-salto-del-tigre/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-resbalon",
+    "url_to": "/rio-resbalon/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-cachapoal-upper",
+    "url_to": "/rio-cachapoal-upper/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-cachapoal-lower",
+    "url_to": "/rio-cachapoal-lower/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-simpson-cajon-de-farrellones",
+    "url_to": "/rio-simpson-cajon-de-farrellones/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-simpson-lower",
+    "url_to": "/rio-simpson-lower/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/quebrada-el-toro",
+    "url_to": "/quebrada-el-toro/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-figueroa",
+    "url_to": "/rio-figueroa/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-clarillo-tinguiririca",
+    "url_to": "/rio-clarillo-tinguiririca/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-pangal",
+    "url_to": "/rio-pangal/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/estero-lechoso",
+    "url_to": "/estero-lechoso/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-teno",
+    "url_to": "/rio-teno/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-manihuales",
+    "url_to": "/rio-manihuales/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-claro-ibanez",
+    "url_to": "/rio-claro-ibanez/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-baker-lower",
+    "url_to": "/rio-baker-lower/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-cochrane",
+    "url_to": "/rio-cochrane/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-el-canal",
+    "url_to": "/rio-el-canal/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/estero-del-bosque",
+    "url_to": "/estero-del-bosque/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-jeinemeni",
+    "url_to": "/rio-jeinemeni/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-los-maitenes",
+    "url_to": "/rio-los-maitenes/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-aviles",
+    "url_to": "/rio-aviles/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-machin-upper",
+    "url_to": "/rio-machin-upper/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-llanquen",
+    "url_to": "/rio-llanquen/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-enco",
+    "url_to": "/rio-enco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-chalquilvin",
+    "url_to": "/rio-chalquilvin/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-futaleufu-terminator-section",
+    "url_to": "/rio-futaleufu-terminator-section/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-cautin",
+    "url_to": "/rio-cautin/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-laja-2",
+    "url_to": "/rio-laja-2/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-ralco",
+    "url_to": "/rio-ralco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-tolten",
+    "url_to": "/rio-tolten/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-queuco",
+    "url_to": "/rio-queuco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-aconcagua-salto-de-soldado",
+    "url_to": "/rio-aconcagua-salto-de-soldado/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/trancura-lower",
+    "url_to": "/trancura-lower/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/estero-coilaco",
+    "url_to": "/estero-coilaco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/florin-river",
+    "url_to": "/florin-river/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-colorado-lontue",
+    "url_to": "/rio-colorado-lontue/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-claro-los-quenes",
+    "url_to": "/rio-claro-los-quenes/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-claro-tinguiririca",
+    "url_to": "/rio-claro-tinguiririca/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-gonzalez",
+    "url_to": "/rio-gonzalez/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-volcan-lower",
+    "url_to": "/rio-volcan-lower/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-volcan-upper",
+    "url_to": "/rio-volcan-upper/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-colorado-aconcagua",
+    "url_to": "/rio-colorado-aconcagua/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-llancalil",
+    "url_to": "/rio-llancalil/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-sollipulli",
+    "url_to": "/rio-sollipulli/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-blanco-de-caburgua",
+    "url_to": "/rio-blanco-de-caburgua/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-malleco",
+    "url_to": "/rio-malleco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-ventisqueros",
+    "url_to": "/rio-ventisqueros/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-san-pedro",
+    "url_to": "/rio-san-pedro/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-longavi",
+    "url_to": "/rio-longavi/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-cochamo",
+    "url_to": "/rio-cochamo/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-blanco-hornopiren",
+    "url_to": "/rio-blanco-hornopiren/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-negro",
+    "url_to": "/rio-negro/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-diguillin",
+    "url_to": "/rio-diguillin/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-clarillo",
+    "url_to": "/rio-clarillo/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-colorado",
+    "url_to": "/rio-colorado/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-maipo",
+    "url_to": "/rio-maipo/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-puesco",
+    "url_to": "/rio-puesco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-rininahue",
+    "url_to": "/rio-rininahue/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/salto-del-nilahue",
+    "url_to": "/salto-del-nilahue/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-ancoa",
+    "url_to": "/rio-ancoa/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-gol-gol",
+    "url_to": "/rio-gol-gol/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/manso-gorge-in-argentina",
+    "url_to": "/manso-gorge-in-argentina/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-maule",
+    "url_to": "/rio-maule/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-espolon",
+    "url_to": "/rio-espolon/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-futaleufu-macal-section",
+    "url_to": "/rio-futaleufu-macal-section/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-futaleufu-bridge-to-bridge",
+    "url_to": "/rio-futaleufu-bridge-to-bridge/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-azul",
+    "url_to": "/rio-azul/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-palguin-upper",
+    "url_to": "/rio-palguin-upper/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-baker",
+    "url_to": "/rio-baker/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rios-queupude-alpehue",
+    "url_to": "/rios-queupude-alpehue/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-llizan",
+    "url_to": "/rio-llizan/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-michinmahuida",
+    "url_to": "/rio-michinmahuida/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-maichin",
+    "url_to": "/rio-maichin/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-panqui",
+    "url_to": "/rio-panqui/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-nuble",
+    "url_to": "/rio-nuble/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-achibueno",
+    "url_to": "/rio-achibueno/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-truful-truful",
+    "url_to": "/rio-truful-truful/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-carhuello",
+    "url_to": "/rio-carhuello/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-quepe",
+    "url_to": "/rio-quepe/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-yeso",
+    "url_to": "/rio-yeso/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-curringue",
+    "url_to": "/rio-curringue/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-llancahue",
+    "url_to": "/rio-llancahue/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-nevado",
+    "url_to": "/rio-nevado/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-plata",
+    "url_to": "/rio-plata/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/22-teacups-22-tazas-rio-claro",
+    "url_to": "/22-teacups-22-tazas-rio-claro/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-desague",
+    "url_to": "/rio-desague/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-turbio",
+    "url_to": "/rio-turbio/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-melado",
+    "url_to": "/rio-melado/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-blanco-de-maule",
+    "url_to": "/rio-blanco-de-maule/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-reyehueco",
+    "url_to": "/rio-reyehueco/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/river-fuy",
+    "url_to": "/river-fuy/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/alumine-river-argentina",
+    "url_to": "/alumine-river-argentina/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/river/rio-liucura",
+    "url_to": "/rio-liucura/",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/feed",
+    "url_to": "/feed.xml",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/feed/",
+    "url_to": "/feed.xml",
+    "type": "301",
+    "status": "published"
+  },
+  {
+    "url_from": "/sitemap_index.xml",
+    "url_to": "/sitemap-index.xml",
+    "type": "301",
+    "status": "published"
+  }
+]
