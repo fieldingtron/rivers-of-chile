@@ -28,6 +28,14 @@ assert.match(river, /Reserva Nacional Malleco/i, 'River body did not render');
 assert.match(river, /riversofchile-images\.pages\.dev\//, 'River images were not rewritten to the R2 image origin');
 assert.doesNotMatch(river, /migrated-media/, 'Built river page still contains /migrated-media/ in a URL');
 
+const colorado = read('rio-colorado/index.html');
+assert.match(colorado, /id="lightbox"/, 'Rio Colorado is missing the lightbox');
+assert.match(colorado, /data-lightbox/, 'Rio Colorado images are not wired to the lightbox');
+assert.match(colorado, /srcset="/, 'Rio Colorado images are missing srcset');
+assert.match(colorado, /content-photo-link/, 'Rio Colorado images are not full-column photo links');
+assert.doesNotMatch(colorado, /style="[^"]*width:\s*\d+px/, 'Rio Colorado still has WordPress inline image widths');
+assert.match(colorado, /rivers-64x64\.png/, 'Inner pages are missing the navy-header logo');
+
 assert.match(page, /<h1[^>]*>/i, 'Page missing heading');
 assert.match(missing, /<h1[^>]*>\s*Page not found\s*<\/h1>/i);
 assert.match(read('robots.txt'), /Disallow:\s*\//, 'robots.txt should disallow all on the beta');

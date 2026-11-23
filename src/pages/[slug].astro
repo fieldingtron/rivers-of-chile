@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Lightbox from '../components/Lightbox.astro';
 import { getPosts, getPages, getCategories, getTags, RESERVED_SLUGS, type PostItem, type PageItem } from '../lib/directus';
-import { loadImageManifest, rewriteLegacyImages, addResponsiveAttrs, featuredImageUrl } from '../lib/legacy-images.mjs';
+import { loadImageManifest, prepareArticleImages, featuredImageUrl } from '../lib/legacy-images.mjs';
+import { regionGuideLabel, authorLabel } from '../lib/home';
 
 export async function getStaticPaths() {
   const [posts, pages] = await Promise.all([getPosts(), getPages()]);
@@ -37,7 +39,7 @@ const tagNames = post
 const description = post?.seo_description || post?.excerpt || (item as PageItem).seo_description || undefined;
 const images = loadImageManifest();
 const image = featuredImageUrl(images, post?.featured_image_url || undefined) || post?.featured_image_url || undefined;
-const body = addResponsiveAttrs(rewriteLegacyImages(item.content || '', images), images);
+const body = prepareArticleImages(item.content || '', images);
 ---
 <BaseLayout
   title={item.seo_title || item.title}
@@ -50,22 +52,22 @@ const body = addResponsiveAttrs(rewriteLegacyImages(item.content || '', images),
     {post && (
       <p class="meta-line">
         {post.kind === 'river' && post.class_label && <span>Class {post.class_label}</span>}
-        {post.region && <span> · {post.region.replace(/-/g, ' ')}</span>}
-        {post.author_name && <span> · {post.author_name}</span>}
+        {post.region && <span> · {regionGuideLabel(post)}</span>}
+        {post.author_name && <span> · {authorLabel(post.author_name)}</span>}
         {post.published_at && <span> · {post.published_at.slice(0, 10)}</span>}
       </p>
     )}
     {post && (post.class_label || post.region || post.country || post.season || post.put_in || post.take_out) && (
       <dl class="summary-grid">
         {post.class_label && <div><dt>Class</dt><dd>{post.class_label}</dd></div>}
-        {post.region && <div><dt>Region</dt><dd>{post.region.replace(/-/g, ' ')}</dd></div>}
-        {post.country && <div><dt>Country</dt><dd>{post.country}</dd></div>}
+        {post.region && <div><dt>Region</dt><dd>{regionGuideLabel(post)}</dd></div>}
+        {post.country && <div><dt>Country</dt><dd>{post.country.charAt(0).toUpperCase() + post.country.slice(1)}</dd></div>}
         {post.season && <div><dt>Season</dt><dd>{post.season}</dd></div>}
         {post.put_in && <div><dt>Put-in</dt><dd>{post.put_in}</dd></div>}
         {post.take_out && <div><dt>Take-out</dt><dd>{post.take_out}</dd></div>}
       </dl>
     )}
-    <div set:html={body} />
+    <div class="article-body" set:html={body} />
     {catNames.length > 0 && (
       <p class="meta-line">
         Categories:
@@ -89,4 +91,5 @@ const body = addResponsiveAttrs(rewriteLegacyImages(item.content || '', images),
       </p>
     )}
   </article>
+  <Lightbox />
 </BaseLayout>
