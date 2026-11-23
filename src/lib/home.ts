@@ -1,5 +1,5 @@
 import { avatarFor } from './file-registry.mjs';
-import { loadImageManifest, assetFor, variantUrl, featuredImageUrl } from './legacy-images.mjs';
+import { loadImageManifest, assetFor, variantUrl, featuredImageUrl, displayVariants, pickDisplay } from './legacy-images.mjs';
 import type { PostItem } from './directus';
 
 const manifest = loadImageManifest();
@@ -49,13 +49,12 @@ export function authorLabel(name?: string | null): string {
   return String(name || 'Rivers of Chile').replace(/\s*\(posthumously\)/i, '').replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-/** Pick an R2 variant at least `width` wide (falls back to the largest). */
+/** Pick an R2 variant at least `width` wide (falls back to the largest, capped at 2400px). */
 export function imageAt(url: string | null | undefined, width: number): string | undefined {
   if (!url) return undefined;
   const asset = assetFor(manifest, url);
   if (!asset?.variants?.length) return url;
-  const sorted = [...asset.variants].filter((v: any) => v.width).sort((a: any, b: any) => a.width - b.width);
-  const pick = sorted.find((v: any) => v.width >= width) || sorted[sorted.length - 1] || asset.variants[0];
+  const pick = pickDisplay(asset, width) || asset.variants[0];
   return variantUrl(manifest, pick);
 }
 

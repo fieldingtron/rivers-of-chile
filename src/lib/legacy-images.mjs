@@ -42,7 +42,7 @@ export function assetFor(manifest, url) {
     const base = manifest.assets[hash];
     // Directus File Library wins for editable text (alt / caption).
     const live = base && assetBySha(hash);
-    return live ? { ...base, alt: live.alt, caption: live.caption } : base;
+    return live ? { ...base, alt: live.alt, caption: live.caption, variants: live.variants?.length ? live.variants : base.variants } : base;
   }
   // Public R2 URLs (Directus files): <base>/<filename_disk> or any variant key.
   const origin = publicBase(manifest);
@@ -58,11 +58,44 @@ export function variantUrl(manifest, variant) {
   return `${publicBase(manifest)}/${publicObjectKey(variant.key)}`;
 }
 
+/** Never serve anything wider than this (camera originals can be 4000px+). */
+export const MAX_DISPLAY_WIDTH = 2400;
+/** Default <img src> / fallback width for in-page photos. */
+export const DEFAULT_SRC_WIDTH = 1200;
+
+/**
+ * Sizes a browser may use: every image variant <= 2400px wide, ascending,
+ * one per width (a WebP sidecar wins over an original of the same width).
+ * If an asset only has bigger files, fall back to what exists.
+ */
+export function displayVariants(asset) {
+  const all = imageVariants(asset);
+  const within = all.filter((v) => v.width <= MAX_DISPLAY_WIDTH);
+  const list = within.length ? within : all;
+  const byWidth = new Map();
+  for (const v of list) {
+    const cur = byWidth.get(v.width);
+    if (!cur || (cur.kind !== 'variant' && v.kind === 'variant')) byWidth.set(v.width, v);
+  }
+  return [...byWidth.values()].sort((a, b) => a.width - b.width);
+}
+
+/** The biggest display size (the 2400 WebP when there is one): used by the lightbox. */
+export function fullVariant(asset) {
+  const list = displayVariants(asset);
+  return list[list.length - 1];
+}
+
+/** Smallest display variant at least `width` wide, else the largest. */
+export function pickDisplay(asset, width = DEFAULT_SRC_WIDTH) {
+  const list = displayVariants(asset);
+  return list.find((v) => v.width >= width) || list[list.length - 1];
+}
+
 export function featuredImageUrl(manifest, url) {
   const asset = assetFor(manifest, url);
-  if (!asset?.variants?.length) return url || undefined;
-  const full = asset.variants[asset.variants.length - 1];
-  return variantUrl(manifest, full);
+  const pick = asset ? pickDisplay(asset) : undefined;
+  return pick ? variantUrl(manifest, pick) : url || undefined;
 }
 
 function rewriteSrcset(value, manifest) {
@@ -74,11 +107,12 @@ function rewriteSrcset(value, manifest) {
       if (!asset) return part.trim();
       const desc = bits.slice(1).join(' ');
       // Prefer a variant matching the requested width when present.
-      let variant = asset.variants[asset.variants.length - 1];
+      const list = displayVariants(asset);
+      let variant = list[list.length - 1] || asset.variants[asset.variants.length - 1];
       const width = desc.match(/^(\d+)w$/);
       if (width) {
         const target = Number(width[1]);
-        variant = asset.variants.find((v) => v.width === target) || asset.variants.find((v) => v.width >= target) || variant;
+        variant = list.find((v) => v.width === target) || list.find((v) => v.width >= target) || variant;
       }
       return desc ? `${variantUrl(manifest, variant)} ${desc}` : variantUrl(manifest, variant);
     })
@@ -89,8 +123,8 @@ function rewriteTag(tag, manifest) {
   return tag.replace(/\s(src|href|data-src|data-lazy-src|data-orig-file)=["']([^"']+)["']/gi, (all, attr, value) => {
     const asset = assetFor(manifest, value);
     if (!asset?.variants?.length) return all;
-    const full = asset.variants[asset.variants.length - 1];
-    return ` ${attr}="${variantUrl(manifest, full)}"`;
+    const pick = /^(src|data-src|data-lazy-src)$/i.test(attr) ? pickDisplay(asset) : fullVariant(asset);
+    return ` ${attr}="${variantUrl(manifest, pick || asset.variants[asset.variants.length - 1])}"`;
   }).replace(/\s(srcset|data-srcset|data-lazy-srcset)=["']([^"']+)["']/gi, (all, attr, value) => {
     return ` ${attr}="${rewriteSrcset(value, manifest)}"`;
   });
@@ -103,7 +137,7 @@ export function rewriteLegacyImages(html, manifest) {
   out = out.replace(/https?:\/\/(?:www\.)?riversofchile\.com\/wp-content\/uploads\/[^"'\\s)]+/g, (url) => {
     const asset = assetFor(manifest, url);
     if (!asset?.variants?.length) return url;
-    return variantUrl(manifest, asset.variants[asset.variants.length - 1]);
+    return variantUrl(manifest, fullVariant(asset) || asset.variants[asset.variants.length - 1]);
   });
   return out;
 }
@@ -120,14 +154,14 @@ export function addResponsiveAttrs(html, manifest) {
       found = Object.values(manifest.assets || {}).find((a) => a.variants?.some((v) => v.key === key));
     }
     if (!found?.variants?.length) return full;
-    const variants = found.variants.filter((v) => (v.mime || '').includes('image') && v.width);
+    const variants = displayVariants(found);
     if (variants.length < 2) return full;
     let next = attrs;
     if (!/\ssrcset=/i.test(next)) {
       next += ` srcset="${variants.map((v) => `${variantUrl(manifest, v)} ${v.width}w`).join(', ')}"`;
-      next += ` sizes="(max-width: 900px) 100vw, 900px"`;
+      next += ` sizes="(max-width: 1000px) 100vw, 1000px"`;
     }
-    const fullV = variants[variants.length - 1];
+    const fullV = pickDisplay(found);
     if (!/\swidth=/i.test(next) && fullV.width) next += ` width="${fullV.width}"`;
     if (!/\sheight=/i.test(next) && fullV.height) next += ` height="${fullV.height}"`;
     if (!/\sdecoding=/i.test(next)) next += ` decoding="async"`;
@@ -202,15 +236,18 @@ function enhanceImgTag(tag, manifest, forcedCaption) {
   let attrs = parsed[1].replace(/\/\s*$/, ' ');
   const src = attr(attrs, 'src');
   const asset = assetFromSrc(manifest, src);
-  const variants = imageVariants(asset);
+  // Browser picks from srcset (400..2400 WebP); src is a ~1200 fallback; the
+  // lightbox (data-full) opens the biggest display size, never the camera original.
+  const variants = displayVariants(asset);
   const full = variants[variants.length - 1];
+  const base = variants.length ? pickDisplay(asset) : undefined;
   const fullUrl = full ? variantUrl(manifest, full) : src;
-  if (fullUrl) attrs = setAttr(attrs, 'src', fullUrl);
+  if (base) attrs = setAttr(attrs, 'src', variantUrl(manifest, base));
   if (variants.length) {
     attrs = setAttr(attrs, 'srcset', variants.map((v) => `${variantUrl(manifest, v)} ${v.width}w`).join(', '));
     attrs = setAttr(attrs, 'sizes', '(max-width: 1000px) 100vw, 1000px');
-    if (full.width) attrs = setAttr(attrs, 'width', String(full.width));
-    if (full.height) attrs = setAttr(attrs, 'height', String(full.height));
+    if (base.width) attrs = setAttr(attrs, 'width', String(base.width));
+    if (base.height) attrs = setAttr(attrs, 'height', String(base.height));
   }
   if (!/\sdecoding=/i.test(attrs)) attrs += ' decoding="async"';
   if (!/\sloading=/i.test(attrs)) attrs += ' loading="lazy"';

@@ -5,8 +5,8 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { registerFiles, registeredCount, fileById, publicUrlFor, registerAvatar } from './file-registry.mjs';
-import { loadImageManifest, publicBase } from './legacy-images.mjs';
+import { registerFiles, registeredCount, fileById, assetById, publicUrlFor, registerAvatar } from './file-registry.mjs';
+import { loadImageManifest, publicBase, pickDisplay, publicObjectKey } from './legacy-images.mjs';
 
 const DIRECTUS_URL = import.meta.env.DIRECTUS_URL || 'https://content.fieldsmarshall.com';
 const DIRECTUS_BUILD_TOKEN = process.env.DIRECTUS_BUILD_TOKEN?.trim();
@@ -218,7 +218,12 @@ function applyFileFields<T extends { featured_image?: string | null; featured_im
   const base = publicBase(loadImageManifest());
   for (const item of items) {
     const file = item.featured_image ? fileById(item.featured_image) : undefined;
-    if (file) item.featured_image_url = publicUrlFor(file, base);
+    if (file) {
+      // Use a ~1200px display variant, never the camera original.
+      const asset = assetById(item.featured_image!);
+      const pick = asset ? pickDisplay(asset) : undefined;
+      item.featured_image_url = pick ? `${base}/${publicObjectKey(pick.key)}` : publicUrlFor(file, base);
+    }
   }
   return items;
 }
