@@ -105,3 +105,49 @@ export const SITE_NAV = [
   { href: '/dedication/', label: 'Dedication' },
   { href: '/about-authors/', label: 'Authors' }
 ];
+
+const REGION_GUIDE: Record<string, string> = {
+  'region-v': 'Region V',
+  'santiago-metropolitan-region': 'Santiago Metropolitan Region',
+  'region-vi': 'Region VI',
+  'region-vii': 'Region VII',
+  'region-viii': 'Region VIII',
+  'region-ix': 'Region IX',
+  'region-xiv-de-los-rios': 'Region XIV De Los Rios',
+  'region-x': 'Region X',
+  'region-xi': 'Region XI'
+};
+
+/** Category-style region labels as stored in the content (e.g. "Region VIII"). */
+export function regionGuideLabel(post: PostItem): string {
+  if (post.region && REGION_GUIDE[post.region]) return REGION_GUIDE[post.region];
+  if (post.country) return post.country.charAt(0).toUpperCase() + post.country.slice(1);
+  return 'Chile';
+}
+
+/** Solid badge color by the highest class number in a label such as "3-5". */
+export function classBadgeColor(label?: string | null): string {
+  const nums = String(label || '').match(/\d+(?:\.\d+)?/g)?.map(Number) || [];
+  const max = nums.length ? Math.max(...nums) : 0;
+  if (max >= 5) return '#dc2626';
+  if (max >= 4) return '#ea580c';
+  if (max >= 3) return '#ca8a04';
+  return '#16a34a';
+}
+
+const AUTHOR_PHOTOS: Record<string, string> = {
+  'kurt casey': '/images/kurt-casey.jpg'
+};
+
+function authorKey(name?: string | null): string {
+  return String(name || '')
+    .replace(/\(.*?\)/g, '')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toLowerCase();
+}
+
+/** Local author portrait if we have one; Directus has no avatar field. */
+export function authorPhoto(name?: string | null): string | undefined {
+  return AUTHOR_PHOTOS[authorKey(name)];
+}
