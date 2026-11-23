@@ -41,8 +41,12 @@ export function assetFor(manifest, url) {
   return manifest.assets[hash];
 }
 
+export function publicObjectKey(key) {
+  return String(key || '').replace(/^migrated-media\//, '');
+}
+
 export function variantUrl(manifest, variant) {
-  return `${publicBase(manifest)}/${variant.key}`;
+  return `${publicBase(manifest)}/${publicObjectKey(variant.key)}`;
 }
 
 export function featuredImageUrl(manifest, url) {

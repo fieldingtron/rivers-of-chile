@@ -21,7 +21,8 @@ assert.match(home, /Rivers of Chile/i, 'Home page missing site name');
 assert.match(home, /rio-niblinto-de-malleco/i, 'Home page missing a known river link');
 assert.match(river, /<h1[^>]*>\s*Rio Niblinto de Malleco/i, 'River route did not render its heading');
 assert.match(river, /Reserva Nacional Malleco/i, 'River body did not render');
-assert.match(river, /riversofchile-images\.pages\.dev\/migrated-media\//, 'River images were not rewritten to the R2 image origin');
+assert.match(river, /riversofchile-images\.pages\.dev\//, 'River images were not rewritten to the R2 image origin');
+assert.doesNotMatch(river, /migrated-media/, 'Built river page still contains /migrated-media/ in a URL');
 
 assert.match(page, /<h1[^>]*>/i, 'Page missing heading');
 assert.match(missing, /<h1[^>]*>\s*Page not found\s*<\/h1>/i);

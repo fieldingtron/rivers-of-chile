@@ -44,13 +44,17 @@ See `.env.example`. Never prefix secrets with `PUBLIC_`.
 ## Images
 
 WordPress media is downloaded read-only, processed, and uploaded to the
-`riversofchile-images` R2 bucket. Keys follow the VPNReviewz scheme:
-`migrated-media/<name>-<width>x<height>-<20hex-sha256>.<ext>`, plus 400/800/1200w
-WebP variants when the source is larger (no upscale). PDFs and video are stored as-is.
+`riversofchile-images` R2 bucket. Objects are stored in R2 under
+`migrated-media/<name>-<width>x<height>-<20hex-sha256>.<ext>` (plus 400/800/1200w
+WebP variants when the source is larger; no upscale). Public URLs omit that prefix:
+`https://riversofchile-images.pages.dev/<name>-….<ext>`. The Pages Function also
+serves the older `/migrated-media/…` paths as an alias, and supports HTTP Range
+so large videos can seek. PDFs and video are stored as-is.
+
 The old-URL → new-key map is `data/images/manifest-v1.json`. The Astro build rewrites
-`<img>`, `srcset`, and featured-image URLs to `https://riversofchile-images.pages.dev/...`.
-`roc_media` keeps the original WordPress `source_url` and alt text, and records `r2_key`,
-`variants`, `sha256`, and `status`.
+`<img>`, `srcset`, and featured-image URLs to the public image origin.
+`roc_media` keeps the original WordPress `source_url` and alt text, and records `r2_key`
+(the public path, without `migrated-media/`), `variants`, `sha256`, and `status`.
 
 ```sh
 # Read-only GETs against live WordPress. Failures (404s) are listed in .image-migration/download-report.json
@@ -94,3 +98,33 @@ Image origin: https://riversofchile-images.pages.dev
 Do not push this work to `main`. The Astro site lives on the `astro-directus` branch;
 `main` still has the previous Next.js app (also saved as `legacy-next`). No DNS changes
 are required for the pages.dev beta.
+
+## Automatic rebuilds
+
+GitHub Actions workflow `.github/workflows/deploy-riversofchile.yml` builds against
+live Directus and direct-uploads to the `riversofchile` Pages project (`--branch=main`).
+It runs on:
+
+- a push to `astro-directus` (the workflow file also lives on `main` so dispatch works;
+  the default branch still holds the previous Next.js app)
+- manual **Run workflow** (`workflow_dispatch`)
+- `repository_dispatch` with `event_type: directus-rebuild`, after a 60-second debounce
+
+Required repository secrets (never commit these):
+
+- `DIRECTUS_BUILD_TOKEN` — read-only Directus build token
+- `CLOUDFLARE_API_TOKEN` — Cloudflare account token with **Pages Write** and **Account Settings Read** only (token name `riversofchile-pages-deploy`)
+- `CLOUDFLARE_ACCOUNT_ID` — `380ad23988b4ff82b4994eac826b8bab`
+
+To hook Directus up, create a fine-grained GitHub personal access token with access
+only to `fieldingtron/rivers-of-chile` and **Contents: Read and write**, then add a
+Directus Flow on `roc_*` item create/update/delete that `POST`s:
+
+```
+https://api.github.com/repos/fieldingtron/rivers-of-chile/dispatches
+Accept: application/vnd.github+json
+Authorization: Bearer <github-token>
+{"event_type":"directus-rebuild"}
+```
+
+Do not store that GitHub token in the repo.

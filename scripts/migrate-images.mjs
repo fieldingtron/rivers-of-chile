@@ -47,9 +47,27 @@ function sha256(buf) {
   return crypto.createHash('sha256').update(buf).digest('hex');
 }
 
-function keyFor(name, width, height, digest, ext) {
+function r2KeyFor(name, width, height, digest, ext) {
   return `migrated-media/${name}-${width}x${height}-${digest.slice(0, 20)}.${ext}`;
 }
+
+function publicKeyFor(r2Key) {
+  return String(r2Key || '').replace(/^migrated-media\//, '');
+}
+
+function toPublicVariant({ r2Key, width, height, bytes, mime, local, kind }) {
+  return {
+    key: publicKeyFor(r2Key),
+    r2_key: r2Key,
+    width,
+    height,
+    bytes,
+    mime,
+    local,
+    kind
+  };
+}
+
 
 function normalizeUrl(url) {
   try {
@@ -72,19 +90,19 @@ async function processImage(file, baseName) {
   if (!meta.format || !meta.width || !meta.height) return null;
   const variants = [];
   const origExt = (meta.format === 'jpeg' ? 'jpg' : meta.format);
-  const origKey = keyFor(baseName, meta.width, meta.height, sha256(input), origExt);
+  const origKey = r2KeyFor(baseName, meta.width, meta.height, sha256(input), origExt);
   const origPath = path.join(variantDir, origKey.replace(/^migrated-media\//, ''));
   fs.mkdirSync(path.dirname(origPath), { recursive: true });
   fs.writeFileSync(origPath, input);
-  variants.push({
-    key: origKey,
+  variants.push(toPublicVariant({
+    r2Key: origKey,
     width: meta.width,
     height: meta.height,
     bytes: input.length,
     mime: `image/${meta.format === 'jpg' ? 'jpeg' : meta.format}`,
     local: origPath,
     kind: 'original'
-  });
+  }));
 
   // Generate WebP only when the requested width is not larger than the source.
   for (const width of WIDTHS) {
@@ -105,19 +123,19 @@ async function processImage(file, baseName) {
       ext = origExt;
       mime = `image/${meta.format === 'jpg' ? 'jpeg' : meta.format}`;
     }
-    const key = keyFor(baseName, width, height, sha256(out), ext);
+    const key = r2KeyFor(baseName, width, height, sha256(out), ext);
     const dest = path.join(variantDir, key.replace(/^migrated-media\//, ''));
     fs.mkdirSync(path.dirname(dest), { recursive: true });
     fs.writeFileSync(dest, out);
-    variants.push({
-      key,
+    variants.push(toPublicVariant({
+      r2Key: key,
       width,
       height,
       bytes: out.length,
       mime,
       local: dest,
       kind: 'variant'
-    });
+    }));
   }
   // Sort small → large; original last if it is the largest width.
   variants.sort((a, b) => a.width - b.width || a.bytes - b.bytes);
@@ -137,7 +155,7 @@ async function processBinary(file, baseName, mime) {
     width: null,
     height: null,
     mime,
-    variants: [{ key, width: 0, height: 0, bytes: input.length, mime, local: dest, kind: 'original' }]
+    variants: [toPublicVariant({ r2Key: key, width: 0, height: 0, bytes: input.length, mime, local: dest, kind: 'original' })]
   };
 }
 
@@ -248,7 +266,7 @@ async function main() {
       bytes: result.variants.find((v) => v.kind === 'original')?.bytes,
       width: result.width,
       height: result.height,
-      variants: result.variants.map(({ key, width, height, bytes, mime, kind }) => ({ key, width, height, bytes, mime, kind }))
+      variants: result.variants.map(({ key, r2_key, width, height, bytes, mime, kind }) => ({ key, r2_key: r2_key || key, width, height, bytes, mime, kind }))
     };
     // Keep local paths in a side map for upload
     assets[hash]._local = result.variants;
@@ -267,9 +285,10 @@ async function main() {
     const seenKeys = new Set();
     for (const asset of Object.values(assets)) {
       for (const variant of asset._local) {
-        if (seenKeys.has(variant.key)) continue;
-        seenKeys.add(variant.key);
-        jobs.push(variant);
+        const objectKey = variant.r2_key || variant.key;
+        if (seenKeys.has(objectKey)) continue;
+        seenKeys.add(objectKey);
+        jobs.push({ ...variant, r2_key: objectKey });
       }
       delete asset._local;
     }
@@ -280,11 +299,11 @@ async function main() {
       while (i < jobs.length) {
         const variant = jobs[i++];
         try {
-          const status = await r2Put(variant.key, variant.local, variant.mime);
+          const status = await r2Put(variant.r2_key || variant.key, variant.local, variant.mime);
           if (status === 'exists') uploads.exists += 1;
           else uploads.uploaded += 1;
         } catch (err) {
-          uploads.failed.push({ key: variant.key, error: err.message });
+          uploads.failed.push({ key: variant.r2_key || variant.key, error: err.message });
         }
         const done = uploads.uploaded + uploads.exists + uploads.failed.length;
         if (done % 50 === 0 || done === jobs.length) {
