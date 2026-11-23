@@ -2,7 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Lightbox from '../components/Lightbox.astro';
 import { getPosts, getPages, getCategories, getTags, RESERVED_SLUGS, type PostItem, type PageItem } from '../lib/directus';
-import { loadImageManifest, prepareArticleImages, featuredImageUrl } from '../lib/legacy-images.mjs';
+import { loadImageManifest, prepareArticleImages, featuredImageUrl, publicBase } from '../lib/legacy-images.mjs';
+import { rewriteDirectusAssets } from '../lib/file-registry.mjs';
 import { regionGuideLabel, authorLabel } from '../lib/home';
 
 export async function getStaticPaths() {
@@ -39,7 +40,7 @@ const tagNames = post
 const description = post?.seo_description || post?.excerpt || (item as PageItem).seo_description || undefined;
 const images = loadImageManifest();
 const image = featuredImageUrl(images, post?.featured_image_url || undefined) || post?.featured_image_url || undefined;
-const body = prepareArticleImages(item.content || '', images);
+const body = prepareArticleImages(rewriteDirectusAssets(item.content || '', publicBase(images)), images);
 ---
 <BaseLayout
   title={item.seo_title || item.title}

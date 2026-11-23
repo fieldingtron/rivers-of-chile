@@ -1,3 +1,4 @@
+import { avatarFor } from './file-registry.mjs';
 import { loadImageManifest, assetFor, variantUrl, featuredImageUrl } from './legacy-images.mjs';
 import type { PostItem } from './directus';
 
@@ -149,5 +150,5 @@ function authorKey(name?: string | null): string {
 
 /** Local author portrait if we have one; Directus has no avatar field. */
 export function authorPhoto(name?: string | null): string | undefined {
-  return AUTHOR_PHOTOS[authorKey(name)];
+  return avatarFor(name) || AUTHOR_PHOTOS[authorKey(name)];
 }

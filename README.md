@@ -130,3 +130,15 @@ Authorization: Bearer <github-token>
 ```
 
 Do not store that GitHub token in the repo.
+
+## Images: Directus File Library on R2
+
+Images are native Directus files (`directus_files`, storage `r2`), kept in the
+File Library under **River Sites > Rivers of Chile** (Peru Whitewater has its own
+folder). Public URL rule: `https://riversofchile-images.pages.dev/<filename_disk>`.
+
+- `roc_posts.featured_image`, `roc_pages.featured_image`, `roc_authors.avatar` are Image fields (M2O to files).
+- `roc_posts.gallery` lists every photo used on a river page.
+- File `description` is the caption/alt text shown in the lightbox; `metadata.variants` holds the resized WebP variants used for `srcset`.
+- The build (`src/lib/directus.ts` + `src/lib/file-registry.mjs`) loads the file library with the read-only build token and resolves `featured_image` to the public R2 URL. Legacy WordPress `<img>` URLs in old body HTML still resolve through `data/images/manifest-v1.json`. Images an editor inserts with the WYSIWYG (`/assets/<id>`) are rewritten to the R2 URL at build time.
+- `roc_media` is deprecated and hidden; it is kept only for reference.

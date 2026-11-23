@@ -5,6 +5,8 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { registerFiles, registeredCount, fileById, publicUrlFor, registerAvatar } from './file-registry.mjs';
+import { loadImageManifest, publicBase } from './legacy-images.mjs';
 
 const DIRECTUS_URL = import.meta.env.DIRECTUS_URL || 'https://content.fieldsmarshall.com';
 const DIRECTUS_BUILD_TOKEN = process.env.DIRECTUS_BUILD_TOKEN?.trim();
@@ -19,6 +21,7 @@ export interface AuthorItem {
   name: string;
   slug: string;
   bio?: string | null;
+  avatar?: string | null; // Directus file id
 }
 
 export interface CategoryItem {
@@ -56,7 +59,8 @@ export interface PostItem {
   author_name?: string | null;
   author_slug?: string | null;
   featured_media_wp_id?: number | null;
-  featured_image_url?: string | null;
+  featured_image?: string | null; // Directus file id (File Library)
+  featured_image_url?: string | null; // derived at build from featured_image, else legacy WordPress URL
   seo_title?: string | null;
   seo_description?: string | null;
   country?: string | null;
@@ -180,13 +184,65 @@ function requirePublished<T extends { status: string; slug: string; title: strin
   return published;
 }
 
+/**
+ * Load the Directus File Library (River Sites folder tree) once per build and
+ * register it for image helpers. Uses the same read-only build token.
+ */
+let filesLoaded: Promise<void> | undefined;
+function loadFileLibrary(): Promise<void> {
+  filesLoaded ||= (async () => {
+    if (!DIRECTUS_BUILD_TOKEN) return; // local snapshot builds keep legacy URLs
+    try {
+      const endpoint = new URL(DIRECTUS_URL);
+      const url = new URL('/files', endpoint);
+      url.searchParams.set('limit', '-1');
+      url.searchParams.set('fields', 'id,storage,filename_disk,type,width,height,filesize,title,description,metadata,folder');
+      const res = await fetch(url, {
+        redirect: 'error',
+        signal: AbortSignal.timeout(20000),
+        headers: { Accept: 'application/json', Authorization: `Bearer ${DIRECTUS_BUILD_TOKEN}` }
+      });
+      if (res.ok) registerFiles((await res.json()).data || []);
+    } catch {
+      // Fall back to legacy image URLs; never log URLs or credentials.
+    }
+    if (HOSTED_BUILD && registeredCount() === 0) {
+      throw new Error('Hosted build could not load the Directus File Library.');
+    }
+  })();
+  return filesLoaded;
+}
+
+/** Resolve featured_image (file id) to the public R2 URL; legacy URL otherwise. */
+function applyFileFields<T extends { featured_image?: string | null; featured_image_url?: string | null }>(items: T[]): T[] {
+  const base = publicBase(loadImageManifest());
+  for (const item of items) {
+    const file = item.featured_image ? fileById(item.featured_image) : undefined;
+    if (file) item.featured_image_url = publicUrlFor(file, base);
+  }
+  return items;
+}
+
 export async function getPosts(): Promise<PostItem[]> {
   const items = await fetchDirectus<PostItem>('roc_posts');
+  await loadFileLibrary();
+  await loadAvatars();
+  applyFileFields(items);
   return requirePublished(items, 'roc_posts').sort((a, b) => a.title.localeCompare(b.title));
+}
+
+async function loadAvatars(): Promise<void> {
+  const base = publicBase(loadImageManifest());
+  const authors = await fetchDirectus<AuthorItem>('roc_authors');
+  for (const a of authors) {
+    const file = a.avatar ? fileById(a.avatar) : undefined;
+    if (file) registerAvatar(a.name, publicUrlFor(file, base));
+  }
 }
 
 export async function getPages(): Promise<PageItem[]> {
   const items = await fetchDirectus<PageItem>('roc_pages');
+  await loadFileLibrary();
   return requirePublished(items, 'roc_pages');
 }
 

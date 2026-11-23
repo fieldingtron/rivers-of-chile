@@ -4,6 +4,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { assetBySha, assetByKey } from './file-registry.mjs';
 
 const DEFAULT_MANIFEST = path.resolve('data/images/manifest-v1.json');
 const DEFAULT_BASE = 'https://riversofchile-images.pages.dev';
@@ -37,8 +38,16 @@ export function assetFor(manifest, url) {
   const stripped = stripSize(url);
   const aliases = manifest.aliases || {};
   const hash = aliases[exact] || aliases[stripped] || aliases[url] || aliases[decodeURI(exact)] || aliases[exact.replace('https://www.', 'https://')];
-  if (!hash) return undefined;
-  return manifest.assets[hash];
+  if (hash) {
+    const base = manifest.assets[hash];
+    // Directus File Library wins for editable text (alt / caption).
+    const live = base && assetBySha(hash);
+    return live ? { ...base, alt: live.alt, caption: live.caption } : base;
+  }
+  // Public R2 URLs (Directus files): <base>/<filename_disk> or any variant key.
+  const origin = publicBase(manifest);
+  if (String(url).startsWith(`${origin}/`)) return assetByKey(String(url).slice(origin.length + 1).split('?')[0]);
+  return undefined;
 }
 
 export function publicObjectKey(key) {
