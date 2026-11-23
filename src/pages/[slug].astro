@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getPosts, getPages, getCategories, getTags, RESERVED_SLUGS, type PostItem, type PageItem } from '../lib/directus';
+import { loadImageManifest, rewriteLegacyImages, addResponsiveAttrs, featuredImageUrl } from '../lib/legacy-images.mjs';
 
 export async function getStaticPaths() {
   const [posts, pages] = await Promise.all([getPosts(), getPages()]);
@@ -34,7 +35,9 @@ const tagNames = post
   ? (post.legacy_tags || []).map((slug) => tags.find((t) => t.slug === slug)).filter(Boolean)
   : [];
 const description = post?.seo_description || post?.excerpt || (item as PageItem).seo_description || undefined;
-const image = post?.featured_image_url || undefined;
+const images = loadImageManifest();
+const image = featuredImageUrl(images, post?.featured_image_url || undefined) || post?.featured_image_url || undefined;
+const body = addResponsiveAttrs(rewriteLegacyImages(item.content || '', images), images);
 ---
 <BaseLayout
   title={item.seo_title || item.title}
@@ -62,7 +65,7 @@ const image = post?.featured_image_url || undefined;
         {post.take_out && <div><dt>Take-out</dt><dd>{post.take_out}</dd></div>}
       </dl>
     )}
-    <div set:html={item.content || ''} />
+    <div set:html={body} />
     {catNames.length > 0 && (
       <p class="meta-line">
         Categories:

@@ -12,10 +12,18 @@
     "snapshot": "node scripts/prepare-snapshot.mjs",
     "check": "node scripts/check-preview-artifact.mjs",
     "directus:setup": "node scripts/directus-setup.mjs",
-    "directus:import": "node scripts/import-wp.mjs"
+    "directus:import": "node scripts/import-wp.mjs",
+    "images:download": "node scripts/download-wp-media.mjs",
+    "images:migrate": "node scripts/migrate-images.mjs",
+    "deploy:images": "cd image-origin && wrangler pages deploy public --project-name=riversofchile-images --branch=main",
+    "deploy:site": "wrangler pages deploy dist --project-name=riversofchile --branch=main --commit-dirty=true"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
-    "astro": "^5.4.2"
+    "astro": "^5.4.2",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "wrangler": "^4.166.0"
   }
 }

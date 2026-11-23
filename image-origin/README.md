@@ -10,9 +10,8 @@ deployed. No custom DNS is required.
 Deploy (from this directory), after `npx wrangler login` or a CI token:
 
 ```sh
-npx wrangler pages deploy public --project-name=riversofchile-images
+npx wrangler pages deploy public --project-name=riversofchile-images --branch=main
 ```
 
-Wrangler picks up `functions/` and the R2 binding in `wrangler.toml`. Do not upload
-media until the inventory and manifest are approved. The site itself is a separate
-Pages project: `riversofchile` → `https://riversofchile.pages.dev`.
+Wrangler picks up `functions/` and the R2 binding in `wrangler.toml`. The site itself
+is a separate Pages project: `riversofchile` → `https://riversofchile.pages.dev`.

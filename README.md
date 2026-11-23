@@ -39,4 +39,58 @@ DIRECTUS_ADMIN_TOKEN=… pnpm directus:import
 
 ## Environment
 
-See `.env.example`. Never prefix secrets with `PUBLIC_`. Cloudflare Pages should store `DIRECTUS_BUILD_TOKEN` as an encrypted build secret.
+See `.env.example`. Never prefix secrets with `PUBLIC_`.
+
+## Images
+
+WordPress media is downloaded read-only, processed, and uploaded to the
+`riversofchile-images` R2 bucket. Keys follow the VPNReviewz scheme:
+`migrated-media/<name>-<width>x<height>-<20hex-sha256>.<ext>`, plus 400/800/1200w
+WebP variants when the source is larger (no upscale). PDFs and video are stored as-is.
+The old-URL → new-key map is `data/images/manifest-v1.json`. The Astro build rewrites
+`<img>`, `srcset`, and featured-image URLs to `https://riversofchile-images.pages.dev/...`.
+`roc_media` keeps the original WordPress `source_url` and alt text, and records `r2_key`,
+`variants`, `sha256`, and `status`.
+
+```sh
+# Read-only GETs against live WordPress. Failures (404s) are listed in .image-migration/download-report.json
+pnpm images:download
+# Process variants, upload to R2, write the manifest, update Directus
+CLOUDFLARE_API_TOKEN=… DIRECTUS_ADMIN_TOKEN=… pnpm images:migrate
+```
+
+`.image-migration/` is gitignored (local originals and encoded variants). The manifest is committed.
+
+## Rebuild and deploy
+
+The beta uses Cloudflare Pages **direct upload**, not a git-connected build, so
+`DIRECTUS_BUILD_TOKEN` is not stored as a Pages secret. Builds run locally against
+live Directus, then the `dist/` folder is uploaded.
+
+```sh
+pnpm install
+
+# 1) Image origin (Pages Function in front of R2). Once per change to image-origin/.
+cd image-origin
+npx wrangler pages deploy public --project-name=riversofchile-images --branch=main
+cd ..
+
+# 2) Site: fetch published roc_* from Directus and emit a static tree
+export DIRECTUS_URL=https://content.fieldsmarshall.com
+export DIRECTUS_BUILD_TOKEN=   # read-only build token; never commit
+pnpm build && pnpm check
+
+# 3) Upload dist/ to the riversofchile Pages project (production / pages.dev)
+npx wrangler pages deploy dist --project-name=riversofchile --branch=main --commit-dirty=true
+```
+
+Local fallback: if `DIRECTUS_BUILD_TOKEN` is unset, `pnpm build` uses `data/snapshot/`
+instead of live Directus. That is for offline work only; the beta deploy should always
+be built against live Directus.
+
+Production URL: https://riversofchile.pages.dev  
+Image origin: https://riversofchile-images.pages.dev  
+
+Do not push this work to `main`. The Astro site lives on the `astro-directus` branch;
+`main` still has the previous Next.js app (also saved as `legacy-next`). No DNS changes
+are required for the pages.dev beta.
