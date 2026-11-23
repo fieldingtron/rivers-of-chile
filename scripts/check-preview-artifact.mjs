@@ -8,17 +8,21 @@ const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 const robots = /<meta\s+name="robots"\s+content="noindex,\s*nofollow"\s*\/?\s*>/i;
 
 const home = read('index.html');
+const home2 = read('home-2/index.html');
+const home3 = read('home-3/index.html');
 const river = read('rio-niblinto-de-malleco/index.html');
 const page = read('about/index.html');
 const category = read('category/chile/index.html');
 const missing = read('404.html');
 
 assert.match(read('_headers'), /^\/\*\s*\r?\n\s*X-Robots-Tag:\s*noindex,\s*nofollow\s*$/im, 'Missing wildcard noindex header');
-for (const html of [home, river, page, category, missing]) {
+for (const html of [home, home2, home3, river, page, category, missing]) {
   assert.match(html, robots, 'Missing page noindex meta');
 }
 assert.match(home, /Rivers of Chile/i, 'Home page missing site name');
-assert.match(home, /rio-niblinto-de-malleco/i, 'Home page missing a known river link');
+assert.match(home, /Popular Rivers/, 'Home 1 missing Popular Rivers');
+for (const html of [home, home2, home3, river, page]) assert.match(html, /Home 1[\s\S]*Home 2[\s\S]*Home 3/, 'Missing Home 1/2/3 nav links');
+for (const html of [home, home2, home3, page]) assert.doesNotMatch(html, /beta preview|Search engines are asked/i, 'Visible beta text found');
 assert.match(river, /<h1[^>]*>\s*Rio Niblinto de Malleco/i, 'River route did not render its heading');
 assert.match(river, /Reserva Nacional Malleco/i, 'River body did not render');
 assert.match(river, /riversofchile-images\.pages\.dev\//, 'River images were not rewritten to the R2 image origin');

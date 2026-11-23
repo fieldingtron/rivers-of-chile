@@ -1,13 +1,13 @@
 ---
 const path = Astro.url.pathname;
 const links = [
-  { href: '/', label: 'Home' },
   { href: '/category/chile/', label: 'Rivers' },
   { href: '/map-of-chile/', label: 'Map' },
   { href: '/history-of-first-descents/', label: 'First descents' },
   { href: '/about/', label: 'About' },
   { href: '/contact-us/', label: 'Contact' }
 ];
+import HomeLinks from './HomeLinks.astro';
 ---
 <header class="site-header">
   <div class="site-header-inner">
@@ -16,6 +16,7 @@ const links = [
       {links.map((link) => (
         <a href={link.href} aria-current={path === link.href ? 'page' : undefined}>{link.label}</a>
       ))}
+      <HomeLinks />
     </nav>
   </div>
 </header>

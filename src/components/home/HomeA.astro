@@ -1,0 +1,105 @@
+---
+import HomeLinks from '../HomeLinks.astro';
+import { regionLabel, excerptOf, initials, authorLabel, imageAt, popularRivers } from '../../lib/home';
+const { posts } = Astro.props;
+const rivers = posts.filter((p: any) => p.kind === 'river');
+const popular = popularRivers(posts, 9);
+const index = rivers.map((p: any) => ({ t: p.title, s: p.slug, r: regionLabel(p), c: p.class_label || '' }));
+---
+<header class="nav">
+  <div class="nav-in">
+    <a class="logo" href="/"><svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#f5b942"/><path d="M5 20c4-6 7 3 11-2s7 3 11-3" fill="none" stroke="#0e2a2b" stroke-width="2.4" stroke-linecap="round"/><path d="M5 14c4-6 7 3 11-2s7 3 11-3" fill="none" stroke="#0e2a2b" stroke-width="2.4" stroke-linecap="round" opacity=".55"/></svg><span>Rivers of Chile</span></a>
+    <nav>
+      <a href="/category/chile/">Rivers</a>
+      <a href="#search">Search</a>
+      <a href="/dedication/">Dedication</a>
+      <a href="/about-authors/">Authors</a>
+      <HomeLinks />
+    </nav>
+  </div>
+</header>
+<section class="strip">
+  <div class="strip-in">
+    <form id="search" class="search" role="search" onsubmit="return false">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m16 16 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="q" type="search" placeholder="Search rivers, regions or class…" autocomplete="off" aria-label="Search rivers" />
+    </form>
+    <ul id="results" class="results" hidden></ul>
+  </div>
+</section>
+<main>
+  <div class="head"><h2>Popular Rivers</h2><a href="/category/chile/">View all {rivers.length} rivers →</a></div>
+  <div class="grid">
+    {popular.map((p: any) => (
+      <article class="card">
+        <a class="photo" href={`/${p.slug}/`} tabindex="-1" aria-hidden="true">
+          <img src={imageAt(p.featured_image_url, 560)} alt="" loading="lazy" decoding="async" />
+          {p.class_label && <span class="badge">Class {p.class_label}</span>}
+        </a>
+        <div class="body">
+          <p class="region">{regionLabel(p)}</p>
+          <h3><a href={`/${p.slug}/`}>{p.title}</a></h3>
+          <p class="ex">{excerptOf(p, 130)}</p>
+          <div class="foot">
+            <a class="more" href={`/${p.slug}/`}>Read More</a>
+            <span class="by"><i>{initials(p.author_name)}</i>{authorLabel(p.author_name)}</span>
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+</main>
+<footer class="foot-bar"><span>Rivers of Chile — a field guide.</span><nav><a href="/dedication/">Dedication</a><a href="/about-authors/">Authors</a><a href="/hardcopy-guidebook/">Hardcopy guidebook</a></nav></footer>
+<script type="application/json" id="idx" set:html={JSON.stringify(index)} />
+<script is:inline>
+  const idx = JSON.parse(document.getElementById('idx').textContent);
+  const q = document.getElementById('q'), out = document.getElementById('results');
+  q.addEventListener('input', () => {
+    const v = q.value.trim().toLowerCase();
+    if (v.length < 2) { out.hidden = true; out.innerHTML = ''; return; }
+    const hits = idx.filter((r) => (r.t + ' ' + r.r + ' class ' + r.c).toLowerCase().includes(v)).slice(0, 8);
+    out.innerHTML = hits.length ? hits.map((r) => `<li><a href="/${r.s}/"><b>${r.t}</b><span>${r.r}${r.c ? ' · Class ' + r.c : ''}</span></a></li>`).join('') : '<li class="none">No rivers match.</li>';
+    out.hidden = false;
+  });
+</script>
+<style>
+  :global(body.v-a) { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; background: #f4f6f5; color: #14201f; }
+  .nav { background: #0b1f20; color: #fff; }
+  .nav-in { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .logo { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 700; font-size: 19px; letter-spacing: .01em; }
+  .nav nav { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+  .nav nav a { color: #cfe3e1; font-size: 15px; }
+  .nav nav a:hover { color: #fff; }
+    .strip { background: #14403f; padding: 22px 24px 26px; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .strip-in { max-width: 760px; margin: 0 auto; position: relative; }
+  .search { display: flex; align-items: center; gap: 12px; background: #fff; color: #14201f; border-radius: 12px; padding: 2px 18px; box-shadow: 0 6px 18px rgba(0,0,0,.22); }
+  .search input { flex: 1; border: 0; outline: 0; font: inherit; font-size: 17px; padding: 13px 0; background: transparent; }
+  .results { position: absolute; left: 0; right: 0; top: calc(100% - 14px); position: absolute; left: 0; right: 0; top: calc(100% + 8px); background: #fff; color: #14201f; border-radius: 12px; list-style: none; margin: 0; padding: 6px; text-align: left; box-shadow: 0 18px 40px rgba(0,0,0,.3); z-index: 10; }
+  .results a { display: flex; justify-content: space-between; gap: 12px; padding: 10px 12px; color: inherit; border-radius: 8px; }
+  .results a:hover { background: #eef3f2; }
+  .results span { color: #5c6d6b; font-size: 14px; }
+  .results .none { padding: 12px; color: #5c6d6b; }
+  main { max-width: 1180px; margin: 0 auto; padding: 0 24px 64px; position: relative; }
+  .head { display: flex; align-items: baseline; justify-content: space-between; margin: 0 0 18px; padding-top: 40px; }
+  .head h2 { margin: 0; font-size: 28px; letter-spacing: -.01em; }
+  .head a { color: #14605b; font-weight: 600; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+  .card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 14px rgba(14,42,43,.08); display: flex; flex-direction: column; transition: transform .18s, box-shadow .18s; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(14,42,43,.16); }
+  .photo { position: relative; aspect-ratio: 16/10; background: #cfdad8; overflow: hidden; display: block; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; }
+  .badge { position: absolute; top: 12px; right: 12px; background: #0e2a2b; color: #f5b942; font-weight: 700; font-size: 12px; padding: 5px 10px; border-radius: 999px; }
+  .body { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
+  .region { margin: 0 0 4px; color: #14605b; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  h3 { margin: 0 0 8px; font-size: 21px; line-height: 1.2; }
+  h3 a { color: #14201f; }
+  .ex { color: #4a5b59; font-size: 15px; line-height: 1.5; margin: 0 0 16px; flex: 1; }
+  .foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid #e5ebea; padding-top: 14px; }
+  .more { color: #14605b; font-weight: 700; font-size: 14px; }
+  .more::after { content: ' →'; }
+  .by { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #4a5b59; }
+  .by i { font-style: normal; width: 30px; height: 30px; border-radius: 50%; background: #14605b; color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 12px; }
+  .foot-bar { background: #0e2a2b; color: #b9d1ce; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 22px max(24px, calc((100% - 1132px)/2)); font-size: 14px; }
+  .foot-bar nav { display: flex; gap: 18px; } .foot-bar a { color: #fff; }
+  @media (max-width: 640px) { .nav nav { gap: 14px; } }
+</style>

@@ -211,6 +211,8 @@ export async function getRedirectRules(): Promise<RedirectItem[]> {
 
 export const RESERVED_SLUGS = new Set([
   'index',
+  'home-2',
+  'home-3',
   '404',
   'category',
   'tag',
