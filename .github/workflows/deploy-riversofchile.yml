@@ -66,11 +66,11 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
       - name: Apply indexing settings to the image server
-        if: vars.RIVER_PRODUCTION == '1' || vars.RIVER_PRODUCTION == '0'
+        if: contains(fromJSON('["0","1"]'), format('{0}', vars.RIVER_PRODUCTION))
         working-directory: image-origin
         run: |
           printf '\n[vars]\nRIVER_PRODUCTION = "%s"\n' "$RIVER_PRODUCTION" >> wrangler.toml
-          pnpm exec wrangler pages deploy public --project-name=riversofchile-images --branch=main --commit-dirty=true
+          ../node_modules/.bin/wrangler pages deploy public --project-name=riversofchile-images --branch=main --commit-dirty=true
         env:
           RIVER_PRODUCTION: ${{ vars.RIVER_PRODUCTION }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
