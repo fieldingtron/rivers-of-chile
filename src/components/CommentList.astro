@@ -1,6 +1,9 @@
 ---
+import { createHash } from 'node:crypto';
+import records from '../../data/comment-translations.json';
 import { commentText } from '../lib/comment-text';
 import type { CommentItem } from '../lib/directus';
+import { createSiteUI } from './site-ui';
 
 interface Props {
   comments: CommentItem[];
@@ -8,6 +11,14 @@ interface Props {
 }
 
 const { comments, parent } = Astro.props;
+const { t, language } = createSiteUI(Astro.url.pathname);
+const archive: Record<string, {original: string; translations: Record<string,string>}> = records;
+function display(c: CommentItem) {
+  const original = commentText(c.content) || t('Link removed.', 'Enlace eliminado.');
+  const digest = createHash('md5').update(c.content || '').digest('hex');
+  const row = archive[digest];
+  return { original, translated: row?.translations[language], source: row?.original || c.original_language || 'und' };
+}
 const visibleIds = new Set(comments.map(c => c.wp_id));
 const entries = comments.filter(c => parent === undefined
   ? !c.parent_wp_id || !visibleIds.has(c.parent_wp_id)
@@ -15,16 +26,22 @@ const entries = comments.filter(c => parent === undefined
 ---
 {entries.length > 0 && (
   <ol class="thread">
-    {entries.map(c => (
+    {entries.map(c => {
+      const { original, translated, source } = display(c);
+      return (
       <li id={c.wp_id ? `comment-${c.wp_id}` : `directus-comment-${c.id}`}>
         <header>
-          <strong>{commentText(c.author_name) || 'Anonymous'}</strong>
+          <strong>{commentText(c.author_name) || t('Anonymous', 'Anónimo')}</strong>
           {c.published_at && <time datetime={c.published_at.slice(0, 10)}>{c.published_at.slice(0, 10)}</time>}
         </header>
-        <div class="comment-body">{commentText(c.content) || 'Link removed.'}</div>
+        <div class="comment-body" lang={translated ? language : source}>{translated || original}</div>
+        {translated && <details class="original">
+          <summary>{t('View original', 'Ver original')} · {source === 'es' ? 'Español' : source === 'en' ? 'English' : t('Mixed languages', 'Varios idiomas')}</summary>
+          <div class="comment-body" lang={source}>{original}</div>
+        </details>}
         {c.wp_id && <Astro.self comments={comments} parent={c.wp_id} />}
       </li>
-    ))}
+    );})}
   </ol>
 )}
 <style>
@@ -34,4 +51,6 @@ const entries = comments.filter(c => parent === undefined
   .comment-body { white-space: pre-line; margin-block-start: .35rem; }
   header { display: flex; align-items: baseline; flex-wrap: wrap; gap: .6rem; }
   time { font-size: .85em; }
+  .original { margin-top: .4rem; }
+  summary { font: .85rem system-ui,sans-serif; cursor: pointer; text-decoration: underline; }
 </style>

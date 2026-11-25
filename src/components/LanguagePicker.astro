@@ -1,0 +1,55 @@
+---
+import { languages } from '../lib/languages';
+import { createSiteUI } from './site-ui';
+
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+const flags: Record<string, string> = { en: '🇺🇸', es: '🇨🇱' };
+const { language, t, languageRoutes } = createSiteUI(Astro.url.pathname);
+---
+<span class:list={['language-picker', {compact}]} role="group" aria-label={t('Site language', 'Idioma del sitio')}>
+  {languages.map(({ code, label }) => (
+    <a
+      href={languageRoutes[code]}
+      data-site-language={code}
+      aria-label={label}
+      title={label}
+      lang={code}
+      hreflang={code}
+      aria-current={language === code ? 'true' : undefined}
+    >{compact && <span aria-hidden="true" class="flag">{flags[code]}</span>}{compact ? code.toUpperCase() : label}</a>
+  ))}
+</span>
+
+<style>
+  .language-picker {
+    display: inline-flex;
+    align-items: center;
+    gap: .15rem;
+    padding: .15rem;
+    border: 1px solid currentColor;
+    border-radius: .4rem;
+    font-family: var(--font-ui, system-ui);
+    white-space: nowrap;
+  }
+  .language-picker a {
+    display: inline-block;
+    padding: .23rem .42rem;
+    border-radius: .25rem;
+    color: inherit;
+    font-size: .84rem;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+  .language-picker a:hover { text-decoration: underline; }
+  .language-picker a[aria-current] {
+    background: var(--language-active-bg, var(--accent-ink, white));
+    color: var(--language-active-ink, var(--accent, #111827));
+    font-weight: 700;
+  }
+  .language-picker.compact { border: 0; padding: 0; gap: 0; }
+  .compact a { display: inline-flex; align-items: center; gap: .28rem; padding: .35rem .4rem; font-size: .78rem; letter-spacing: .04em; }
+  .compact a + a { border-inline-start: 1px solid currentColor; border-radius: 0; }
+  .compact a[aria-current] { background: transparent; color: inherit; text-decoration: underline; text-underline-offset: .23em; }
+  .flag { font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; font-size: 1rem; line-height: 1; }
+</style>

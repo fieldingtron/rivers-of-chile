@@ -1,4 +1,9 @@
 ---
+import { createSiteUI } from '../site-ui';
+import LanguagePicker from '../LanguagePicker.astro';
+import { taxonomyName } from '../../lib/spanish';
+const navigationLabels: Record<string, string> = {"Rivers": "Ríos", "Map": "Mapa", "First descents": "Primeros descensos", "Dedication": "Dedicatoria", "Authors": "Autores"};
+const { t, href, spanish } = createSiteUI(Astro.url.pathname);
 import HomeLinks from '../HomeLinks.astro';
 import { regionLabel, regionList, excerptOf, imageAt, initials, authorLabel, popularRivers, SITE_NAV } from '../../lib/home';
 const { posts } = Astro.props;
@@ -8,55 +13,55 @@ const lead = picks[0];
 const side = picks.slice(1);
 const regions = regionList(rivers);
 const rows = [...rivers].sort((a: any, b: any) => a.title.localeCompare(b.title)).map((p: any) => ({
-  t: p.title, s: p.slug, r: regionLabel(p), rs: p.region || p.country || '', c: p.class_label || '—', a: authorLabel(p.author_name), cm: Number(p.class_max || 0)
+  t: p.title, s: p.slug, r: (spanish ? taxonomyName(regionLabel(p)) : regionLabel(p)), rs: p.region || p.country || '', c: p.class_label || '—', a: authorLabel(p.author_name), cm: Number(p.class_max || 0)
 }));
 ---
 <div class="wrap">
   <header class="mast">
-    <div class="meta"><span>Est. 2007</span><span>{rivers.length} rivers documented</span></div>
-    <a class="title" href="/">Rivers of Chile</a>
-    <nav>{SITE_NAV.map((l) => <a href={l.href}>{l.label}</a>)}<HomeLinks /></nav>
+    <div class="meta"><span>{t("Est. 2007", "Desde 2007")}</span><span>{rivers.length} {t("rivers documented", "ríos documentados")}</span></div>
+    <a class="title" href={href("/")}>Rivers of Chile</a>
+    <nav>{SITE_NAV.map((l) => <a href={href(l.href)}>{t(l.label, navigationLabels[l.label] || l.label)}</a>)}<HomeLinks /><LanguagePicker compact /></nav>
   </header>
   <section class="lead">
-    <a class="lead-photo" href={`/${lead.slug}/`}><img src={imageAt(lead.featured_image_url, 1200)} alt="" decoding="async" /></a>
+    <a class="lead-photo" href={href(`/${lead.slug}/`)}><img src={imageAt(lead.featured_image_url, 1200)} alt="" decoding="async" /></a>
     <div class="lead-text">
-      <p class="over">Featured guide · {regionLabel(lead)}</p>
-      <h1><a href={`/${lead.slug}/`}>{lead.title}</a></h1>
+      <p class="over">{t("Featured guide", "Guía destacada")} · {(spanish ? taxonomyName(regionLabel(lead)) : regionLabel(lead))}</p>
+      <h1><a href={href(`/${lead.slug}/`)}>{lead.title}</a></h1>
       <p class="dek">{excerptOf(lead, 240)}</p>
-      <p class="by"><i>{initials(lead.author_name)}</i>By {authorLabel(lead.author_name)} · Class {lead.class_label}</p>
-      <a class="read" href={`/${lead.slug}/`}>Read the guide</a>
+      <p class="by"><i>{initials(lead.author_name)}</i>{t("By", "Por")} {authorLabel(lead.author_name)} · {t("Class", "Clase")} {lead.class_label}</p>
+      <a class="read" href={href(`/${lead.slug}/`)}>{t("Read the guide", "Leer la guía")}</a>
     </div>
   </section>
   <section class="secondary">
     {side.map((p: any) => (
       <article>
-        <a href={`/${p.slug}/`}><img src={imageAt(p.featured_image_url, 560)} alt="" decoding="async" /></a>
-        <p class="over">{regionLabel(p)}{p.class_label ? ` · Class ${p.class_label}` : ''}</p>
-        <h2><a href={`/${p.slug}/`}>{p.title}</a></h2>
+        <a href={href(`/${p.slug}/`)}><img src={imageAt(p.featured_image_url, 560)} alt="" decoding="async" /></a>
+        <p class="over">{(spanish ? taxonomyName(regionLabel(p)) : regionLabel(p))}{p.class_label ? ` · ${t("Class", "Clase")} ${p.class_label}` : ''}</p>
+        <h2><a href={href(`/${p.slug}/`)}>{p.title}</a></h2>
         <p>{excerptOf(p, 110)}</p>
       </article>
     ))}
   </section>
   <section class="dir">
     <div class="dir-head">
-      <h2>The river index</h2>
+      <h2>{t("The river index", "Índice de ríos")}</h2>
       <div class="tools">
-        <input id="f" type="search" placeholder="Filter by name…" aria-label="Filter rivers" />
-        <select id="reg" aria-label="Region"><option value="">All regions</option>{regions.map((r) => <option value={r.slug}>{r.label} ({r.count})</option>)}</select>
-        <select id="cls" aria-label="Class"><option value="">Any class</option><option value="3">Class III+</option><option value="4">Class IV+</option><option value="5">Class V</option></select>
+        <input id="f" type="search" placeholder={t("Filter by name\u2026","Filtrar por nombre…")} aria-label={t("Filter rivers","Filtrar ríos")} />
+        <select id="reg" aria-label={t("Region","Región")}><option value="">{t("All regions", "Todas las regiones")}</option>{regions.map((r) => <option value={r.slug}>{spanish ? taxonomyName(r.label) : r.label} ({r.count})</option>)}</select>
+        <select id="cls" aria-label={t("Class","Clase")}><option value="">{t("Any class", "Todas las clases")}</option><option value="3">{t("Class III+", "Clase III+")}</option><option value="4">{t("Class IV+", "Clase IV+")}</option><option value="5">{t("Class V", "Clase V")}</option></select>
       </div>
     </div>
     <table>
-      <thead><tr><th>River</th><th>Region</th><th>Class</th><th>Author</th></tr></thead>
+      <thead><tr><th>{t("River", "Río")}</th><th>{t("Region", "Región")}</th><th>{t("Class", "Clase")}</th><th>{t("Author", "Autor")}</th></tr></thead>
       <tbody id="rows">
-        {rows.map((r) => <tr data-t={r.t.toLowerCase()} data-r={r.rs} data-c={r.cm}><td><a href={`/${r.s}/`}>{r.t}</a></td><td>{r.r}</td><td><span class="cl">{r.c}</span></td><td>{r.a}</td></tr>)}
+        {rows.map((r) => <tr data-t={r.t.toLowerCase()} data-r={r.rs} data-c={r.cm}><td><a href={href(`/${r.s}/`)}>{r.t}</a></td><td>{r.r}</td><td><span class="cl">{r.c}</span></td><td>{r.a}</td></tr>)}
       </tbody>
     </table>
     <p id="count" class="count"></p>
   </section>
-  <footer><span>Rivers of Chile — a field guide.</span><nav><a href="/dedication/">Dedication</a><a href="/about-authors/">Authors</a><a href="/hardcopy-guidebook/">Hardcopy guidebook</a></nav></footer>
+  <footer><span>{t("Rivers of Chile — a field guide.", "Rivers of Chile — guía de ríos.")}</span><nav><a href={href("/dedication/")}>{t("Dedication", "Dedicatoria")}</a><a href={href("/about-authors/")}>{t("Authors", "Autores")}</a><a href={href("/hardcopy-guidebook/")}>{t("Hardcopy guidebook", "Guía impresa")}</a><a href={href('/contact-us/')}>{t('Contact', 'Contacto')}</a> <LanguagePicker /></nav></footer>
 </div>
-<script is:inline>
+<script define:vars={{ spanish }}>
   const rowsEl = [...document.querySelectorAll('#rows tr')];
   const f = document.getElementById('f'), reg = document.getElementById('reg'), cls = document.getElementById('cls'), count = document.getElementById('count');
   function run() {
@@ -66,7 +71,7 @@ const rows = [...rivers].sort((a: any, b: any) => a.title.localeCompare(b.title)
       const ok = (!q || tr.dataset.t.includes(q)) && (!r || tr.dataset.r === r) && (!c || Number(tr.dataset.c) >= c);
       tr.hidden = !ok; if (ok) n++;
     });
-    count.textContent = n + ' of ' + rowsEl.length + ' rivers';
+    count.textContent = spanish ? n + ' de ' + rowsEl.length + ' ríos' : n + ' of ' + rowsEl.length + ' rivers';
   }
   [f, reg, cls].forEach((el) => el.addEventListener('input', run)); run();
 </script>
@@ -100,6 +105,6 @@ const rows = [...rivers].sort((a: any, b: any) => a.title.localeCompare(b.title)
   .cl { display: inline-block; min-width: 38px; text-align: center; background: #1d1a16; color: #f6f1e7; padding: 2px 8px; font-weight: 700; font-size: 13px; }
   .count { color: #6d6458; font: 13px system-ui, sans-serif; }
   footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 32px; padding-top: 18px; border-top: 3px double #1d1a16; font: 13px system-ui, sans-serif; color: #6d6458; }
-  footer nav { display: flex; gap: 18px; } footer a { color: #1d1a16; }
+  footer nav { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; } footer a { color: #1d1a16; }
   @media (max-width: 800px) { .lead, .secondary { grid-template-columns: 1fr; } .secondary article { border: 0; padding: 0; } td:nth-child(4), th:nth-child(4) { display: none; } }
 </style>

@@ -1,0 +1,41 @@
+---
+import { languageForPath, languages, languagePrefix } from '../../../lib/languages';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { tagPathSlug, getTags, getPosts } from '../../../lib/directus';
+
+export async function getStaticPaths() {
+  const routes = await Promise.all(languages.map(async ({ code, prefix }) => {
+    const lang = prefix.slice(1) || undefined;
+    const es = code === 'es';
+    const [tags, posts] = await Promise.all([getTags(es), getPosts(code)]);
+    return tags
+      .filter((t) => t.slug)
+      .map((tag) => ({
+        params: { lang, slug: tagPathSlug(tag.slug) },
+        props: {
+          tag,
+          posts: posts.filter((p) => (p.legacy_tags || []).includes(tag.slug))
+        }
+      }));
+  }));
+  return routes.flat();
+}
+
+const language = languageForPath(Astro.url.pathname);
+const es = language === 'es';
+const prefix = languagePrefix(language);
+const { tag, posts } = Astro.props;
+---
+<BaseLayout title={tag.name} description={es ? `Entradas con la etiqueta ${tag.name}.` : `Entries tagged ${tag.name}.`}>
+  <h1 class="page-title">{tag.name}</h1>
+  <p class="lede">{posts.length} {es ? (posts.length === 1 ? 'entrada' : 'entradas') : (posts.length === 1 ? 'entry' : 'entries')}.</p>
+  <ul class="river-list">
+    {posts.map((post) => (
+      <li>
+        <a href={`${prefix}/${post.slug}/`}>
+          <strong>{post.title}</strong>
+        </a>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

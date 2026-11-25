@@ -14,3 +14,5 @@ scripts/.directus-build-token
 # Local image migration input/output
 .image-migration/
 dist-*/
+
+__pycache__/

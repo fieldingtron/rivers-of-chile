@@ -1,0 +1,60 @@
+const names: Record<string, string> = {
+  "Santiago Metropolitan": "Región Metropolitana",
+  "Santiago Metropolitan Region": "Región Metropolitana de Santiago",
+  "Region XIV De Los Rios": "Región XIV de Los Ríos",
+  "news": "Noticias",
+  "argentina": "Argentina",
+  "chile": "Chile",
+  "brasil": "Brasil",
+  "brazil": "Brasil",
+  "pucon": "Pucón",
+  "map": "Mapa",
+  "waterfalls": "Cascadas",
+  "Uncategorized": "Sin categoría",
+  "guidebook": "Guía de ríos",
+  "guide": "Guía",
+  "whitewater": "Aguas blancas",
+  "22 falls": "22 saltos",
+  "Chile Whitewater guide": "Guía de aguas blancas de Chile",
+  "chile kayak guide": "Guía de kayak de Chile",
+  "Chile whitewater guide book": "Guía de aguas blancas de Chile",
+  "Chile whitewater guidebook": "Guía de aguas blancas de Chile",
+  "chilean whitewater river guide": "Guía de ríos de aguas blancas de Chile",
+  "Guide kayak Chile": "Guía de kayak de Chile",
+  "kayaking guidebook": "Guía de kayak",
+  "kayak guide": "Guía de kayak",
+  "south american kayaking": "Kayak en Sudamérica",
+  "kayaking south america": "Kayak en Sudamérica",
+  "whitewater andes": "Aguas blancas de los Andes",
+  "whitewater guide": "Guía de aguas blancas",
+  "river guide": "Guía de ríos",
+  "River description": "Descripción del río",
+  "Rivers": "Ríos",
+  "Rivers of Chile guidebook": "Guía de ríos de Chile",
+  "rivers of Argentina chile guidebook": "Guía de ríos de Argentina y Chile",
+  "pucon waterfalls": "Cascadas de Pucón",
+  "pucon rivers": "Ríos de Pucón",
+  "Chile whitewater kayak": "Kayak de aguas blancas en Chile",
+  "kayak chile whitewater": "Kayak de aguas blancas en Chile",
+  "kayak chile rivers": "Kayak en los ríos de Chile",
+  "kayak chile": "Kayak en Chile",
+  "chile kayak": "Kayak en Chile",
+  "chile whitewater": "Aguas blancas de Chile",
+  "Pucon Whitewater": "Aguas blancas de Pucón",
+  "kayak pucon": "Kayak en Pucón",
+  "Clarillo National park": "Parque Nacional Río Clarillo",
+  "Macal section": "Tramo del Macal",
+  "Chillan": "Chillán",
+  "Hornopiren": "Hornopirén",
+  "futaleufu": "Futaleufú",
+  "River Longavi": "Río Longaví"
+};
+export function taxonomyName(name: string): string {
+  return names[name] ?? name.replace(/^class /i, 'Clase ').replace(/^region /i, 'Región ')
+    .replace(/^rio /i, 'Río ').replace(/^(.+) river$/i, 'Río $1');
+}
+export function localizedBodyLinks(html: string, prefix: string): string {
+  if (!prefix) return html;
+  return html.replace(/(\shref=["'])(?:https?:\/\/(?:www\.)?riversofchile\.com)?(\/(?:(?:category|tag)\/)?[a-z\d%-]*\/?)([?#][^"']*)?(["'])/gi,
+    (original, attr, path, suffix, quote) => path.startsWith(prefix + '/') ? original : attr + prefix + path + (suffix || '') + quote);
+}

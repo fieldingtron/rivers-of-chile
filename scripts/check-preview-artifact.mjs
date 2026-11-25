@@ -54,3 +54,17 @@ for (const file of files) {
 }
 
 console.log('Preview artifact checks passed: populated pages, 404, noindex header+meta, robots Disallow, redirects, no secret.');
+
+const esHome = read('es/index.html');
+assert.match(esHome, /<html lang="es"/);
+assert.match(esHome, /Ríos populares/);
+assert.match(esHome, /🇨🇱/);
+assert.match(esHome, /href="\/es\/category\/chile\/"/);
+for (const file of files.filter((file) => file.endsWith('.html') && !file.startsWith('es/'))) {
+  const translated = read(file === '404.html' ? 'es/404/index.html' : 'es/' + file);
+  assert.match(translated, /hreflang="es"/, file);
+  assert.doesNotMatch(translated, /ZXQ\d|QXZ/, file);
+}
+assert.match(read('es/contact-us/index.html'), /action="\/api\/contact"/);
+assert.match(read('es/rio-niblinto-de-malleco/index.html'), /action="\/api\/comment"/);
+console.log('Bilingual routes, Chilean flag and visitor forms verified.');

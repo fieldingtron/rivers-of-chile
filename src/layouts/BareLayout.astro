@@ -1,15 +1,20 @@
 ---
+import LanguageChooser from '../components/LanguageChooser.astro';
+import LanguagePreference from '../components/LanguagePreference.astro';
+import { languageForPath } from '../lib/languages';
 import SEO from '../components/SEO.astro';
 interface Props { title: string; description?: string; image?: string; bodyClass?: string; }
 const { title, description, image, bodyClass } = Astro.props;
 ---
 <!doctype html>
-<html lang="en">
+<html lang={languageForPath(Astro.url.pathname)}>
   <head>
     <SEO title={title} description={description} image={image} />
+    <LanguagePreference />
   </head>
   <body class={bodyClass}>
     <slot />
+    <LanguageChooser />
   </body>
 </html>
 <style is:global>

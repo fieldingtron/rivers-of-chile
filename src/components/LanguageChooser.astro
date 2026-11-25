@@ -1,0 +1,45 @@
+---
+import LanguagePicker from './LanguagePicker.astro';
+import { createSiteUI } from './site-ui';
+
+const { t } = createSiteUI(Astro.url.pathname);
+---
+<aside class="language-chooser" id="language-chooser" aria-labelledby="language-chooser-heading" hidden>
+  <p id="language-chooser-heading">{t('Choose your language', 'Elige tu idioma')}</p>
+  <LanguagePicker />
+  <button type="button" aria-label={t('Dismiss language chooser', 'Cerrar selector de idioma')}>×</button>
+</aside>
+
+<style>
+  .language-chooser {
+    --language-active-bg: var(--accent, #111827);
+    --language-active-ink: var(--accent-ink, white);
+    position: sticky;
+    z-index: 30;
+    bottom: 0;
+    padding: .8rem var(--gutter, 1rem) max(.8rem, env(safe-area-inset-bottom));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: .5rem .8rem;
+    background: var(--card, white);
+    color: var(--ink, #111827);
+    box-shadow: 0 -1px 12px rgb(0 0 0 / 18%);
+    font-family: var(--font-ui, system-ui);
+  }
+  .language-chooser[hidden] { display: none; }
+  p { margin: 0; font-weight: 600; }
+  button {
+    border: 1px solid transparent;
+    border-radius: .3rem;
+    background: transparent;
+    color: inherit;
+    min-width: 2rem;
+    min-height: 2rem;
+    cursor: pointer;
+    font: inherit;
+    font-size: 1.2rem;
+  }
+  button:hover { border-color: currentColor; }
+</style>

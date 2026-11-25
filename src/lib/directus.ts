@@ -1,3 +1,5 @@
+import { defaultLanguage, type Language } from './languages';
+import { taxonomyName } from './spanish';
 /**
  * Directus API client for the Rivers of Chile static site.
  * Hosted builds fetch published roc_* collections over HTTPS with a scoped
@@ -126,7 +128,7 @@ async function fetchDirectus<T>(collection: string): Promise<T[]> {
       const url = new URL(`/items/${collection}`, endpoint);
       url.searchParams.set('limit', '-1');
       if (collection === 'roc_comments') {
-        url.searchParams.set('fields', 'id,wp_id,parent_wp_id,status,author_name,content,published_at,post.slug,page.slug');
+        url.searchParams.set('fields', 'id,wp_id,parent_wp_id,status,author_name,content,original_language,published_at,post.slug,page.slug');
       }
       if (required) url.searchParams.set('filter[status][_eq]', 'published');
       const res = await fetch(url, {
@@ -224,12 +226,27 @@ function applyFileFields<T extends { featured_image?: string | null; featured_im
   return items;
 }
 
-export async function getPosts(): Promise<PostItem[]> {
+// Each reviewed export is a locale directory. No private database access is required at build time.
+const editions = import.meta.glob<Record<string, Partial<PostItem>>>('../../data/*/{posts,pages}.json', {eager: true, import: 'default'});
+
+function localizedItems<T extends PageItem | PostItem>(items: T[], language: Language, kind: 'posts' | 'pages'): T[] {
+  if (language === defaultLanguage) return items;
+  const translations = editions[`../../data/${language}/${kind}.json`];
+  if (!translations) throw new Error(`Missing reviewed ${language} export for ${kind}`);
+  return items.map((item) => {
+    const translated = translations[item.slug];
+    if (translated?.title && typeof translated.content === 'string') return { ...item, ...translated };
+    return { ...item, seo_title: null, seo_description: null, excerpt: '', content:
+      '<p>La traducción de esta página aún no está disponible. Puedes leer el original seleccionando English.</p>' };
+  });
+}
+
+export async function getPosts(language: Language = defaultLanguage): Promise<PostItem[]> {
   const items = await fetchDirectus<PostItem>('roc_posts');
   await loadFileLibrary();
   await loadAvatars();
   applyFileFields(items);
-  return requirePublished(items, 'roc_posts').sort((a, b) => a.title.localeCompare(b.title));
+  return localizedItems(requirePublished(items, 'roc_posts'), language, 'posts').sort((a, b) => a.title.localeCompare(b.title));
 }
 
 async function loadAvatars(): Promise<void> {
@@ -241,20 +258,22 @@ async function loadAvatars(): Promise<void> {
   }
 }
 
-export async function getPages(): Promise<PageItem[]> {
+export async function getPages(language: Language = defaultLanguage): Promise<PageItem[]> {
   const items = await fetchDirectus<PageItem>('roc_pages');
   await loadFileLibrary();
-  return requirePublished(items, 'roc_pages');
+  return localizedItems(requirePublished(items, 'roc_pages'), language, 'pages');
 }
 
-export async function getCategories(): Promise<CategoryItem[]> {
+export async function getCategories(es = false): Promise<CategoryItem[]> {
   const items = await fetchDirectus<CategoryItem>('roc_categories');
-  return items.filter((item) => item.status === 'published' || !item.status);
+  const published = items.filter((item) => item.status === 'published' || !item.status);
+  return es ? published.map((item) => ({...item, name: taxonomyName(item.name)})) : published;
 }
 
-export async function getTags(): Promise<TagItem[]> {
+export async function getTags(es = false): Promise<TagItem[]> {
   const items = await fetchDirectus<TagItem>('roc_tags');
-  return items.filter((item) => item.status === 'published' || !item.status);
+  const published = items.filter((item) => item.status === 'published' || !item.status);
+  return es ? published.map((item) => ({...item, name: taxonomyName(item.name)})) : published;
 }
 
 export async function getAuthors(): Promise<AuthorItem[]> {
@@ -264,6 +283,7 @@ export async function getAuthors(): Promise<AuthorItem[]> {
 
 export const RESERVED_SLUGS = new Set([
   'index',
+  'es',
   'home-2',
   'home-3',
   '404',
@@ -280,6 +300,7 @@ export const RESERVED_SLUGS = new Set([
 ]);
 
 export interface CommentItem {
+  original_language?: string | null;
   id: number;
   wp_id: number | null;
   parent_wp_id: number | null;

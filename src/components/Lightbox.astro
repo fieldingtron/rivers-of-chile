@@ -1,8 +1,12 @@
-<div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Image viewer">
-  <button type="button" class="lb-backdrop" data-lb="close" tabindex="-1" aria-label="Close"></button>
-  <button type="button" class="lb-close" data-lb="close" aria-label="Close">&times;</button>
-  <button type="button" class="lb-prev" data-lb="prev" aria-label="Previous image">&#10094;</button>
-  <button type="button" class="lb-next" data-lb="next" aria-label="Next image">&#10095;</button>
+---
+import { createSiteUI } from './site-ui';
+const { t } = createSiteUI(Astro.url.pathname);
+---
+<div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label={t('Image viewer', 'Visor de imágenes')}>
+  <button type="button" class="lb-backdrop" data-lb="close" tabindex="-1" aria-label={t('Close', 'Cerrar')}></button>
+  <button type="button" class="lb-close" data-lb="close" aria-label={t('Close', 'Cerrar')}>&times;</button>
+  <button type="button" class="lb-prev" data-lb="prev" aria-label={t('Previous image', 'Imagen anterior')}>&#10094;</button>
+  <button type="button" class="lb-next" data-lb="next" aria-label={t('Next image', 'Imagen siguiente')}>&#10095;</button>
   <figure class="lb-frame">
     <img class="lb-image" alt="" />
     <figcaption class="lb-caption"></figcaption>

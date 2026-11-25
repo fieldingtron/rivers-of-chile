@@ -1,16 +1,20 @@
 ---
+import VisitorForm from './VisitorForm.astro';
 import CommentList from './CommentList.astro';
 import type { CommentItem } from '../lib/directus';
+import { createSiteUI } from './site-ui';
 
-interface Props { comments: CommentItem[] }
-const { comments } = Astro.props;
+interface Props { comments: CommentItem[]; slug: string; allowSubmission?: boolean }
+const { comments, slug, allowSubmission = true } = Astro.props;
+const { t } = createSiteUI(Astro.url.pathname);
+const heading = comments.length
+  ? `${comments.length} ${comments.length === 1 ? t('comment', 'comentario') : t('comments', 'comentarios')}`
+  : t('Comments', 'Comentarios');
 ---
 <section class="comments" id="comments" aria-labelledby="comments-title">
-  <h2 id="comments-title">{comments.length ? `${comments.length} ${comments.length === 1 ? 'comment' : 'comments'}` : 'Comments'}</h2>
+  <h2 id="comments-title">{heading}</h2>
   {comments.length > 0 && <CommentList comments={comments} />}
-  <label for="new-comment">Add a comment</label>
-  <textarea id="new-comment" rows="3" disabled aria-describedby="comment-availability"></textarea>
-  <small id="comment-availability">New comments are closed for now.</small>
+  {allowSubmission && <VisitorForm kind="comment" slug={slug} />}
 </section>
 <style>
   section { margin-block-start: 2.5rem; padding-block-start: 1rem; border-top: 1px solid #ccc; }

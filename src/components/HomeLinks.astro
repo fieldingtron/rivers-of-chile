@@ -1,4 +1,6 @@
 ---
+import { createSiteUI } from './site-ui';
+const { t, href, spanish } = createSiteUI(Astro.url.pathname);
 // "Home 1 | Home 2 | Home 3": links between the homepage design options.
 const compact = Boolean(Astro.props.compact);
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
@@ -8,8 +10,8 @@ const opts = [
   { href: '/home-3/', label: 'Home 3', match: '/home-3' }
 ];
 ---
-<span class:list={["home-links", compact && "compact"]} aria-label="Homepage design options">
-  {opts.map((o) => <a href={o.href} aria-current={path === o.match ? 'page' : undefined}>{o.label}</a>)}
+<span class:list={["home-links", compact && "compact"]} aria-label={t("Homepage design options","Opciones de portada")}>
+  {opts.map((o) => <a href={href(o.href)} aria-current={path === (href(o.href).replace(/\/$/, '') || '/') ? 'page' : undefined}>{t(o.label, o.label.replace('Home', 'Inicio'))}</a>)}
 </span>
 <style>
   .home-links { display: inline-flex; gap: 2px; align-items: center; padding: 3px; border: 1px solid currentColor; border-radius: 999px; opacity: .95; }

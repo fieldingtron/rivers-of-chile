@@ -1,12 +1,15 @@
 ---
+import { createSiteUI } from './site-ui';
+import LanguagePicker from './LanguagePicker.astro';
+const { t, href, spanish } = createSiteUI(Astro.url.pathname);
 ---
 <footer class="site-footer">
   <div class="site-footer-inner">
-    <p>Rivers of Chile — a field guide.</p>
-    <nav class="site-nav" aria-label="Footer">
-      <a href="/dedication/">Dedication</a>
-      <a href="/about-authors/">Authors</a>
-      <a href="/hardcopy-guidebook/">Hardcopy guidebook</a>
-    </nav>
+    <p>{t("Rivers of Chile — a field guide.", "Rivers of Chile — guía de ríos.")}</p>
+    <nav class="site-nav" aria-label={t("Footer","Pie de página")}>
+      <a href={href("/dedication/")}>{t("Dedication", "Dedicatoria")}</a>
+      <a href={href("/about-authors/")}>{t("Authors", "Autores")}</a>
+      <a href={href("/hardcopy-guidebook/")}>{t("Hardcopy guidebook", "Guía impresa")}</a>
+    <a href={href('/contact-us/')}>{t('Contact', 'Contacto')}</a> <LanguagePicker /></nav>
   </div>
 </footer>

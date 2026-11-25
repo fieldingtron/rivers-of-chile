@@ -1,0 +1,79 @@
+---
+import { defaultLanguage, languages } from '../lib/languages';
+import { createSiteUI } from './site-ui';
+
+const { language, isNotFound, languageRoutes } = createSiteUI(Astro.url.pathname);
+---
+<script define:vars={{ defaultLanguage, languages, language, isNotFound, languageRoutes }}>
+  (() => {
+    const storage = 'roc_language';
+    const dismissal = 'roc_language_dismissed';
+    const read = (key) => document.cookie
+      .split(';')
+      .map((cookie) => cookie.trim())
+      .find((cookie) => cookie.startsWith(key + '='))
+      ?.slice(key.length + 1);
+    const write = (key, value) => {
+      const secure = location.protocol === 'https:' ? '; Secure' : '';
+      document.cookie = key + '=' + value + '; Path=/; Max-Age=31536000; SameSite=Lax' + secure;
+    };
+    const withLocation = (route) => route + location.search + location.hash;
+    const preference = read(storage);
+    const chosen = languages.some(({ code }) => code === preference);
+    const dismissed = read(dismissal) === '1';
+    const browserLanguage = (navigator.languages?.length ? navigator.languages : [navigator.language])
+      .map((tag) => tag?.toLowerCase() || '')
+      .map((tag) => languages.find(({ browserLanguage }) => {
+        const range = browserLanguage.toLowerCase();
+        return tag === range || tag.startsWith(range + '-');
+      })?.code)
+      .find(Boolean);
+    const target = chosen ? preference : dismissed ? undefined : browserLanguage;
+    const internalNavigation = document.referrer && new URL(document.referrer).origin === location.origin;
+
+    // Locale URLs and ordinary navigation already encode the intended language.
+    if (!isNotFound && !internalNavigation && language === defaultLanguage && target && target !== language) {
+      location.replace(withLocation(languageRoutes[target]));
+      return;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const banner = document.getElementById('language-chooser');
+      const links = document.querySelectorAll('a[data-site-language]');
+      const routes = Array.from(links, (link) => link.getAttribute('href'));
+      const updateLinks = () => links.forEach((link, i) => {
+        link.href = withLocation(routes[i]);
+      });
+      updateLinks();
+      window.addEventListener('hashchange', updateLinks);
+      const syncBanner = () => {
+        const stored = read(storage);
+        banner.hidden = languages.some(({ code }) => code === stored) || read(dismissal) === '1';
+      };
+      const hideBanner = () => {
+        const restoreFocus = banner.contains(document.activeElement);
+        banner.hidden = true;
+        if (restoreFocus) document.querySelector('a[data-site-language][aria-current]')?.focus({ preventScroll: true });
+      };
+      syncBanner();
+      window.addEventListener('pageshow', syncBanner);
+
+      links.forEach((link) => {
+        const choose = () => {
+          write(storage, link.dataset.siteLanguage);
+          hideBanner();
+          updateLinks();
+        };
+        link.addEventListener('click', choose);
+        link.addEventListener('auxclick', (event) => {
+          if (event.button === 1) choose();
+        });
+      });
+
+      banner.querySelector('button').addEventListener('click', () => {
+        write(dismissal, '1');
+        hideBanner();
+      });
+    });
+  })();
+</script>

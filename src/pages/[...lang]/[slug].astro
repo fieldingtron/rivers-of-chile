@@ -1,0 +1,141 @@
+---
+import { languages, languageForPath, languagePrefix } from '../../lib/languages';
+import { taxonomyName, localizedBodyLinks } from '../../lib/spanish';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import VisitorForm from '../../components/VisitorForm.astro';
+import Comments from '../../components/Comments.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import { tagPathSlug, getPosts, getPages, getComments, type CommentItem, getCategories, getTags, RESERVED_SLUGS, type PostItem, type PageItem } from '../../lib/directus';
+import { loadImageManifest, prepareArticleImages, featuredImageUrl, publicBase, HERO_SIZES, assetFor, pickDisplay, displayVariants, variantUrl, isPlaceholderFeatured } from '../../lib/legacy-images.mjs';
+import { rewriteDirectusAssets } from '../../lib/file-registry.mjs';
+import { regionGuideLabel, authorLabel } from '../../lib/home';
+
+export async function getStaticPaths() {
+  const routes = await Promise.all(languages.map(async ({ code, prefix }) => {
+    const lang = prefix.slice(1) || undefined;
+    const [posts, pages, comments] = await Promise.all([getPosts(code), getPages(code), getComments()]);
+    const used = new Set(RESERVED_SLUGS);
+    const pageSlugs = new Set(pages.map((p) => p.slug));
+    const paths: { params: { lang: string | undefined; slug: string }; props: { type: 'post' | 'page'; item: PostItem | PageItem; comments: CommentItem[] } }[] = [];
+
+    for (const item of [...pages, ...posts]) {
+      if (!item.slug || used.has(item.slug)) continue;
+      used.add(item.slug);
+      const type = pageSlugs.has(item.slug) ? 'page' : 'post';
+      paths.push({
+        params: { lang, slug: item.slug },
+        props: { type, item, comments: comments.filter(c => c[type]?.slug === item.slug) }
+      });
+    }
+    return paths;
+  }));
+  return routes.flat();
+}
+
+interface Props {
+  type: 'post' | 'page';
+  item: PostItem | PageItem;
+  comments: CommentItem[];
+}
+
+const language = languageForPath(Astro.url.pathname);
+const prefix = languagePrefix(language);
+const es = language === 'es';
+const { type, item, comments } = Astro.props;
+const post = type === 'post' ? (item as PostItem) : null;
+const [categories, tags] = post ? await Promise.all([getCategories(es), getTags(es)]) : [[], []];
+const catNames = post
+  ? (post.legacy_categories || []).map((slug) => categories.find((c) => c.slug === slug)).filter(Boolean)
+  : [];
+const tagNames = post
+  ? (post.legacy_tags || []).map((slug) => tags.find((t) => t.slug === slug)).filter(Boolean)
+  : [];
+const description = post?.seo_description || post?.excerpt || (item as PageItem).seo_description || undefined;
+const images = loadImageManifest();
+const featured = post?.featured_image_url || undefined;
+const image = featuredImageUrl(images, featured) || featured || undefined;
+const preparedBody = prepareArticleImages(rewriteDirectusAssets(item.content || '', publicBase(images)), images);
+const body = item.slug === 'contact-us' ? '' : localizedBodyLinks(preparedBody, prefix);
+const featuredAsset = featured ? assetFor(images, featured) : undefined;
+const featuredDisplay = featuredAsset ? pickDisplay(featuredAsset) : undefined;
+const featuredAlreadyInBody = !!(featuredAsset?.variants || []).some((v: { key?: string }) => {
+  const name = String(v.key || '').split('/').pop();
+  return name && (body.includes(name) || (item.content || '').includes(name));
+});
+const showHero = Boolean(image && featuredAsset && !featuredAlreadyInBody && !isPlaceholderFeatured(featured, featuredAsset));
+const heroSrcset = showHero && featuredAsset && images
+  ? displayVariants(featuredAsset).map((v: { key: string; width: number }) => `${variantUrl(images, v)} ${v.width}w`).join(', ')
+  : undefined;
+---
+<BaseLayout
+  title={item.seo_title || item.title}
+  description={description}
+  type={type === 'post' ? 'article' : 'website'}
+  image={image}
+>
+  <article class="prose">
+    <div class="prose-header">
+    <h1 class="page-title">{item.title}</h1>
+    {post && (
+      <p class="meta-line">
+        {post.kind === 'river' && post.class_label && <span>{es ? 'Clase' : 'Class'} {post.class_label}</span>}
+        {post.region && <span> · {es ? taxonomyName(regionGuideLabel(post)) : regionGuideLabel(post)}</span>}
+        {post.author_name && <span> · {authorLabel(post.author_name)}</span>}
+        {post.published_at && <span> · {post.published_at.slice(0, 10)}</span>}
+      </p>
+    )}
+    {post && (post.class_label || post.region || post.country || post.season || post.put_in || post.take_out) && (
+      <dl class="summary-grid">
+        {post.class_label && <div><dt>{es ? 'Clase' : 'Class'}</dt><dd>{post.class_label}</dd></div>}
+        {post.region && <div><dt>{es ? 'Región' : 'Region'}</dt><dd>{es ? taxonomyName(regionGuideLabel(post)) : regionGuideLabel(post)}</dd></div>}
+        {post.country && <div><dt>{es ? 'País' : 'Country'}</dt><dd>{post.country.charAt(0).toUpperCase() + post.country.slice(1)}</dd></div>}
+        {post.season && <div><dt>{es ? 'Temporada' : 'Season'}</dt><dd>{post.season}</dd></div>}
+        {post.put_in && <div><dt>{es ? 'Embarque' : 'Put-in'}</dt><dd>{post.put_in}</dd></div>}
+        {post.take_out && <div><dt>{es ? 'Desembarque' : 'Take-out'}</dt><dd>{post.take_out}</dd></div>}
+      </dl>
+    )}
+    </div>
+    {showHero && (
+      <figure class="hero">
+        <img
+          src={featuredDisplay && images ? variantUrl(images, featuredDisplay) : image}
+          alt={item.title}
+          width={featuredDisplay?.width}
+          height={featuredDisplay?.height}
+          sizes={HERO_SIZES}
+          srcset={heroSrcset}
+          decoding="async"
+          fetchpriority="high"
+        />
+      </figure>
+    )}
+    <div class="article-body" set:html={body} />
+    {catNames.length > 0 && (
+      <p class="meta-line">
+        {es ? 'Categorías:' : 'Categories:'}
+        {catNames.map((c, i) => (
+          <>
+            {i > 0 && ', '}
+            <a href={`${prefix}/category/${c!.slug}/`}>{c!.name}</a>
+          </>
+        ))}
+      </p>
+    )}
+    {tagNames.length > 0 && (
+      <p class="meta-line">
+        {es ? 'Etiquetas:' : 'Tags:'}
+        {tagNames.map((t, i) => (
+          <>
+            {i > 0 && ', '}
+            <a href={`${prefix}/tag/${tagPathSlug(t!.slug)}/`}>{t!.name}</a>
+          </>
+        ))}
+      </p>
+    )}
+    {item.slug === 'contact-us' && <VisitorForm kind="contact" />}
+    {(item.slug !== 'contact-us' || comments.length > 0) && (
+      <Comments comments={comments} slug={item.slug} allowSubmission={item.slug !== 'contact-us'} />
+    )}
+  </article>
+  <Lightbox />
+</BaseLayout>

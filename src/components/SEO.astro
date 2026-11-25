@@ -1,4 +1,6 @@
 ---
+import { languages } from '../lib/languages';
+import { createSiteUI } from './site-ui';
 interface Props {
   title: string;
   description?: string;
@@ -7,9 +9,11 @@ interface Props {
   type?: 'website' | 'article';
 }
 
+const { spanish: es, languageRoutes } = createSiteUI(Astro.url.pathname);
+const base = Astro.site || Astro.url;
 const {
   title,
-  description = 'A kayaker’s river guide to Chile: first-hand reports, access notes, and photographs.',
+  description = es ? 'Guía de kayak en aguas bravas de Chile, con descripciones de los ríos, información de acceso y fotografías.' : 'Kayakers guide to the whitewater of Chile: river descriptions, access notes, and photographs.',
   canonical = Astro.url.href,
   image,
   type = 'website'
@@ -29,6 +33,8 @@ const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 <meta name="robots" content="noindex, nofollow" />
 <link rel="canonical" href={canonical} />
 
+{languages.map(({code}) => <link rel="alternate" hreflang={code} href={new URL(languageRoutes[code], base)} />)}
+<meta property="og:locale" content={es ? 'es_CL' : 'en_US'} />
 <meta property="og:type" content={type} />
 <meta property="og:url" content={canonical} />
 <meta property="og:title" content={fullTitle} />

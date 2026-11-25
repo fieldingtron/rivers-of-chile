@@ -57,6 +57,13 @@ jobs:
           DIRECTUS_URL: https://content.fieldsmarshall.com
           DIRECTUS_BUILD_TOKEN: ${{ secrets.DIRECTUS_BUILD_TOKEN }}
 
+      - name: Configure private form delivery
+        run: printf '%s' "$DIRECTUS_FORM_TOKEN" | pnpm exec wrangler pages secret put DIRECTUS_FORM_TOKEN --project-name=riversofchile
+        env:
+          DIRECTUS_FORM_TOKEN: ${{ secrets.DIRECTUS_FORM_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
       - name: Deploy to Cloudflare Pages
         run: pnpm exec wrangler pages deploy dist --project-name=riversofchile --branch=main --commit-dirty=true
         env:

@@ -1,0 +1,14 @@
+---
+import { languagePaths, languageForPath } from '../../lib/languages';
+import { getPosts } from '../../lib/directus';
+import BareLayout from '../../layouts/BareLayout.astro';
+import HomeC from '../../components/home/HomeC.astro';
+
+export function getStaticPaths() { return languagePaths(); }
+const language = languageForPath(Astro.url.pathname);
+const es = language === 'es';
+const posts = await getPosts(language);
+---
+<BareLayout title={es ? "Rivers of Chile — Inicio 3" : "Rivers of Chile — Home 3"} description={es ? "Guía de kayak de Chile con relatos de primera mano, accesos y fotografías." : "A kayaker’s river guide to Chile: first-hand river reports, access notes and photographs."} bodyClass="v-c">
+  <HomeC posts={posts} />
+</BareLayout>

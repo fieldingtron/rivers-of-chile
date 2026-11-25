@@ -1,4 +1,9 @@
 ---
+import { createSiteUI } from '../site-ui';
+import LanguagePicker from '../LanguagePicker.astro';
+import { taxonomyName } from '../../lib/spanish';
+const navigationLabels: Record<string, string> = {"Rivers": "Ríos", "Map": "Mapa", "First descents": "Primeros descensos", "Dedication": "Dedicatoria", "Authors": "Autores"};
+const { t, href, spanish } = createSiteUI(Astro.url.pathname);
 import HomeLinks from '../HomeLinks.astro';
 import { regionLabel, regionList, excerptOf, imageAt, fullImage, popularRivers, SITE_NAV } from '../../lib/home';
 const { posts } = Astro.props;
@@ -16,35 +21,35 @@ const classes = [
 ];
 ---
 <header class="top">
-  <a class="logo" href="/">RIVERS <b>OF</b> CHILE</a>
-  <nav>{SITE_NAV.map((l) => <a href={l.href}>{l.label}</a>)}<HomeLinks /></nav>
+  <a class="logo" href={href("/")}>RIVERS <b>OF</b> CHILE</a>
+  <nav>{SITE_NAV.map((l) => <a href={href(l.href)}>{t(l.label, navigationLabels[l.label] || l.label)}</a>)}<HomeLinks /><LanguagePicker compact /></nav>
 </header>
 <section class="hero" style={`background-image: linear-gradient(180deg, rgba(8,16,16,.55) 0%, rgba(8,16,16,.25) 40%, rgba(8,16,16,.88) 100%), url(${imageAt(hero.featured_image_url, 1200)})`}>
   <div class="hero-in">
-    <p class="eyebrow">Whitewater expedition guide · Chile &amp; Patagonia</p>
-    <h1>Every river we’ve run,<br />from the Andes to the sea.</h1>
+    <p class="eyebrow">{t("Whitewater expedition guide · Chile & Patagonia", "Guía de expediciones en aguas blancas · Chile y Patagonia")}</p>
+    <h1>{t("Every river we’ve run,", "Los ríos que hemos bajado,")}<br />{t("from the Andes to the sea.", "desde los Andes hasta el mar.")}</h1>
     <div class="cta">
-      <a class="btn primary" href="/map-of-chile/">Explore the map</a>
-      <a class="btn" href="/category/chile/">Find a river</a>
+      <a class="btn primary" href={href("/map-of-chile/")}>{t("Explore the map", "Explorar el mapa")}</a>
+      <a class="btn" href={href("/category/chile/")}>{t("Find a river", "Buscar un río")}</a>
     </div>
   </div>
-  <a class="credit" href={`/${hero.slug}/`}>{hero.title} · Class {hero.class_label} →</a>
+  <a class="credit" href={href(`/${hero.slug}/`)}>{hero.title} · {t("Class", "Clase")} {hero.class_label} →</a>
 </section>
 <section class="stats">
-  <div><b>{rivers.length}</b><span>river guides</span></div>
-  <div><b>{regions.length}</b><span>regions mapped</span></div>
-  <div><b>2007</b><span>first report</span></div>
-  <div><b>V</b><span>top class on record</span></div>
+  <div><b>{rivers.length}</b><span>{t("river guides", "guías de ríos")}</span></div>
+  <div><b>{regions.length}</b><span>{t("regions mapped", "regiones en el mapa")}</span></div>
+  <div><b>2007</b><span>{t("first report", "primer relato")}</span></div>
+  <div><b>V</b><span>{t("top class on record", "máxima dificultad registrada")}</span></div>
 </section>
 <main>
   <section class="block">
-    <div class="head"><h2>Rivers by region</h2><p>North to south along the Andes</p></div>
+    <div class="head"><h2>{t("Rivers by region", "Ríos por región")}</h2><p>{t("North to south along the Andes", "De norte a sur por los Andes")}</p></div>
     <ol class="rail">
       {regions.map((r) => (
         <li>
-          <a href={`/category/${r.slug}/`}>
+          <a href={href(`/category/${r.slug}/`)}>
             <span class="rn">{r.roman}</span>
-            <span class="rl">{r.label}</span>
+            <span class="rl">{spanish ? taxonomyName(r.label) : r.label}</span>
             <span class="bar"><i style={`width:${Math.round((r.count / max) * 100)}%`}></i></span>
             <span class="rc">{r.count}</span>
           </a>
@@ -53,35 +58,35 @@ const classes = [
     </ol>
   </section>
   <section class="block">
-    <div class="head"><h2>By difficulty</h2><p>Jump straight to your level</p></div>
+    <div class="head"><h2>{t("By difficulty", "Por dificultad")}</h2><p>{t("Jump straight to your level", "Elige tu nivel")}</p></div>
     <div class="classes">
-      {classes.map((c) => <a href={`/category/${c.slug}/`}><b>Class {c.label}</b><span>{c.n} rivers</span></a>)}
+      {classes.map((c) => <a href={href(`/category/${c.slug}/`)}><b>{t("Class", "Clase")} {c.label}</b><span>{c.n} {t("rivers", "ríos")}</span></a>)}
     </div>
   </section>
   <section class="block">
-    <div class="head"><h2>Featured guides</h2><a href="/category/chile/">All rivers →</a></div>
+    <div class="head"><h2>{t("Featured guides", "Guías destacadas")}</h2><a href={href("/category/chile/")}>{t("All rivers →", "Todos los ríos →")}</a></div>
     <div class="strip">
       {featured.slice(1).map((p: any) => (
-        <a class="tile" href={`/${p.slug}/`}>
+        <a class="tile" href={href(`/${p.slug}/`)}>
           <img src={imageAt(p.featured_image_url, 560)} alt="" loading="lazy" decoding="async" />
-          <div><span class="tag">{regionLabel(p)}{p.class_label ? ` · Class ${p.class_label}` : ''}</span><h3>{p.title}</h3></div>
+          <div><span class="tag">{(spanish ? taxonomyName(regionLabel(p)) : regionLabel(p))}{p.class_label ? ` · ${t("Class", "Clase")} ${p.class_label}` : ''}</span><h3>{p.title}</h3></div>
         </a>
       ))}
     </div>
   </section>
   <section class="block two">
     <div>
-      <div class="head"><h2>First descents</h2></div>
-      <p class="lede">Chile’s whitewater history, told by the people who paddled it first. Read the chronology and follow each name back to the river.</p>
-      <a class="btn dark" href="/history-of-first-descents/">Read the history →</a>
+      <div class="head"><h2>{t("First descents", "Primeros descensos")}</h2></div>
+      <p class="lede">{t("Chile’s whitewater history, told by the people who paddled it first. Read the chronology and follow each name back to the river.", "La historia de las aguas blancas de Chile, contada por quienes abrieron los descensos. Recorre la cronología para conocer cada río y a sus primeros navegantes.")}</p>
+      <a class="btn dark" href={href("/history-of-first-descents/")}>{t("Read the history →", "Leer la historia →")}</a>
     </div>
     <div>
-      <div class="head"><h2>From the field</h2></div>
-      <ul class="news">{stories.map((s: any) => <li><a href={`/${s.slug}/`}>{s.title}</a><span>{(s.published_at || '').slice(0, 4)}</span></li>)}</ul>
+      <div class="head"><h2>{t("From the field", "Desde el río")}</h2></div>
+      <ul class="news">{stories.map((s: any) => <li><a href={href(`/${s.slug}/`)}>{s.title}</a><span>{(s.published_at || '').slice(0, 4)}</span></li>)}</ul>
     </div>
   </section>
 </main>
-<footer><span>Rivers of Chile — a field guide.</span><nav><a href="/dedication/">Dedication</a><a href="/about-authors/">Authors</a><a href="/hardcopy-guidebook/">Hardcopy guidebook</a></nav></footer>
+<footer><span>{t("Rivers of Chile — a field guide.", "Rivers of Chile — guía de ríos.")}</span><nav><a href={href("/dedication/")}>{t("Dedication", "Dedicatoria")}</a><a href={href("/about-authors/")}>{t("Authors", "Autores")}</a><a href={href("/hardcopy-guidebook/")}>{t("Hardcopy guidebook", "Guía impresa")}</a><a href={href('/contact-us/')}>{t('Contact', 'Contacto')}</a> <LanguagePicker /></nav></footer>
 <style>
   :global(body.v-b) { background: #0d1717; color: #e8efee; font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif; }
   .top { position: absolute; z-index: 5; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 22px 36px; flex-wrap: wrap; gap: 12px; }
@@ -119,6 +124,6 @@ const classes = [
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; } .lede { color: #b4c6c3; line-height: 1.6; max-width: 34rem; }
   .news { list-style: none; margin: 0; padding: 0; } .news li { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1f3332; } .news a { color: #e8efee; } .news a:hover { color: #f08a3c; } .news span { color: #93aaa7; }
   footer { border-top: 1px solid #1f3332; padding: 26px 36px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; color: #93aaa7; font-size: 14px; }
-  footer nav { display: flex; gap: 18px; } footer a { color: #e8efee; }
+  footer nav { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; } footer a { color: #e8efee; }
   @media (max-width: 760px) { .two { grid-template-columns: 1fr; } .rail a { grid-template-columns: 34px 1fr 30px; } .bar { display: none; } .hero { padding: 0 20px 56px; } .top { padding: 16px 20px; } }
 </style>
