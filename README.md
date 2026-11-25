@@ -108,11 +108,12 @@ The Astro site is maintained on `main`. The previous Next.js app is available on
 
 GitHub Actions workflow `.github/workflows/deploy-riversofchile.yml` builds against
 live Directus and direct-uploads to the `riversofchile` Pages project (`--branch=main`).
-The scheduler checks at 20 past each hour. It builds once if main or the content queue
-has changed since the last successful upload. An empty hour skips the build. Edits
-made during a build are picked up by the next check. Directus dispatches and the
-manual **Queue Chile beta update** action only mark work for the hourly check.
-Use `pnpm dev` for immediate local previews.
+Directus checks at the top of each hour. Pushes to main, Directus edits, and the
+manual **Queue Chile beta update** action mark pending work. The hourly check
+deploys pending changes once the previous deployment has finished and at least
+60 minutes have passed since it started. To explicitly deploy immediately, run
+**Deploy riversofchile.pages.dev**. The Mac preview on port 8742 checks for local
+file changes and Directus edits every two minutes while logged in.
 
 Required repository secrets (never commit these):
 

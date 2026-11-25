@@ -1,0 +1,48 @@
+name: Check hourly Chile publication
+
+on:
+  repository_dispatch:
+    types: [chile-hourly-check]
+
+concurrency:
+  group: chile-hourly-publishing-check
+  cancel-in-progress: false
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish pending changes if the hour is available
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const latest = async (workflow_id, filters = {}) => {
+              const { data } = await github.rest.actions.listWorkflowRuns({
+                ...context.repo, workflow_id, branch: 'main', per_page: 1, ...filters
+              });
+              return data.workflow_runs[0];
+            };
+            const deploy = 'deploy-riversofchile.yml';
+            const marker = 'queue-riversofchile.yml';
+            const [attempt, success, push, edit, queued] = await Promise.all([
+              latest(deploy), latest(deploy, { status: 'success' }),
+              latest(marker, { event: 'push' }), latest(marker, { event: 'repository_dispatch' }),
+              latest(marker, { event: 'workflow_dispatch' })
+            ]);
+            if (attempt && (attempt.status !== 'completed' ||
+                Date.now() - Date.parse(attempt.created_at) < 3600000)) {
+              return core.info('A deployment is active or began within the past hour.');
+            }
+            if (success && ![push, edit, queued].some(change => change && change.created_at >= success.created_at)) {
+              return core.info('No pending site or content changes.');
+            }
+            if (context.payload.client_payload?.check_only === true) {
+              return core.info('Pending changes qualify for the next hourly deployment. Check only.');
+            }
+            await github.rest.repos.createDispatchEvent({
+              ...context.repo, event_type: 'chile-hourly-deploy'
+            });

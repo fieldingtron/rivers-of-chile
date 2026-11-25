@@ -1,5 +1,10 @@
 name: Queue Chile beta update
 on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'README.md'
+      - '.github/**'
   workflow_dispatch:
   repository_dispatch:
     types: [directus-rebuild]
