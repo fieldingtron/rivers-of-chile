@@ -14,7 +14,7 @@ const index = rivers.map((p: any) => ({ t: p.title, s: href(`/${p.slug}/`), r: (
   <div class="nav-in">
     <a class="logo" href={href("/")}>
       <img src="/images/rivers-64x64.png" width="36" height="36" alt="" />
-      <span>Rivers Of Chile</span>
+      <h1>Rivers of Chile</h1>
     </a>
     <nav>
       <a href={href("/category/chile/")}>{t("Rivers", "Ríos")}</a>
@@ -111,6 +111,7 @@ const index = rivers.map((p: any) => ({ t: p.title, s: href(`/${p.slug}/`), r: (
   .results a:hover { background: #f3f4f6; }
   .results span { color: #6b7280; font-size: 13px; }
   .results .none { padding: 12px; color: #6b7280; }
+  .logo h1 { margin: 0; font: inherit; }
   main { max-width: 1180px; margin: 0 auto; padding: 0 24px 64px; }
   .head { margin: 0 0 22px; padding-top: 36px; border-bottom: 1px solid #d1d5db; }
   .head h2 { margin: 0 0 10px; font-size: 28px; font-weight: 800; color: #111; letter-spacing: -.01em; }

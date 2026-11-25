@@ -9,6 +9,6 @@ const language = languageForPath(Astro.url.pathname);
 const es = language === 'es';
 const posts = await getPosts(language);
 ---
-<BareLayout title="Rivers of Chile" description={es ? "Guía de kayak de Chile con relatos de primera mano, accesos y fotografías." : "A kayaker’s river guide to Chile: first-hand river reports, access notes and photographs."} bodyClass="v-a">
+<BareLayout title={es ? "Rivers of Chile — Guía de kayak en aguas bravas" : "Rivers of Chile — Whitewater Kayaking Guide"} description={es ? "Guía de kayak de Chile con relatos de primera mano, accesos y fotografías." : "A kayaker’s river guide to Chile: first-hand river reports, access notes and photographs."} bodyClass="v-a">
   <HomeA posts={posts} />
 </BareLayout>

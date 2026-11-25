@@ -54,6 +54,7 @@ jobs:
       - name: Build from live Directus
         run: pnpm build && pnpm check
         env:
+          RIVER_PRODUCTION: ${{ vars.RIVER_PRODUCTION }}
           DIRECTUS_URL: https://content.fieldsmarshall.com
           DIRECTUS_BUILD_TOKEN: ${{ secrets.DIRECTUS_BUILD_TOKEN }}
 

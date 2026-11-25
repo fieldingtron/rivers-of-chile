@@ -15,9 +15,18 @@ const page = read('about/index.html');
 const category = read('category/chile/index.html');
 const missing = read('404.html');
 
-assert.match(read('_headers'), /^\/\*\s*\r?\n\s*X-Robots-Tag:\s*noindex,\s*nofollow\s*$/im, 'Missing wildcard noindex header');
-for (const html of [home, home2, home3, river, page, category, missing]) {
-  assert.match(html, robots, 'Missing page noindex meta');
+const production = process.env.RIVER_PRODUCTION === '1';
+if (production) {
+  assert.doesNotMatch(read('_headers'), /X-Robots-Tag/i);
+  assert.doesNotMatch(river, /name="robots" content="noindex/i);
+  assert.match(missing, /name="robots" content="noindex, follow"/);
+  assert.match(read('robots.txt'), /Allow: \/\s+Sitemap:/);
+} else {
+  assert.match(read('_headers'), /^\/\*\s*\r?\n\s*X-Robots-Tag:\s*noindex,\s*nofollow\s*$/im, 'Missing wildcard noindex header');
+  for (const html of [home, home2, home3, river, page, category, missing]) {
+    assert.match(html, robots, 'Missing page noindex meta');
+  }
+  assert.match(read('robots.txt'), /Disallow:\s*\//);
 }
 assert.match(home, /Rivers of Chile/i, 'Home page missing site name');
 assert.match(home, /Popular Rivers/, 'Home 1 missing Popular Rivers');
@@ -38,7 +47,6 @@ assert.match(colorado, /rivers-64x64\.png/, 'Inner pages are missing the navy-he
 
 assert.match(page, /<h1[^>]*>/i, 'Page missing heading');
 assert.match(missing, /<h1[^>]*>\s*Page not found\s*<\/h1>/i);
-assert.match(read('robots.txt'), /Disallow:\s*\//, 'robots.txt should disallow all on the beta');
 
 const redirects = read('_redirects').split(/\r?\n/);
 assert.ok(redirects.some((line) => line.startsWith('/river/')), 'Missing /river/:slug redirects');
@@ -53,7 +61,7 @@ for (const file of files) {
   assert.ok(!forbidden.some((secret) => bytes.includes(secret)), 'A build secret was found in the static output.');
 }
 
-console.log('Preview artifact checks passed: populated pages, 404, noindex header+meta, robots Disallow, redirects, no secret.');
+console.log('Artifact checks passed for pages, indexing controls, redirects and build secrets.');
 
 const esHome = read('es/index.html');
 assert.match(esHome, /<html lang="es"/);

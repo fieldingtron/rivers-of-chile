@@ -1,0 +1,23 @@
+---
+import { createSiteUI } from './site-ui';
+
+interface Props { label: string }
+const { label } = Astro.props;
+const { t, href } = createSiteUI(Astro.url.pathname);
+const home = { label: t('Home', 'Inicio'), path: href('/') };
+const items = [home, { label, path: Astro.url.pathname }];
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map(({ label, path }, i) => ({
+    '@type': 'ListItem', position: i + 1, name: label, item: new URL(path, Astro.site).href
+  }))
+};
+---
+<nav aria-label={t('Breadcrumb', 'Ruta de navegación')} class="breadcrumbs">
+  <a href={home.path}>{home.label}</a> <span aria-hidden="true">›</span> <span aria-current="page">{label}</span>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />
+<style>
+  .breadcrumbs { margin-block: 1rem; font-size: .9rem; }
+</style>

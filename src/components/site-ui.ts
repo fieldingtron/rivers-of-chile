@@ -1,3 +1,4 @@
+import { guidePath } from '../lib/guide-seo';
 import { defaultLanguage, languageForPath, languages, localizedPath } from '../lib/languages';
 
 export function createSiteUI(pathname: string) {
@@ -11,6 +12,6 @@ export function createSiteUI(pathname: string) {
     isNotFound && code === defaultLanguage ? '/404.html' : localizedPath(isNotFound ? '/404/' : path, code)
   ]));
   const t = (english: string, translation: string) => spanish ? translation : english;
-  const href = (route: string) => route.startsWith('/') ? localizedPath(route, language) : route;
+  const href = (route: string) => route.startsWith('/') ? localizedPath(guidePath(route), language) : route;
   return { language, spanish, t, href, isNotFound, languageRoutes };
 }

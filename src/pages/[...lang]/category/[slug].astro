@@ -1,5 +1,6 @@
 ---
 import { languageForPath, languages, languagePrefix } from '../../../lib/languages';
+import { publicSlug, guideHeading } from '../../../lib/guide-seo';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCategories, getPosts } from '../../../lib/directus';
 
@@ -25,15 +26,20 @@ const language = languageForPath(Astro.url.pathname);
 const es = language === 'es';
 const prefix = languagePrefix(language);
 const { category, posts } = Astro.props;
+const examples = posts.slice(0, 3).map(post => guideHeading(post.slug, post.title));
+const listing = new Intl.ListFormat(language).format(examples);
+const description = es
+  ? `Explora las entradas sobre ${category.name}${listing ? ', entre ellas ' + listing : ''}.`
+  : `Browse entries for ${category.name}${listing ? ', including ' + listing : ''}.`;
 ---
-<BaseLayout title={category.name} description={es ? `Ríos y artículos de la categoría ${category.name}.` : `Rivers and articles in ${category.name}.`}>
+<BaseLayout breadcrumb={category.name} title={category.name} description={description}>
   <h1 class="page-title">{category.name}</h1>
   <p class="lede">{posts.length} {es ? (posts.length === 1 ? 'entrada' : 'entradas') : (posts.length === 1 ? 'entry' : 'entries')}.</p>
   <ul class="river-list">
     {posts.map((post) => (
       <li>
-        <a href={`${prefix}/${post.slug}/`}>
-          <strong>{post.title}</strong>
+        <a href={`${prefix}/${publicSlug(post.slug)}/`}>
+          <strong>{guideHeading(post.slug, post.title)}</strong>
           <div class="meta">
             {post.class_label && <span>{es ? 'Clase' : 'Class'} {post.class_label}</span>}
             {post.author_name && <span> · {post.author_name}</span>}

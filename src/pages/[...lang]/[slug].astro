@@ -1,6 +1,7 @@
 ---
 import { languages, languageForPath, languagePrefix } from '../../lib/languages';
 import { taxonomyName, localizedBodyLinks } from '../../lib/spanish';
+import { publicSlug, guideHeading, guideLinks, guideDescription } from '../../lib/guide-seo';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import VisitorForm from '../../components/VisitorForm.astro';
 import Comments from '../../components/Comments.astro';
@@ -15,15 +16,19 @@ export async function getStaticPaths() {
     const lang = prefix.slice(1) || undefined;
     const [posts, pages, comments] = await Promise.all([getPosts(code), getPages(code), getComments()]);
     const used = new Set(RESERVED_SLUGS);
+    const publicSlugs = new Set(RESERVED_SLUGS);
     const pageSlugs = new Set(pages.map((p) => p.slug));
     const paths: { params: { lang: string | undefined; slug: string }; props: { type: 'post' | 'page'; item: PostItem | PageItem; comments: CommentItem[] } }[] = [];
 
     for (const item of [...pages, ...posts]) {
       if (!item.slug || used.has(item.slug)) continue;
       used.add(item.slug);
+      const slug = publicSlug(item.slug);
+      if (publicSlugs.has(slug)) throw new Error('Conflicting public route: ' + slug);
+      publicSlugs.add(slug);
       const type = pageSlugs.has(item.slug) ? 'page' : 'post';
       paths.push({
-        params: { lang, slug: item.slug },
+        params: { lang, slug },
         props: { type, item, comments: comments.filter(c => c[type]?.slug === item.slug) }
       });
     }
@@ -50,7 +55,12 @@ const catNames = post
 const tagNames = post
   ? (post.legacy_tags || []).map((slug) => tags.find((t) => t.slug === slug)).filter(Boolean)
   : [];
-const description = post?.seo_description || post?.excerpt || (item as PageItem).seo_description || undefined;
+const heading = guideHeading(item.slug, item.title);
+const description = guideDescription(item, heading, es);
+const legacyTitle = item.seo_title?.replace(/\s*[-|]\s*(?:peruwhitewater\.com|rivers of chile)\s*$/i, '').trim();
+const title = post?.kind === 'river'
+  ? (es ? heading + ' — Guía de kayak' : heading + ' kayaking guide')
+  : legacyTitle || heading;
 const images = loadImageManifest();
 const featured = post?.featured_image_url || undefined;
 const image = featuredImageUrl(images, featured) || featured || undefined;
@@ -68,14 +78,15 @@ const heroSrcset = showHero && featuredAsset && images
   : undefined;
 ---
 <BaseLayout
-  title={item.seo_title || item.title}
+  title={title}
+  breadcrumb={heading}
   description={description}
   type={type === 'post' ? 'article' : 'website'}
   image={image}
 >
   <article class="prose">
     <div class="prose-header">
-    <h1 class="page-title">{item.title}</h1>
+    <h1 class="page-title">{heading}</h1>
     {post && (
       <p class="meta-line">
         {post.kind === 'river' && post.class_label && <span>{es ? 'Clase' : 'Class'} {post.class_label}</span>}
@@ -109,7 +120,7 @@ const heroSrcset = showHero && featuredAsset && images
         />
       </figure>
     )}
-    <div class="article-body" set:html={body} />
+    <div class="article-body" set:html={guideLinks(body)} />
     {catNames.length > 0 && (
       <p class="meta-line">
         {es ? 'Categorías:' : 'Categories:'}

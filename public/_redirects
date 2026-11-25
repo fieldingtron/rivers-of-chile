@@ -65,7 +65,7 @@
 /river/rio-blanco-cerro-castillo /rio-blanco-cerro-castillo/ 301
 /river/rio-petrohue-upper /rio-petrohue-upper/ 301
 /river/rio-petrohue-lower /rio-petrohue-lower/ 301
-/river/rio-claro-tinguiririca-2 /rio-claro-tinguiririca-2/ 301
+/river/rio-claro-tinguiririca-2 /rio-claro-puente-las-pinas/ 301
 /river/rio-cisnes-upper /rio-cisnes-upper/ 301
 /river/rio-salto-del-tigre /rio-salto-del-tigre/ 301
 /river/rio-resbalon /rio-resbalon/ 301
@@ -94,7 +94,7 @@
 /river/rio-chalquilvin /rio-chalquilvin/ 301
 /river/rio-futaleufu-terminator-section /rio-futaleufu-terminator-section/ 301
 /river/rio-cautin /rio-cautin/ 301
-/river/rio-laja-2 /rio-laja-2/ 301
+/river/rio-laja-2 /rio-laja-salto-las-chilcas/ 301
 /river/rio-ralco /rio-ralco/ 301
 /river/rio-tolten /rio-tolten/ 301
 /river/rio-queuco /rio-queuco/ 301
@@ -163,3 +163,13 @@
 /feed /feed.xml 301
 /feed/ /feed.xml 301
 /sitemap_index.xml /sitemap-index.xml 301
+/rio-laja-2 /rio-laja-salto-las-chilcas/ 301
+/rio-laja-2/ /rio-laja-salto-las-chilcas/ 301
+/es/rio-laja-2 /es/rio-laja-salto-las-chilcas/ 301
+/es/rio-laja-2/ /es/rio-laja-salto-las-chilcas/ 301
+/river/rio-laja-2/ /rio-laja-salto-las-chilcas/ 301
+/rio-claro-tinguiririca-2 /rio-claro-puente-las-pinas/ 301
+/rio-claro-tinguiririca-2/ /rio-claro-puente-las-pinas/ 301
+/es/rio-claro-tinguiririca-2 /es/rio-claro-puente-las-pinas/ 301
+/es/rio-claro-tinguiririca-2/ /es/rio-claro-puente-las-pinas/ 301
+/river/rio-claro-tinguiririca-2/ /rio-claro-puente-las-pinas/ 301

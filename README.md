@@ -4,6 +4,10 @@ Headless, fully static rebuild of [riversofchile.com](https://www.riversofchile.
 Design comes later; this branch moves the published WordPress content onto the same
 pattern as VPNReviewz: Directus on the NAS, Astro at build time, images on R2.
 
+## Search indexing at migration
+
+The default build is the noindex Pages beta. Set the GitHub Actions repository variable `RIVER_PRODUCTION=1` for the build serving the public www domain at cutover. This sets production canonical links, language alternates, sitemap URLs, robots.txt and indexing headers. Keep separate preview builds on the default setting.
+
 ## Beta hosts (no DNS changes)
 
 - Site: [https://riversofchile.pages.dev](https://riversofchile.pages.dev) (Pages project `riversofchile`)
