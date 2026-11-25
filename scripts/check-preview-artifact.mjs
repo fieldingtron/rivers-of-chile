@@ -70,7 +70,7 @@ const esHome = read('es/index.html');
 assert.match(esHome, /<html lang="es"/);
 assert.match(esHome, /Ríos populares/);
 assert.match(esHome, /🇨🇱/);
-assert.match(esHome, /href="\/es\/category\/chile\/"/);
+assert.match(esHome, /href="\/es\/rivers\/#region"/);
 for (const file of files.filter((file) => file.endsWith('.html') && !file.startsWith('es/'))) {
   const translated = read(file === '404.html' ? 'es/404/index.html' : 'es/' + file);
   assert.match(translated, /hreflang="es"/, file);

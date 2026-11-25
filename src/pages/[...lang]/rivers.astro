@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCategories, getPosts } from '../../lib/directus';
+import { languagePaths, languageForPath } from '../../lib/languages';
+import { createSiteUI } from '../../components/site-ui';
+import { publicSlug, guideHeading } from '../../lib/guide-seo';
+
+export function getStaticPaths() { return languagePaths(); }
+const language = languageForPath(Astro.url.pathname);
+const { href, t } = createSiteUI(Astro.url.pathname);
+const [categories, posts] = await Promise.all([getCategories(language === 'es'), getPosts(language)]);
+const groups = [
+  { id: 'region', title: t('By region', 'Por región'), items: categories.filter(c => c.type === 'region') },
+  { id: 'difficulty', title: t('By difficulty', 'Por dificultad'), items: categories.filter(c => /^class-/.test(c.slug)) }
+];
+const guides = posts.filter(p => p.kind === 'river').sort((a,b) => a.title.localeCompare(b.title, language));
+const title = t('River directory', 'Directorio de ríos');
+---
+<BaseLayout title={title} breadcrumb={title} description={t('Find river guides by region or whitewater difficulty, browse the map, or look up a river by name.', 'Busca guías por región o dificultad, consulta el mapa o encuentra un río por su nombre.')}>
+  <article class="prose">
+    <h1>{title}</h1>
+    <p><a href={href('/map-of-chile/')}>{t('Explore the river map', 'Explora el mapa de ríos')}</a></p>
+    {groups.map(group => <section id={group.id}>
+      <h2>{group.title}</h2>
+      <ul>{group.items.map(c => <li><a href={href('/category/' + c.slug + '/')}>{c.name}</a></li>)}</ul>
+    </section>)}
+    <h2>{t('All river guides', 'Todas las guías de ríos')}</h2>
+    <ul>{guides.map(p => <li><a href={href('/' + publicSlug(p.slug) + '/')}>{guideHeading(p.slug, p.title)}</a></li>)}</ul>
+  </article>
+</BaseLayout>

@@ -6,7 +6,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import VisitorForm from '../../components/VisitorForm.astro';
 import Comments from '../../components/Comments.astro';
 import Lightbox from '../../components/Lightbox.astro';
-import { tagPathSlug, getPosts, getPages, getComments, type CommentItem, getCategories, getTags, RESERVED_SLUGS, type PostItem, type PageItem } from '../../lib/directus';
+import { getPosts, getPages, getComments, type CommentItem, getCategories, RESERVED_SLUGS, type PostItem, type PageItem } from '../../lib/directus';
 import { loadImageManifest, prepareArticleImages, featuredImageUrl, publicBase, HERO_SIZES, assetFor, pickDisplay, displayVariants, variantUrl, isPlaceholderFeatured } from '../../lib/legacy-images.mjs';
 import { rewriteDirectusAssets } from '../../lib/file-registry.mjs';
 import { regionGuideLabel, authorLabel } from '../../lib/home';
@@ -48,12 +48,9 @@ const prefix = languagePrefix(language);
 const es = language === 'es';
 const { type, item, comments } = Astro.props;
 const post = type === 'post' ? (item as PostItem) : null;
-const [categories, tags] = post ? await Promise.all([getCategories(es), getTags(es)]) : [[], []];
+const categories = post ? await getCategories(es) : [];
 const catNames = post
   ? (post.legacy_categories || []).map((slug) => categories.find((c) => c.slug === slug)).filter(Boolean)
-  : [];
-const tagNames = post
-  ? (post.legacy_tags || []).map((slug) => tags.find((t) => t.slug === slug)).filter(Boolean)
   : [];
 const heading = guideHeading(item.slug, item.title);
 const description = guideDescription(item, heading, es);
@@ -142,17 +139,6 @@ const article = post && {
           <>
             {i > 0 && ', '}
             <a href={`${prefix}/category/${c!.slug}/`}>{c!.name}</a>
-          </>
-        ))}
-      </p>
-    )}
-    {tagNames.length > 0 && (
-      <p class="meta-line">
-        {es ? 'Etiquetas:' : 'Tags:'}
-        {tagNames.map((t, i) => (
-          <>
-            {i > 0 && ', '}
-            <a href={`${prefix}/tag/${tagPathSlug(t!.slug)}/`}>{t!.name}</a>
           </>
         ))}
       </p>

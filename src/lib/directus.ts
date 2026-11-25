@@ -284,6 +284,7 @@ export async function getAuthors(): Promise<AuthorItem[]> {
 }
 
 export const RESERVED_SLUGS = new Set([
+  'rivers',
   'index',
   'es',
   'home-2',

@@ -17,7 +17,9 @@ const index = rivers.map((p: any) => ({ t: p.title, s: href(`/${p.slug}/`), r: (
       <h1>Rivers of Chile</h1>
     </a>
     <nav>
-      <a href={href("/category/chile/")}>{t("Rivers", "Ríos")}</a>
+      <a href={href("/rivers/#region")}>{t("Region", "Región")}</a>
+      <a href={href("/rivers/#difficulty")}>{t("Difficulty", "Dificultad")}</a>
+      <a href={href("/map-of-chile/")}>{t("Map", "Mapa")}</a>
       <a href="#search">{t("Search", "Buscar")}</a>
       <a href={href("/dedication/")}>{t("Dedication", "Dedicatoria")}</a>
       <a href={href("/about-authors/")}>{t("Authors", "Autores")}</a>

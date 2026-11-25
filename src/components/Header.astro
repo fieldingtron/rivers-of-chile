@@ -1,11 +1,12 @@
 ---
 import { createSiteUI } from './site-ui';
 import LanguagePicker from './LanguagePicker.astro';
-const navigationLabels: Record<string, string> = {"Rivers": "Ríos", "Map": "Mapa", "First descents": "Primeros descensos", "Dedication": "Dedicatoria", "Authors": "Autores"};
+const navigationLabels: Record<string, string> = {"Region": "Región", "Difficulty": "Dificultad", "Map": "Mapa", "First descents": "Primeros descensos", "Dedication": "Dedicatoria", "Authors": "Autores"};
 const { t, href, spanish } = createSiteUI(Astro.url.pathname);
 const path = Astro.url.pathname;
 const links = [
-  { href: '/category/chile/', label: 'Rivers' },
+  { href: '/rivers/#region', label: 'Region' },
+  { href: '/rivers/#difficulty', label: 'Difficulty' },
   { href: '/map-of-chile/', label: 'Map' },
   { href: '/history-of-first-descents/', label: 'First descents' },
   { href: '/dedication/', label: 'Dedication' },
