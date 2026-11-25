@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import CommentList from '../components/CommentList.astro';
+import Comments from '../components/Comments.astro';
 import Lightbox from '../components/Lightbox.astro';
-import { getPosts, getPages, getComments, type CommentItem, getCategories, getTags, RESERVED_SLUGS, type PostItem, type PageItem } from '../lib/directus';
+import { tagPathSlug, getPosts, getPages, getComments, type CommentItem, getCategories, getTags, RESERVED_SLUGS, type PostItem, type PageItem } from '../lib/directus';
 import { loadImageManifest, prepareArticleImages, featuredImageUrl, publicBase, HERO_SIZES, assetFor, pickDisplay, displayVariants, variantUrl, isPlaceholderFeatured } from '../lib/legacy-images.mjs';
 import { rewriteDirectusAssets } from '../lib/file-registry.mjs';
 import { regionGuideLabel, authorLabel } from '../lib/home';
@@ -116,17 +116,12 @@ const heroSrcset = showHero && featuredAsset && images
         {tagNames.map((t, i) => (
           <>
             {i > 0 && ', '}
-            <a href={`/tag/${t!.slug}/`}>{t!.name}</a>
+            <a href={`/tag/${tagPathSlug(t!.slug)}/`}>{t!.name}</a>
           </>
         ))}
       </p>
     )}
-    {comments.length > 0 && (
-      <section id="comments" aria-labelledby="comments-title">
-        <h2 id="comments-title">{comments.length} {comments.length === 1 ? 'comment' : 'comments'}</h2>
-        <CommentList comments={comments} />
-      </section>
-    )}
+    <Comments comments={comments} />
   </article>
   <Lightbox />
 </BaseLayout>

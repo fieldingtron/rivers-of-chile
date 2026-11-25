@@ -1,5 +1,5 @@
 ---
-import sanitizeHtml from 'sanitize-html';
+import { commentText } from '../lib/comment-text';
 import type { CommentItem } from '../lib/directus';
 
 interface Props {
@@ -18,14 +18,10 @@ const entries = comments.filter(c => parent === undefined
     {entries.map(c => (
       <li id={c.wp_id ? `comment-${c.wp_id}` : `directus-comment-${c.id}`}>
         <header>
-          <strong>{c.author_name || 'Anonymous'}</strong>
+          <strong>{commentText(c.author_name) || 'Anonymous'}</strong>
           {c.published_at && <time datetime={c.published_at.slice(0, 10)}>{c.published_at.slice(0, 10)}</time>}
         </header>
-        <div set:html={sanitizeHtml(c.content || '', {
-          allowedTags: ['p', 'br', 'a', 'em', 'strong', 'i', 'b', 'blockquote', 'ul', 'ol', 'li', 'code'],
-          allowedAttributes: { a: ['href', 'title'] },
-          allowedSchemes: ['http', 'https', 'mailto']
-        })} />
+        <div class="comment-body">{commentText(c.content) || 'Link removed.'}</div>
         {c.wp_id && <Astro.self comments={comments} parent={c.wp_id} />}
       </li>
     ))}
@@ -35,6 +31,7 @@ const entries = comments.filter(c => parent === undefined
   .thread { list-style: none; padding: 0; }
   li { margin: 1.4rem 0; overflow-wrap: anywhere; }
   li > .thread { border-inline-start: 2px solid currentColor; padding-inline-start: 1rem; }
+  .comment-body { white-space: pre-line; margin-block-start: .35rem; }
   header { display: flex; align-items: baseline; flex-wrap: wrap; gap: .6rem; }
   time { font-size: .85em; }
 </style>

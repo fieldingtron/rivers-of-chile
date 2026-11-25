@@ -1,13 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getTags, getPosts } from '../../lib/directus';
+import { tagPathSlug, getTags, getPosts } from '../../lib/directus';
 
 export async function getStaticPaths() {
   const [tags, posts] = await Promise.all([getTags(), getPosts()]);
   return tags
     .filter((t) => t.slug)
     .map((tag) => ({
-      params: { slug: tag.slug },
+      params: { slug: tagPathSlug(tag.slug) },
       props: {
         tag,
         posts: posts.filter((p) => (p.legacy_tags || []).includes(tag.slug))

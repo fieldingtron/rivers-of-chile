@@ -23,11 +23,10 @@
     "@astrojs/sitemap": "^3.2.1",
     "@fontsource-variable/source-serif-4": "^5.3.1",
     "astro": "^5.4.2",
-    "sanitize-html": "^2.18.2",
+    "entities": "^6.0.1",
     "sharp": "^0.35.5"
   },
   "devDependencies": {
-    "@types/sanitize-html": "^2.16.2",
     "wrangler": "^4.166.0"
   }
 }

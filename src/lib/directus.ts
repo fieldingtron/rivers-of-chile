@@ -296,3 +296,8 @@ export async function getComments(): Promise<CommentItem[]> {
   return items.filter(item => item.status === 'published').sort((a, b) =>
     (a.published_at || '').localeCompare(b.published_at || '') || a.id - b.id);
 }
+
+// WordPress encoded a soft hyphen into one legacy tag slug.
+export function tagPathSlug(slug: string): string {
+  return slug.replace(/%c2%ad/gi, '');
+}
