@@ -38,9 +38,10 @@ export async function onRequestPost({ request, env, params }) {
   const language = field('language');
   const es = field('ui') === 'es';
   const strings = es ? spanish : english;
-  const respond = (status, key) => {
+  const respond = (status, key, issue) => {
     const message = strings[key];
     const headers = { 'Cache-Control': 'no-store' };
+    if (issue) headers['X-Delivery-Status'] = issue;
     if (request.headers.get('Accept')?.includes('application/json')) return Response.json({ message }, { status, headers });
     return new Response(`<!doctype html><html lang="${es ? 'es' : 'en'}"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${message}</title><p>${message}</p><a href="${es ? '/es/' : '/'}">${es ? 'Volver al inicio' : 'Return home'}</a></html>`, { status, headers: { ...headers, 'Content-Type': 'text/html; charset=utf-8' } });
   };
@@ -55,22 +56,23 @@ export async function onRequestPost({ request, env, params }) {
       payload = { sender_name: name, reply_to: email, subject, message, language };
     } else {
       const source = await env.ASSETS.fetch(new Request(new URL('/comment-targets.json', url)));
-      if (!source.ok) return respond(503,'failed');
+      if (!source.ok) return respond(503,'failed','target-list');
       const targets = await source.json();
       const target = Object.hasOwn(targets, field('slug')) && targets[field('slug')];
       if (!target || !['post','page'].includes(target.kind) || !Number.isInteger(target.id)) return respond(400,'invalid');
       payload = { author_name: escape(name), content: escape(message), original_language: language, [target.kind]: target.id };
     }
     const collection = site + (kind === 'comment' ? '_comments' : '_contact_messages');
+    if (!env.DIRECTUS_FORM_TOKEN) return respond(503,'failed','configuration');
     const result = await fetch('https://content.fieldsmarshall.com/items/' + collection, {
       method: 'POST', redirect: 'error',
       headers: { 'Content-Type':'application/json', 'User-Agent':'RiverSites/1.0', Authorization: 'Bearer ' + env.DIRECTUS_FORM_TOKEN },
       body: JSON.stringify(payload)
     });
     if (!result.ok) console.error('Directus form delivery returned', result.status);
-    return result.ok ? respond(201,kind) : respond(503,'failed');
+    return result.ok ? respond(201,kind) : respond(503,'failed','upstream-' + result.status + (result.headers.get('cf-mitigated') === 'challenge' ? '-challenge' : ''));
   } catch (error) {
     console.error('Form delivery exception', error.name);
-    return respond(503,'failed');
+    return respond(503,'failed','request-' + error.name);
   }
 }
