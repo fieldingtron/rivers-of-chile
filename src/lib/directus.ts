@@ -11,7 +11,7 @@ import { loadImageManifest, publicBase, pickDisplay, publicObjectKey } from './l
 const DIRECTUS_URL = import.meta.env.DIRECTUS_URL || 'https://content.fieldsmarshall.com';
 const DIRECTUS_BUILD_TOKEN = process.env.DIRECTUS_BUILD_TOKEN?.trim();
 const HOSTED_BUILD = process.env.CI === 'true' || process.env.CF_PAGES === '1' || process.env.RENDER === 'true';
-const REQUIRED_CONTENT = new Set(['roc_posts', 'roc_pages']);
+const REQUIRED_CONTENT = new Set(['roc_posts', 'roc_pages', 'roc_comments']);
 const SNAPSHOT_DIR = path.resolve('data/snapshot');
 
 export interface AuthorItem {
@@ -98,6 +98,7 @@ export interface PageItem {
 }
 
 const FILE_MAP: Record<string, string> = {
+  roc_comments: 'comments.json',
   roc_posts: 'posts.json',
   roc_pages: 'pages.json',
   roc_categories: 'categories.json',
@@ -124,6 +125,9 @@ async function fetchDirectus<T>(collection: string): Promise<T[]> {
     try {
       const url = new URL(`/items/${collection}`, endpoint);
       url.searchParams.set('limit', '-1');
+      if (collection === 'roc_comments') {
+        url.searchParams.set('fields', 'id,wp_id,parent_wp_id,status,author_name,content,published_at,post.slug,page.slug');
+      }
       if (required) url.searchParams.set('filter[status][_eq]', 'published');
       const res = await fetch(url, {
         signal: controller.signal,
@@ -135,7 +139,7 @@ async function fetchDirectus<T>(collection: string): Promise<T[]> {
       });
       if (res.ok) {
         const json = await res.json();
-        if (Array.isArray(json.data) && json.data.length > 0) {
+        if (Array.isArray(json.data) && (json.data.length > 0 || collection === 'roc_comments')) {
           return json.data as T[];
         }
         failure = 'empty or invalid response';
@@ -274,3 +278,21 @@ export const RESERVED_SLUGS = new Set([
   '_redirects',
   '_headers'
 ]);
+
+export interface CommentItem {
+  id: number;
+  wp_id: number | null;
+  parent_wp_id: number | null;
+  author_name: string | null;
+  content: string | null;
+  published_at: string | null;
+  status: string;
+  post: { slug: string } | null;
+  page: { slug: string } | null;
+}
+
+export async function getComments(): Promise<CommentItem[]> {
+  const items = await fetchDirectus<CommentItem>('roc_comments');
+  return items.filter(item => item.status === 'published').sort((a, b) =>
+    (a.published_at || '').localeCompare(b.published_at || '') || a.id - b.id);
+}

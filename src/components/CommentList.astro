@@ -1,0 +1,40 @@
+---
+import sanitizeHtml from 'sanitize-html';
+import type { CommentItem } from '../lib/directus';
+
+interface Props {
+  comments: CommentItem[];
+  parent?: number;
+}
+
+const { comments, parent } = Astro.props;
+const visibleIds = new Set(comments.map(c => c.wp_id));
+const entries = comments.filter(c => parent === undefined
+  ? !c.parent_wp_id || !visibleIds.has(c.parent_wp_id)
+  : c.parent_wp_id === parent);
+---
+{entries.length > 0 && (
+  <ol class="thread">
+    {entries.map(c => (
+      <li id={c.wp_id ? `comment-${c.wp_id}` : `directus-comment-${c.id}`}>
+        <header>
+          <strong>{c.author_name || 'Anonymous'}</strong>
+          {c.published_at && <time datetime={c.published_at.slice(0, 10)}>{c.published_at.slice(0, 10)}</time>}
+        </header>
+        <div set:html={sanitizeHtml(c.content || '', {
+          allowedTags: ['p', 'br', 'a', 'em', 'strong', 'i', 'b', 'blockquote', 'ul', 'ol', 'li', 'code'],
+          allowedAttributes: { a: ['href', 'title'] },
+          allowedSchemes: ['http', 'https', 'mailto']
+        })} />
+        {c.wp_id && <Astro.self comments={comments} parent={c.wp_id} />}
+      </li>
+    ))}
+  </ol>
+)}
+<style>
+  .thread { list-style: none; padding: 0; }
+  li { margin: 1.4rem 0; overflow-wrap: anywhere; }
+  li > .thread { border-inline-start: 2px solid currentColor; padding-inline-start: 1rem; }
+  header { display: flex; align-items: baseline; flex-wrap: wrap; gap: .6rem; }
+  time { font-size: .85em; }
+</style>
