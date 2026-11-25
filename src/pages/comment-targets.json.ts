@@ -5,6 +5,7 @@ export async function GET() {
   const targets: Record<string, {kind: string; id: number}> = Object.create(null);
   for (const [kind, items] of [['page', pages], ['post', posts]] as const) {
     for (const {id, slug} of items) {
+      if (kind === 'page' && slug === 'map-of-chile') continue;
       if (id && slug && !RESERVED_SLUGS.has(slug) && !targets[slug]) targets[slug] = {kind, id};
     }
   }

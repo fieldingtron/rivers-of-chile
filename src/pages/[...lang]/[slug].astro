@@ -178,7 +178,7 @@ const article = post && {
       </p>
     )}
     {item.slug === 'contact-us' && <VisitorForm kind="contact" />}
-    {(item.slug !== 'contact-us' || comments.length > 0) && (
+    {!isRiverMap && (item.slug !== 'contact-us' || comments.length > 0) && (
       <Comments comments={comments} slug={item.slug} allowSubmission={item.slug !== 'contact-us'} />
     )}
   </article>
