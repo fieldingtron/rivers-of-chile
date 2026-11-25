@@ -57,16 +57,6 @@ for (const m of snapshot.media) {
   m.referenced = usedMedia.has(m.wp_id) || contentRefs.has(m.source_url) || contentRefs.has(base);
 }
 
-const redirects = [];
-for (const p of snapshot.posts) {
-  redirects.push({ url_from: `/river/${p.slug}`, url_to: `/${p.slug}/`, type: '301', status: 'published' });
-}
-redirects.push(
-  { url_from: '/feed', url_to: '/feed.xml', type: '301', status: 'published' },
-  { url_from: '/feed/', url_to: '/feed.xml', type: '301', status: 'published' },
-  { url_from: '/sitemap_index.xml', url_to: '/sitemap-index.xml', type: '301', status: 'published' }
-);
-
 fs.mkdirSync(outDir, { recursive: true });
 const files = {
   'posts.json': snapshot.posts,
@@ -75,7 +65,6 @@ const files = {
   'tags.json': snapshot.tags,
   'authors.json': snapshot.authors,
   'media.json': snapshot.media,
-  'redirects.json': redirects
 };
 for (const [name, data] of Object.entries(files)) {
   fs.writeFileSync(path.join(outDir, name), JSON.stringify(data, null, 2));

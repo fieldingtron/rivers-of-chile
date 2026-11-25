@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "node scripts/generate-redirects.mjs && astro build",
+    "build": "astro build",
+    "redirects:render": "node scripts/render-routes.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "snapshot": "node scripts/prepare-snapshot.mjs",

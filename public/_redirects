@@ -1,5 +1,4 @@
-# Cloudflare Pages redirects
-# Auto-generated. Do not edit by hand — see scripts/generate-redirects.mjs
+# Site redirects. Edit these rules in the repository.
 
 /river/rio-macae /rio-macae/ 301
 /river/rio-niblinto-de-malleco /rio-niblinto-de-malleco/ 301

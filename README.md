@@ -142,3 +142,7 @@ folder). Public URL rule: `https://riversofchile-images.pages.dev/<filename_disk
 - File `description` is the caption/alt text shown in the lightbox; `metadata.variants` holds the resized WebP variants used for `srcset`.
 - The build (`src/lib/directus.ts` + `src/lib/file-registry.mjs`) loads the file library with the read-only build token and resolves `featured_image` to the public R2 URL. Legacy WordPress `<img>` URLs in old body HTML still resolve through `data/images/manifest-v1.json`. Images an editor inserts with the WYSIWYG (`/assets/<id>`) are rewritten to the R2 URL at build time.
 - `roc_media` is deprecated and hidden; it is kept only for reference.
+
+## Redirects
+
+Edit `public/_redirects` for permanent URL moves. Astro copies it into the build for Cloudflare Pages. For a Render static site, run `node scripts/render-routes.mjs` and use the resulting `routes` list in the service’s Blueprint. Render serves existing files before applying redirect rules.

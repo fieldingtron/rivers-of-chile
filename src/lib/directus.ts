@@ -97,20 +97,12 @@ export interface PageItem {
   author_wp_id?: number;
 }
 
-export interface RedirectItem {
-  url_from: string;
-  url_to: string;
-  type?: string;
-  status?: string;
-}
-
 const FILE_MAP: Record<string, string> = {
   roc_posts: 'posts.json',
   roc_pages: 'pages.json',
   roc_categories: 'categories.json',
   roc_tags: 'tags.json',
   roc_authors: 'authors.json',
-  roc_redirects: 'redirects.json',
   roc_media: 'media.json'
 };
 
@@ -264,10 +256,6 @@ export async function getTags(): Promise<TagItem[]> {
 export async function getAuthors(): Promise<AuthorItem[]> {
   const items = await fetchDirectus<AuthorItem>('roc_authors');
   return items.filter((item) => item.status === 'published' || !item.status);
-}
-
-export async function getRedirectRules(): Promise<RedirectItem[]> {
-  return fetchDirectus<RedirectItem>('roc_redirects');
 }
 
 export const RESERVED_SLUGS = new Set([

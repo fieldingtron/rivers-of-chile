@@ -22,8 +22,6 @@ const COLLECTIONS = [
   'roc_tags',
   'roc_posts',
   'roc_pages',
-  'roc_redirects',
-  'roc_site'
 ];
 
 function requireAdminToken() {
@@ -238,29 +236,6 @@ function collections() {
         field('author_wp_id', 'integer')
       ]
     },
-    {
-      collection: 'roc_redirects',
-      meta: { icon: 'transfer_within_a_station', display_template: '{{url_from}}' },
-      schema: {},
-      fields: [
-        field('url_from', 'string', { required: true }),
-        field('url_to', 'string', { required: true }),
-        field('type', 'string', {}, { default_value: '301' }),
-        status
-      ]
-    },
-    {
-      collection: 'roc_site',
-      meta: { icon: 'home', singleton: true },
-      schema: {},
-      fields: [
-        field('title', 'string', {}, { default_value: 'Rivers of Chile' }),
-        field('tagline', 'string'),
-        field('nav', 'json', { interface: 'input-code', options: { language: 'json' } }),
-        field('noindex', 'boolean', { interface: 'boolean' }, { default_value: true }),
-        field('r2_public_base_url', 'string')
-      ]
-    }
   ].map((c) => ({ ...c, fields: [ID_FIELD, ...(c.fields || []).filter((f) => f.field !== 'id')] }));
 }
 
@@ -347,7 +322,7 @@ async function ensurePolicy(roleId) {
   const perms = [];
   for (const collection of COLLECTIONS) {
     if (!have.has(`${collection}:read`)) {
-      const open = collection === 'roc_site' || collection === 'roc_regions' || collection === 'roc_media';
+      const open = collection === 'roc_regions' || collection === 'roc_media';
       perms.push({
         collection,
         action: 'read',

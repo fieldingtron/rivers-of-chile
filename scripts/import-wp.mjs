@@ -116,18 +116,6 @@ async function main() {
     authorsFromYoast: load(exportDir, 'authors-from-yoast.json', {})
   });
 
-  const redirects = snapshot.posts.map((p) => ({
-    url_from: `/river/${p.slug}`,
-    url_to: `/${p.slug}/`,
-    type: '301',
-    status: 'published'
-  }));
-  redirects.push(
-    { url_from: '/feed', url_to: '/feed.xml', type: '301', status: 'published' },
-    { url_from: '/feed/', url_to: '/feed.xml', type: '301', status: 'published' },
-    { url_from: '/sitemap_index.xml', url_to: '/sitemap-index.xml', type: '301', status: 'published' }
-  );
-
   await insertMissing('roc_authors', snapshot.authors, 'wp_user_id');
   await insertMissing('roc_media', snapshot.media, 'wp_id');
   await insertMissing('roc_regions', REGIONS, 'slug');
@@ -135,7 +123,6 @@ async function main() {
   await insertMissing('roc_tags', snapshot.tags, 'wp_id');
   await insertMissing('roc_posts', snapshot.posts, 'wp_id');
   await insertMissing('roc_pages', snapshot.pages, 'wp_id');
-  await insertMissing('roc_redirects', redirects, 'url_from');
   console.log('Import complete.');
 }
 
