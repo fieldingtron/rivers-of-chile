@@ -1,0 +1,93 @@
+[
+  {
+    "wp_user_id": 1,
+    "status": "published",
+    "name": "Fields Marshall",
+    "slug": "fields-marshall",
+    "bio": null
+  },
+  {
+    "wp_user_id": 2,
+    "status": "published",
+    "name": "kurt casey",
+    "slug": "kurt-casey",
+    "bio": null
+  },
+  {
+    "wp_user_id": 96,
+    "status": "published",
+    "name": "Tyler Williams",
+    "slug": "tyler-williams",
+    "bio": null
+  },
+  {
+    "wp_user_id": 95,
+    "status": "published",
+    "name": "Jeff Colgrove",
+    "slug": "jeff-colgrove",
+    "bio": null
+  },
+  {
+    "wp_user_id": 15,
+    "status": "published",
+    "name": "jared",
+    "slug": "jared",
+    "bio": null
+  },
+  {
+    "wp_user_id": 91,
+    "status": "published",
+    "name": "mariann",
+    "slug": "mariann",
+    "bio": null
+  },
+  {
+    "wp_user_id": 89,
+    "status": "published",
+    "name": "Laura Farrell",
+    "slug": "laura-farrell",
+    "bio": null
+  },
+  {
+    "wp_user_id": 42,
+    "status": "published",
+    "name": "Valentin",
+    "slug": "valentin",
+    "bio": null
+  },
+  {
+    "wp_user_id": 37,
+    "status": "published",
+    "name": "John Foss (posthumously)",
+    "slug": "john-foss-posthumously",
+    "bio": null
+  },
+  {
+    "wp_user_id": 39,
+    "status": "published",
+    "name": "Josh Lowry",
+    "slug": "josh-lowry",
+    "bio": null
+  },
+  {
+    "wp_user_id": 38,
+    "status": "published",
+    "name": "Robby Dastin",
+    "slug": "robby-dastin",
+    "bio": null
+  },
+  {
+    "wp_user_id": 10,
+    "status": "published",
+    "name": "jomama",
+    "slug": "jomama",
+    "bio": null
+  },
+  {
+    "wp_user_id": 14,
+    "status": "published",
+    "name": "santiago Ibañez",
+    "slug": "santiago-ibanez",
+    "bio": null
+  }
+]

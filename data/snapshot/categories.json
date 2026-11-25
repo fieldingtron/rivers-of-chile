@@ -1,0 +1,200 @@
+[
+  {
+    "wp_id": 6,
+    "status": "published",
+    "slug": "argentina",
+    "name": "argentina",
+    "type": "country",
+    "parent_wp_id": null,
+    "count": 6
+  },
+  {
+    "wp_id": 175,
+    "status": "published",
+    "slug": "brasil",
+    "name": "brasil",
+    "type": "country",
+    "parent_wp_id": null,
+    "count": 1
+  },
+  {
+    "wp_id": 176,
+    "status": "published",
+    "slug": "brazil",
+    "name": "brazil",
+    "type": "country",
+    "parent_wp_id": null,
+    "count": 1
+  },
+  {
+    "wp_id": 4,
+    "status": "published",
+    "slug": "chile",
+    "name": "chile",
+    "type": "country",
+    "parent_wp_id": null,
+    "count": 137
+  },
+  {
+    "wp_id": 10,
+    "status": "published",
+    "slug": "class-2",
+    "name": "class 2",
+    "type": "class",
+    "parent_wp_id": null,
+    "count": 13
+  },
+  {
+    "wp_id": 5,
+    "status": "published",
+    "slug": "class-3",
+    "name": "class 3",
+    "type": "class",
+    "parent_wp_id": null,
+    "count": 55
+  },
+  {
+    "wp_id": 7,
+    "status": "published",
+    "slug": "class-4",
+    "name": "class 4",
+    "type": "class",
+    "parent_wp_id": null,
+    "count": 78
+  },
+  {
+    "wp_id": 8,
+    "status": "published",
+    "slug": "class-5",
+    "name": "class 5",
+    "type": "class",
+    "parent_wp_id": null,
+    "count": 67
+  },
+  {
+    "wp_id": 157,
+    "status": "published",
+    "slug": "map",
+    "name": "map",
+    "type": "topic",
+    "parent_wp_id": null,
+    "count": 9
+  },
+  {
+    "wp_id": 158,
+    "status": "published",
+    "slug": "news",
+    "name": "news",
+    "type": "news",
+    "parent_wp_id": null,
+    "count": 5
+  },
+  {
+    "wp_id": 3,
+    "status": "published",
+    "slug": "pucon",
+    "name": "pucon",
+    "type": "topic",
+    "parent_wp_id": null,
+    "count": 28
+  },
+  {
+    "wp_id": 11,
+    "status": "published",
+    "slug": "region-ix",
+    "name": "Region IX",
+    "type": "region",
+    "parent_wp_id": null,
+    "count": 25
+  },
+  {
+    "wp_id": 17,
+    "status": "published",
+    "slug": "region-v",
+    "name": "Region V",
+    "type": "region",
+    "parent_wp_id": null,
+    "count": 2
+  },
+  {
+    "wp_id": 14,
+    "status": "published",
+    "slug": "region-vi",
+    "name": "Region VI",
+    "type": "region",
+    "parent_wp_id": null,
+    "count": 8
+  },
+  {
+    "wp_id": 13,
+    "status": "published",
+    "slug": "region-vii",
+    "name": "Region VII",
+    "type": "region",
+    "parent_wp_id": null,
+    "count": 11
+  },
+  {
+    "wp_id": 12,
+    "status": "published",
+    "slug": "region-viii",
+    "name": "Region VIII",
+    "type": "region",
+    "parent_wp_id": null,
+    "count": 16
+  },
+  {
+    "wp_id": 9,
+    "status": "published",
+    "slug": "region-x",
+    "name": "Region X",
+    "type": "region",
+    "parent_wp_id": null,
+    "count": 22
+  },
+  {
+    "wp_id": 26,
+    "status": "published",
+    "slug": "region-xi",
+    "name": "Region XI",
+    "type": "region",
+    "parent_wp_id": null,
+    "count": 20
+  },
+  {
+    "wp_id": 138,
+    "status": "published",
+    "slug": "region-xiv-de-los-rios",
+    "name": "Region XIV De Los Rios",
+    "type": "region",
+    "parent_wp_id": null,
+    "count": 16
+  },
+  {
+    "wp_id": 16,
+    "status": "published",
+    "slug": "santiago-metropolitan-region",
+    "name": "Santiago Metropolitan Region",
+    "type": "region",
+    "parent_wp_id": null,
+    "count": 6
+  },
+  {
+    "wp_id": 1,
+    "status": "published",
+    "slug": "uncategorized",
+    "name": "Uncategorized",
+    "type": "topic",
+    "parent_wp_id": null,
+    "count": 0
+  },
+  {
+    "wp_id": 15,
+    "status": "published",
+    "slug": "waterfalls",
+    "name": "waterfalls",
+    "type": "topic",
+    "parent_wp_id": null,
+    "count": 16
+  }
+]

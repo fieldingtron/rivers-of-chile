@@ -1,0 +1,105 @@
+---
+import HomeLinks from '../HomeLinks.astro';
+import { regionLabel, regionList, excerptOf, imageAt, initials, authorLabel, popularRivers, SITE_NAV } from '../../lib/home';
+const { posts } = Astro.props;
+const rivers = posts.filter((p: any) => p.kind === 'river');
+const picks = popularRivers(posts, 4);
+const lead = picks[0];
+const side = picks.slice(1);
+const regions = regionList(rivers);
+const rows = [...rivers].sort((a: any, b: any) => a.title.localeCompare(b.title)).map((p: any) => ({
+  t: p.title, s: p.slug, r: regionLabel(p), rs: p.region || p.country || '', c: p.class_label || '—', a: authorLabel(p.author_name), cm: Number(p.class_max || 0)
+}));
+---
+<div class="wrap">
+  <header class="mast">
+    <div class="meta"><span>Est. 2007</span><span>{rivers.length} rivers documented</span></div>
+    <a class="title" href="/">Rivers of Chile</a>
+    <nav>{SITE_NAV.map((l) => <a href={l.href}>{l.label}</a>)}<HomeLinks /></nav>
+  </header>
+  <section class="lead">
+    <a class="lead-photo" href={`/${lead.slug}/`}><img src={imageAt(lead.featured_image_url, 1200)} alt="" decoding="async" /></a>
+    <div class="lead-text">
+      <p class="over">Featured guide · {regionLabel(lead)}</p>
+      <h1><a href={`/${lead.slug}/`}>{lead.title}</a></h1>
+      <p class="dek">{excerptOf(lead, 240)}</p>
+      <p class="by"><i>{initials(lead.author_name)}</i>By {authorLabel(lead.author_name)} · Class {lead.class_label}</p>
+      <a class="read" href={`/${lead.slug}/`}>Read the guide</a>
+    </div>
+  </section>
+  <section class="secondary">
+    {side.map((p: any) => (
+      <article>
+        <a href={`/${p.slug}/`}><img src={imageAt(p.featured_image_url, 560)} alt="" decoding="async" /></a>
+        <p class="over">{regionLabel(p)}{p.class_label ? ` · Class ${p.class_label}` : ''}</p>
+        <h2><a href={`/${p.slug}/`}>{p.title}</a></h2>
+        <p>{excerptOf(p, 110)}</p>
+      </article>
+    ))}
+  </section>
+  <section class="dir">
+    <div class="dir-head">
+      <h2>The river index</h2>
+      <div class="tools">
+        <input id="f" type="search" placeholder="Filter by name…" aria-label="Filter rivers" />
+        <select id="reg" aria-label="Region"><option value="">All regions</option>{regions.map((r) => <option value={r.slug}>{r.label} ({r.count})</option>)}</select>
+        <select id="cls" aria-label="Class"><option value="">Any class</option><option value="3">Class III+</option><option value="4">Class IV+</option><option value="5">Class V</option></select>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>River</th><th>Region</th><th>Class</th><th>Author</th></tr></thead>
+      <tbody id="rows">
+        {rows.map((r) => <tr data-t={r.t.toLowerCase()} data-r={r.rs} data-c={r.cm}><td><a href={`/${r.s}/`}>{r.t}</a></td><td>{r.r}</td><td><span class="cl">{r.c}</span></td><td>{r.a}</td></tr>)}
+      </tbody>
+    </table>
+    <p id="count" class="count"></p>
+  </section>
+  <footer><span>Rivers of Chile — a field guide.</span><nav><a href="/dedication/">Dedication</a><a href="/about-authors/">Authors</a><a href="/hardcopy-guidebook/">Hardcopy guidebook</a></nav></footer>
+</div>
+<script is:inline>
+  const rowsEl = [...document.querySelectorAll('#rows tr')];
+  const f = document.getElementById('f'), reg = document.getElementById('reg'), cls = document.getElementById('cls'), count = document.getElementById('count');
+  function run() {
+    const q = f.value.trim().toLowerCase(), r = reg.value, c = Number(cls.value || 0);
+    let n = 0;
+    rowsEl.forEach((tr) => {
+      const ok = (!q || tr.dataset.t.includes(q)) && (!r || tr.dataset.r === r) && (!c || Number(tr.dataset.c) >= c);
+      tr.hidden = !ok; if (ok) n++;
+    });
+    count.textContent = n + ' of ' + rowsEl.length + ' rivers';
+  }
+  [f, reg, cls].forEach((el) => el.addEventListener('input', run)); run();
+</script>
+<style>
+  :global(body.v-c) { background: #f6f1e7; color: #1d1a16; font-family: "Source Serif 4", Georgia, "Times New Roman", serif; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 28px 48px; }
+  .mast { text-align: center; padding: 22px 0 18px; border-bottom: 3px double #1d1a16; }
+  .meta { display: flex; justify-content: space-between; font: 600 11px/1 system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #6d6458; }
+  .title { display: block; font-size: clamp(40px, 7vw, 76px); font-weight: 700; letter-spacing: -.02em; color: #1d1a16; margin: 14px 0 12px; }
+  .mast nav { display: flex; justify-content: center; align-items: center; gap: 24px; flex-wrap: wrap; font: 600 13px system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+  .mast nav a { color: #1d1a16; } .mast nav a:hover { color: #a8431f; }
+  .lead { display: grid; grid-template-columns: 1.35fr 1fr; gap: 36px; padding: 34px 0; border-bottom: 1px solid #cdc3b1; align-items: center; }
+  .lead-photo img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+  .over { font: 700 11px/1 system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #a8431f; margin: 0 0 10px; }
+  h1 { font-size: clamp(30px, 4vw, 46px); line-height: 1.08; margin: 0 0 14px; } h1 a, h2 a { color: #1d1a16; } h1 a:hover, h2 a:hover { color: #a8431f; }
+  .dek { font-size: 19px; line-height: 1.5; color: #433d34; margin: 0 0 16px; }
+  .by { display: flex; align-items: center; gap: 10px; font: 14px system-ui, sans-serif; color: #6d6458; margin: 0 0 18px; }
+  .by i { font-style: normal; width: 32px; height: 32px; border-radius: 50%; background: #1d1a16; color: #f6f1e7; display: grid; place-items: center; font-weight: 700; font-size: 12px; }
+  .read { display: inline-block; background: #1d1a16; color: #f6f1e7; padding: 12px 22px; font: 600 14px system-ui, sans-serif; letter-spacing: .04em; } .read:hover { background: #a8431f; }
+  .secondary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; padding: 30px 0; border-bottom: 1px solid #cdc3b1; }
+  .secondary article { border-right: 1px solid #cdc3b1; padding-right: 28px; } .secondary article:last-child { border: 0; padding: 0; }
+  .secondary img { width: 100%; aspect-ratio: 3/2; object-fit: cover; margin-bottom: 12px; }
+  h2 { font-size: 24px; line-height: 1.15; margin: 0 0 8px; } .secondary p:last-child { color: #433d34; font-size: 15.5px; line-height: 1.5; margin: 0; }
+  .dir { padding: 36px 0 8px; }
+  .dir-head { display: flex; justify-content: space-between; gap: 18px; align-items: end; flex-wrap: wrap; margin-bottom: 14px; }
+  .dir-head h2 { font-size: 34px; margin: 0; }
+  .tools { display: flex; gap: 10px; flex-wrap: wrap; } .tools input, .tools select { font: 15px system-ui, sans-serif; padding: 10px 12px; border: 1px solid #1d1a16; background: #fffdf8; border-radius: 0; }
+  table { width: 100%; border-collapse: collapse; font: 15px system-ui, sans-serif; background: #fffdf8; }
+  th { text-align: left; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6458; padding: 10px 12px; border-bottom: 2px solid #1d1a16; }
+  td { padding: 10px 12px; border-bottom: 1px solid #e3dac8; } tr:hover td { background: #f3eadb; } td a { color: #1d1a16; font-weight: 600; font-family: Georgia, serif; font-size: 16px; } td a:hover { color: #a8431f; }
+  .cl { display: inline-block; min-width: 38px; text-align: center; background: #1d1a16; color: #f6f1e7; padding: 2px 8px; font-weight: 700; font-size: 13px; }
+  .count { color: #6d6458; font: 13px system-ui, sans-serif; }
+  footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 32px; padding-top: 18px; border-top: 3px double #1d1a16; font: 13px system-ui, sans-serif; color: #6d6458; }
+  footer nav { display: flex; gap: 18px; } footer a { color: #1d1a16; }
+  @media (max-width: 800px) { .lead, .secondary { grid-template-columns: 1fr; } .secondary article { border: 0; padding: 0; } td:nth-child(4), th:nth-child(4) { display: none; } }
+</style>

@@ -1,0 +1,10 @@
+---
+import { getPosts } from '../lib/directus';
+import BareLayout from '../layouts/BareLayout.astro';
+import HomeB from '../components/home/HomeB.astro';
+
+const posts = await getPosts();
+---
+<BareLayout title="Rivers of Chile — Home 2" description="A kayaker’s river guide to Chile: first-hand river reports, access notes and photographs." bodyClass="v-b">
+  <HomeB posts={posts} />
+</BareLayout>

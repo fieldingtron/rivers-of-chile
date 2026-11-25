@@ -1,0 +1,124 @@
+---
+import HomeLinks from '../HomeLinks.astro';
+import { regionLabel, regionList, excerptOf, imageAt, fullImage, popularRivers, SITE_NAV } from '../../lib/home';
+const { posts } = Astro.props;
+const rivers = posts.filter((p: any) => p.kind === 'river');
+const featured = popularRivers(posts, 7);
+const hero = featured[0];
+const regions = regionList(rivers);
+const max = Math.max(...regions.map((r) => r.count));
+const stories = posts.filter((p: any) => p.kind !== 'river').slice(0, 3);
+const classes = [
+  { slug: 'class-2', label: 'II', n: rivers.filter((p: any) => Number(p.class_max) === 2 || (p.legacy_categories || []).includes('class-2')).length },
+  { slug: 'class-3', label: 'III', n: rivers.filter((p: any) => (p.legacy_categories || []).includes('class-3')).length },
+  { slug: 'class-4', label: 'IV', n: rivers.filter((p: any) => (p.legacy_categories || []).includes('class-4')).length },
+  { slug: 'class-5', label: 'V', n: rivers.filter((p: any) => (p.legacy_categories || []).includes('class-5')).length }
+];
+---
+<header class="top">
+  <a class="logo" href="/">RIVERS <b>OF</b> CHILE</a>
+  <nav>{SITE_NAV.map((l) => <a href={l.href}>{l.label}</a>)}<HomeLinks /></nav>
+</header>
+<section class="hero" style={`background-image: linear-gradient(180deg, rgba(8,16,16,.55) 0%, rgba(8,16,16,.25) 40%, rgba(8,16,16,.88) 100%), url(${imageAt(hero.featured_image_url, 1200)})`}>
+  <div class="hero-in">
+    <p class="eyebrow">Whitewater expedition guide · Chile &amp; Patagonia</p>
+    <h1>Every river we’ve run,<br />from the Andes to the sea.</h1>
+    <div class="cta">
+      <a class="btn primary" href="/map-of-chile/">Explore the map</a>
+      <a class="btn" href="/category/chile/">Find a river</a>
+    </div>
+  </div>
+  <a class="credit" href={`/${hero.slug}/`}>{hero.title} · Class {hero.class_label} →</a>
+</section>
+<section class="stats">
+  <div><b>{rivers.length}</b><span>river guides</span></div>
+  <div><b>{regions.length}</b><span>regions mapped</span></div>
+  <div><b>2007</b><span>first report</span></div>
+  <div><b>V</b><span>top class on record</span></div>
+</section>
+<main>
+  <section class="block">
+    <div class="head"><h2>Rivers by region</h2><p>North to south along the Andes</p></div>
+    <ol class="rail">
+      {regions.map((r) => (
+        <li>
+          <a href={`/category/${r.slug}/`}>
+            <span class="rn">{r.roman}</span>
+            <span class="rl">{r.label}</span>
+            <span class="bar"><i style={`width:${Math.round((r.count / max) * 100)}%`}></i></span>
+            <span class="rc">{r.count}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+  <section class="block">
+    <div class="head"><h2>By difficulty</h2><p>Jump straight to your level</p></div>
+    <div class="classes">
+      {classes.map((c) => <a href={`/category/${c.slug}/`}><b>Class {c.label}</b><span>{c.n} rivers</span></a>)}
+    </div>
+  </section>
+  <section class="block">
+    <div class="head"><h2>Featured guides</h2><a href="/category/chile/">All rivers →</a></div>
+    <div class="strip">
+      {featured.slice(1).map((p: any) => (
+        <a class="tile" href={`/${p.slug}/`}>
+          <img src={imageAt(p.featured_image_url, 560)} alt="" loading="lazy" decoding="async" />
+          <div><span class="tag">{regionLabel(p)}{p.class_label ? ` · Class ${p.class_label}` : ''}</span><h3>{p.title}</h3></div>
+        </a>
+      ))}
+    </div>
+  </section>
+  <section class="block two">
+    <div>
+      <div class="head"><h2>First descents</h2></div>
+      <p class="lede">Chile’s whitewater history, told by the people who paddled it first. Read the chronology and follow each name back to the river.</p>
+      <a class="btn dark" href="/history-of-first-descents/">Read the history →</a>
+    </div>
+    <div>
+      <div class="head"><h2>From the field</h2></div>
+      <ul class="news">{stories.map((s: any) => <li><a href={`/${s.slug}/`}>{s.title}</a><span>{(s.published_at || '').slice(0, 4)}</span></li>)}</ul>
+    </div>
+  </section>
+</main>
+<footer><span>Rivers of Chile — a field guide.</span><nav><a href="/dedication/">Dedication</a><a href="/about-authors/">Authors</a><a href="/hardcopy-guidebook/">Hardcopy guidebook</a></nav></footer>
+<style>
+  :global(body.v-b) { background: #0d1717; color: #e8efee; font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif; }
+  .top { position: absolute; z-index: 5; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 22px 36px; flex-wrap: wrap; gap: 12px; }
+  .logo { color: #fff; letter-spacing: .22em; font-weight: 600; font-size: 14px; } .logo b { color: #f08a3c; font-weight: 600; }
+  .top nav { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; } .top nav a { color: #e8efee; font-size: 14px; opacity: .9; } .top nav a:hover { opacity: 1; color: #f08a3c; }
+  .hero { min-height: 82vh; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: 0 36px 72px; position: relative; }
+  .hero-in { max-width: 860px; }
+  .eyebrow { text-transform: uppercase; letter-spacing: .2em; font-size: 12px; color: #f08a3c; margin: 0 0 16px; font-weight: 600; }
+  h1 { font-size: clamp(36px, 6vw, 70px); line-height: 1.02; margin: 0 0 28px; font-weight: 700; letter-spacing: -.02em; color: #fff; }
+  .cta { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 14px 26px; border-radius: 6px; border: 1px solid rgba(255,255,255,.55); color: #fff; font-weight: 600; }
+  .btn.primary { background: #f08a3c; border-color: #f08a3c; color: #1a1209; }
+  .btn.dark { background: #f08a3c; color: #1a1209; border-color: #f08a3c; }
+  .credit { position: absolute; right: 36px; bottom: 22px; color: #d9e4e2; font-size: 13px; opacity: .85; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); background: #12201f; border-bottom: 1px solid #1f3332; }
+  .stats div { padding: 26px 36px; border-right: 1px solid #1f3332; } .stats b { display: block; font-size: 34px; color: #f08a3c; } .stats span { color: #93aaa7; font-size: 13px; text-transform: uppercase; letter-spacing: .1em; }
+  main { max-width: 1180px; margin: 0 auto; padding: 24px 28px 72px; }
+  .block { padding: 44px 0 8px; }
+  .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 20px; border-bottom: 1px solid #1f3332; padding-bottom: 10px; }
+  .head h2 { margin: 0; font-size: 26px; color: #fff; } .head p, .head a { color: #93aaa7; margin: 0; font-size: 14px; } .head a:hover { color: #f08a3c; }
+  .rail { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .rail a { display: grid; grid-template-columns: 44px 190px 1fr 40px; align-items: center; gap: 14px; padding: 12px 16px; background: #12201f; border: 1px solid #1f3332; border-radius: 8px; color: #e8efee; }
+  .rail a:hover { border-color: #f08a3c; }
+  .rn { font-weight: 700; color: #f08a3c; letter-spacing: .06em; } .rl { font-weight: 600; }
+  .bar { height: 8px; background: #1b2e2d; border-radius: 99px; overflow: hidden; } .bar i { display: block; height: 100%; background: linear-gradient(90deg, #2c8f86, #f08a3c); }
+  .rc { text-align: right; color: #93aaa7; font-variant-numeric: tabular-nums; }
+  .classes { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+  .classes a { background: #12201f; border: 1px solid #1f3332; border-radius: 10px; padding: 22px; color: #fff; display: flex; flex-direction: column; gap: 4px; }
+  .classes a:hover { background: #f08a3c; color: #1a1209; } .classes b { font-size: 22px; } .classes span { opacity: .75; font-size: 14px; }
+  .strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .tile { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 4/5; display: block; background: #12201f; }
+  .tile img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; } .tile:hover img { transform: scale(1.05); }
+  .tile div { position: absolute; inset: auto 0 0 0; padding: 60px 18px 18px; background: linear-gradient(0deg, rgba(5,10,10,.92), transparent); }
+  .tile h3 { margin: 4px 0 0; color: #fff; font-size: 20px; } .tag { font-size: 12px; color: #f08a3c; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; } .lede { color: #b4c6c3; line-height: 1.6; max-width: 34rem; }
+  .news { list-style: none; margin: 0; padding: 0; } .news li { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1f3332; } .news a { color: #e8efee; } .news a:hover { color: #f08a3c; } .news span { color: #93aaa7; }
+  footer { border-top: 1px solid #1f3332; padding: 26px 36px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; color: #93aaa7; font-size: 14px; }
+  footer nav { display: flex; gap: 18px; } footer a { color: #e8efee; }
+  @media (max-width: 760px) { .two { grid-template-columns: 1fr; } .rail a { grid-template-columns: 34px 1fr 30px; } .bar { display: none; } .hero { padding: 0 20px 56px; } .top { padding: 16px 20px; } }
+</style>

@@ -1,0 +1,25 @@
+---
+const path = Astro.url.pathname;
+const links = [
+  { href: '/category/chile/', label: 'Rivers' },
+  { href: '/map-of-chile/', label: 'Map' },
+  { href: '/history-of-first-descents/', label: 'First descents' },
+  { href: '/dedication/', label: 'Dedication' },
+  { href: '/about-authors/', label: 'Authors' }
+];
+import HomeLinks from './HomeLinks.astro';
+---
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="/">
+      <img src="/images/rivers-64x64.png" width="36" height="36" alt="" />
+      <span>Rivers Of Chile</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      {links.map((link) => (
+        <a href={link.href} aria-current={path === link.href ? 'page' : undefined}>{link.label}</a>
+      ))}
+      <HomeLinks compact />
+    </nav>
+  </div>
+</header>

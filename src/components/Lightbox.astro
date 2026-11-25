@@ -1,0 +1,131 @@
+<div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button type="button" class="lb-backdrop" data-lb="close" tabindex="-1" aria-label="Close"></button>
+  <button type="button" class="lb-close" data-lb="close" aria-label="Close">&times;</button>
+  <button type="button" class="lb-prev" data-lb="prev" aria-label="Previous image">&#10094;</button>
+  <button type="button" class="lb-next" data-lb="next" aria-label="Next image">&#10095;</button>
+  <figure class="lb-frame">
+    <img class="lb-image" alt="" />
+    <figcaption class="lb-caption"></figcaption>
+    <div class="lb-count" aria-live="polite"></div>
+  </figure>
+</div>
+<style is:global>
+  .lightbox { position: fixed; inset: 0; z-index: 80; display: flex; align-items: center; justify-content: center; padding: 3.5rem 4.5rem 4.5rem; }
+  .lightbox[hidden] { display: none !important; }
+  .lb-backdrop { position: absolute; inset: 0; border: 0; padding: 0; margin: 0; background: rgba(17, 24, 39, 0.92); cursor: zoom-out; }
+  .lb-frame { position: relative; z-index: 1; margin: 0; max-width: min(var(--hero-max), 1400px, 100%); max-height: 100%; display: flex; flex-direction: column; align-items: center; }
+  .lb-image { max-width: 100%; max-height: calc(100vh - 9rem); width: auto; height: auto; object-fit: contain; border-radius: 4px; box-shadow: 0 16px 40px rgba(0,0,0,.45); background: #111; }
+  .lb-caption { color: #e5e7eb; font-size: 0.95rem; line-height: 1.45; margin: 0.75rem 0 0; text-align: center; max-width: 50rem; font-family: Inter, system-ui, sans-serif; }
+  .lb-count { color: #9ca3af; font-size: 0.8rem; letter-spacing: 0.06em; margin-top: 0.35rem; font-family: Inter, system-ui, sans-serif; }
+  .lb-close, .lb-prev, .lb-next {
+    position: absolute; z-index: 2; border: 0; background: transparent; color: #fff;
+    cursor: pointer; font-size: 2rem; line-height: 1; padding: 0.4rem 0.7rem; border-radius: 6px;
+  }
+  .lb-close:hover, .lb-prev:hover, .lb-next:hover { background: rgba(255,255,255,.12); }
+  .lb-close { top: 0.7rem; right: 0.7rem; font-size: 2.4rem; }
+  .lb-prev, .lb-next { top: 50%; transform: translateY(-50%); }
+  .lb-prev { left: 0.4rem; }
+  .lb-next { right: 0.4rem; }
+  .lightbox.is-single .lb-prev, .lightbox.is-single .lb-next { display: none; }
+  body.lb-open { overflow: hidden; }
+  @media (max-width: 700px) {
+    .lightbox { padding: 3.25rem 0.75rem 4rem; }
+    .lb-prev, .lb-next { font-size: 1.6rem; }
+  }
+</style>
+<script>
+  const root = document.getElementById('lightbox');
+  if (root) {
+    const img = root.querySelector('.lb-image');
+    const cap = root.querySelector('.lb-caption');
+    const count = root.querySelector('.lb-count');
+    const items = [];
+    const seen = new Set();
+
+    function collect() {
+      items.length = 0;
+      seen.clear();
+      document.querySelectorAll('article img.content-photo, article a[data-lightbox] img, article .prose img').forEach((el) => {
+        const link = el.closest('a[data-lightbox], a.content-photo-link');
+        const src = link?.getAttribute('data-full') || el.getAttribute('data-full') || el.currentSrc || el.src;
+        if (!src || seen.has(src)) return;
+        seen.add(src);
+        const caption = link?.getAttribute('data-caption') || el.getAttribute('data-caption') || el.getAttribute('alt') || '';
+        items.push({ src, caption, alt: el.getAttribute('alt') || caption });
+      });
+    }
+
+    let index = 0;
+    let touchX = null;
+
+    function render() {
+      const item = items[index];
+      if (!item) return;
+      img.src = item.src;
+      img.alt = item.alt || item.caption || '';
+      cap.textContent = item.caption || '';
+      cap.hidden = !item.caption;
+      count.textContent = items.length ? `${index + 1} / ${items.length}` : '';
+      root.classList.toggle('is-single', items.length < 2);
+    }
+
+    function open(at) {
+      collect();
+      if (!items.length) return;
+      index = Math.max(0, Math.min(at, items.length - 1));
+      render();
+      root.hidden = false;
+      document.body.classList.add('lb-open');
+      root.querySelector('.lb-close').focus();
+    }
+
+    function close() {
+      root.hidden = true;
+      document.body.classList.remove('lb-open');
+      img.removeAttribute('src');
+    }
+
+    function step(delta) {
+      if (items.length < 2) return;
+      index = (index + delta + items.length) % items.length;
+      render();
+    }
+
+    document.addEventListener('click', (event) => {
+      const link = event.target.closest?.('a[data-lightbox], a.content-photo-link');
+      const photo = event.target.closest?.('article img.content-photo, article .content-figure img');
+      if (!link && !photo) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      collect();
+      const node = photo || link?.querySelector('img') || link;
+      const src = link?.getAttribute('data-full') || node?.getAttribute('data-full') || node?.currentSrc || node?.src || link?.getAttribute('href');
+      const at = items.findIndex((item) => item.src === src);
+      open(at === -1 ? 0 : at);
+    });
+
+    root.addEventListener('click', (event) => {
+      const action = event.target.closest('[data-lb]')?.getAttribute('data-lb');
+      if (action === 'close') close();
+      if (action === 'prev') step(-1);
+      if (action === 'next') step(1);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (root.hidden) return;
+      if (event.key === 'Escape') close();
+      if (event.key === 'ArrowLeft') { event.preventDefault(); step(-1); }
+      if (event.key === 'ArrowRight') { event.preventDefault(); step(1); }
+    });
+
+    root.addEventListener('touchstart', (event) => {
+      touchX = event.changedTouches[0]?.clientX ?? null;
+    }, { passive: true });
+    root.addEventListener('touchend', (event) => {
+      if (touchX == null) return;
+      const dx = (event.changedTouches[0]?.clientX ?? touchX) - touchX;
+      touchX = null;
+      if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }
+</script>

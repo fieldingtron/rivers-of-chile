@@ -5,7 +5,7 @@ on:
   repository_dispatch:
     types: [directus-rebuild]
   push:
-    branches: [astro-directus]
+    branches: [main]
     paths-ignore:
       - 'README.md'
       - 'image-origin/**'
@@ -32,10 +32,10 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Checkout astro-directus
+      - name: Checkout main
         uses: actions/checkout@v4
         with:
-          ref: astro-directus
+          ref: ${{ github.event_name == 'push' && github.sha || 'main' }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4

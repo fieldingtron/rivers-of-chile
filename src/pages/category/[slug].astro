@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCategories, getPosts } from '../../lib/directus';
+
+export async function getStaticPaths() {
+  const [categories, posts] = await Promise.all([getCategories(), getPosts()]);
+  return categories
+    .filter((c) => c.slug && c.slug !== 'uncategorized')
+    .map((category) => ({
+      params: { slug: category.slug },
+      props: {
+        category,
+        posts: posts.filter((p) => (p.legacy_categories || []).includes(category.slug))
+      }
+    }));
+}
+
+const { category, posts } = Astro.props;
+---
+<BaseLayout title={category.name} description={`Rivers and articles in ${category.name}.`}>
+  <h1 class="page-title">{category.name}</h1>
+  <p class="lede">{posts.length} {posts.length === 1 ? 'entry' : 'entries'}.</p>
+  <ul class="river-list">
+    {posts.map((post) => (
+      <li>
+        <a href={`/${post.slug}/`}>
+          <strong>{post.title}</strong>
+          <div class="meta">
+            {post.class_label && <span>Class {post.class_label}</span>}
+            {post.author_name && <span> · {post.author_name}</span>}
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>
