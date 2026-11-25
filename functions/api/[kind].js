@@ -54,7 +54,7 @@ export async function onRequestPost({ request, env, params }) {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254 || subject.length > 150) return respond(400,'invalid');
       payload = { sender_name: name, reply_to: email, subject, message, language };
     } else {
-      const source = await env.ASSETS.fetch(new URL('/comment-targets.json', url));
+      const source = await env.ASSETS.fetch(new Request(new URL('/comment-targets.json', url)));
       if (!source.ok) return respond(503,'failed');
       const targets = await source.json();
       const target = Object.hasOwn(targets, field('slug')) && targets[field('slug')];
@@ -63,10 +63,14 @@ export async function onRequestPost({ request, env, params }) {
     }
     const collection = site + (kind === 'comment' ? '_comments' : '_contact_messages');
     const result = await fetch('https://content.fieldsmarshall.com/items/' + collection, {
-      method: 'POST', redirect: 'error', signal: AbortSignal.timeout(10000),
-      headers: { 'Content-Type':'application/json', Authorization: 'Bearer ' + env.DIRECTUS_FORM_TOKEN },
+      method: 'POST', redirect: 'error',
+      headers: { 'Content-Type':'application/json', 'User-Agent':'RiverSites/1.0', Authorization: 'Bearer ' + env.DIRECTUS_FORM_TOKEN },
       body: JSON.stringify(payload)
     });
+    if (!result.ok) console.error('Directus form delivery returned', result.status);
     return result.ok ? respond(201,kind) : respond(503,'failed');
-  } catch { return respond(503,'failed'); }
+  } catch (error) {
+    console.error('Form delivery exception', error.name);
+    return respond(503,'failed');
+  }
 }
