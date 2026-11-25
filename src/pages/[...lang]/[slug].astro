@@ -52,6 +52,7 @@ const categories = post ? await getCategories(es) : [];
 const catNames = post
   ? (post.legacy_categories || []).map((slug) => categories.find((c) => c.slug === slug)).filter(Boolean)
   : [];
+const openLinksInNewWindow = !es && item.slug === '22-teacups-22-tazas-rio-claro';
 const heading = guideHeading(item.slug, item.title);
 const description = guideDescription(item, heading, es);
 const legacyTitle = item.seo_title?.replace(/\s*[-|]\s*(?:peruwhitewater\.com|rivers of chile)\s*$/i, '').trim();
@@ -88,6 +89,7 @@ const article = post && {
 };
 ---
 <BaseLayout
+  openLinksInNewWindow={openLinksInNewWindow}
   title={title}
   breadcrumb={heading}
   description={description}
@@ -148,5 +150,5 @@ const article = post && {
       <Comments comments={comments} slug={item.slug} allowSubmission={item.slug !== 'contact-us'} />
     )}
   </article>
-  <Lightbox />
+  {!openLinksInNewWindow && <Lightbox />}
 </BaseLayout>

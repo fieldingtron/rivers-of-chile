@@ -13,6 +13,7 @@ interface Props {
   title: string;
   description?: string;
   breadcrumb?: string;
+  openLinksInNewWindow?: boolean;
   canonical?: string;
   type?: 'website' | 'article';
   image?: string;
@@ -23,6 +24,7 @@ const { title, description, canonical, type, image } = Astro.props;
 <!doctype html>
 <html lang={languageForPath(Astro.url.pathname)}>
   <head>
+    {Astro.props.openLinksInNewWindow && <base target="_blank" />}
     <SEO title={title} description={description} canonical={canonical} type={type} image={image} />
     <LanguagePreference />
   </head>
