@@ -9,10 +9,8 @@ const contact = kind === 'contact';
   <input type="hidden" name="slug" value={slug} />
   <input type="hidden" name="ui" value={language} />
   <label>{t('Your name', 'Tu nombre')}<input name="name" maxlength="100" autocomplete="name" required /></label>
-  {contact && <>
-    <label>{t('Your email', 'Tu correo electrónico')}<input type="email" name="email" maxlength="254" autocomplete="email" required /></label>
-    <label>{t('Subject (optional)', 'Asunto (opcional)')}<input name="subject" maxlength="150" /></label>
-  </>}
+  <label>{t('Your email', 'Tu correo electrónico')}<input type="email" name="email" maxlength="254" autocomplete="email" required /></label>
+  {contact && <label>{t('Subject (optional)', 'Asunto (opcional)')}<input name="subject" maxlength="150" /></label>}
   <label>{contact ? t('Message', 'Mensaje') : t('Add a comment', 'Escribe un comentario')}
     <textarea name="message" rows="4" maxlength="4000" required></textarea>
   </label>
@@ -21,7 +19,7 @@ const contact = kind === 'contact';
   </label>
   <label class="trap" aria-hidden="true">Website<input name="website" autocomplete="off" tabindex="-1" /></label>
   <small>{contact ? t('Your message goes privately to the site team.', 'Tu mensaje se envía en privado al equipo del sitio.') :
-    t('Comments appear after moderation.', 'Los comentarios se publican después de su revisión.')}</small>
+    t('Your email stays private. We’ll email you when your comment is approved or declined.', 'Tu correo es privado. Te avisaremos si se aprueba o se rechaza tu comentario.')}</small>
   <button type="submit">{contact ? t('Send message', 'Enviar mensaje') : t('Submit comment', 'Enviar comentario')}</button>
   <p class="result" role="status" aria-live="polite"></p>
 </form>

@@ -48,11 +48,13 @@ export async function onRequestPost({ request, env, params }) {
   if (field('website')) return respond(200, kind);
   const name = field('name'), message = field('message');
   if (!name || name.length > 100 || !message || message.length > 4000 || !['en','es'].includes(language)) return respond(400,'invalid');
+  const email = field('email');
+  if (email.length > 254 || !/^[^\s@,;<>:]+@[^\s@,;<>:]+\.[^\s@,;<>:]+$/.test(email)) return respond(400,'invalid');
   try {
     let payload;
     if (kind === 'contact') {
-      const email = field('email'), subject = field('subject');
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254 || subject.length > 150) return respond(400,'invalid');
+      const subject = field('subject');
+      if (subject.length > 150) return respond(400,'invalid');
       payload = { sender_name: name, reply_to: email, subject, message, language };
     } else {
       const source = await env.ASSETS.fetch(new Request(new URL('/comment-targets.json', url)));
@@ -60,7 +62,7 @@ export async function onRequestPost({ request, env, params }) {
       const targets = await source.json();
       const target = Object.hasOwn(targets, field('slug')) && targets[field('slug')];
       if (!target || !['post','page'].includes(target.kind) || !Number.isInteger(target.id)) return respond(400,'invalid');
-      payload = { author_name: escape(name), content: escape(message), original_language: language, [target.kind]: target.id };
+      payload = { author_name: escape(name), author_email: email, content: escape(message), original_language: language, [target.kind]: target.id };
     }
     const collection = site + (kind === 'comment' ? '_comments' : '_contact_messages');
     if (!env.DIRECTUS_FORM_TOKEN) return respond(503,'failed','configuration');

@@ -327,7 +327,7 @@ async function ensurePolicy(roleId) {
         collection,
         action: 'read',
         policy: policy.id,
-        fields: ['*'],
+        fields: collection === 'roc_comments' ? ['id','wp_id','post_wp_id','parent_wp_id','status','author_name','content','original_language','published_at','post','page'] : ['*'],
         permissions: open ? {} : { status: { _eq: 'published' } }
       });
     }
