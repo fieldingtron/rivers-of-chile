@@ -65,6 +65,14 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
+      - name: Publish indexable photos at production cutover
+        if: vars.RIVER_PRODUCTION == '1'
+        working-directory: image-origin
+        run: pnpm exec wrangler pages deploy public --project-name=riversofchile-images --branch=main --commit-dirty=true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
       - name: Deploy to Cloudflare Pages
         run: pnpm exec wrangler pages deploy dist --project-name=riversofchile --branch=main --commit-dirty=true
         env:

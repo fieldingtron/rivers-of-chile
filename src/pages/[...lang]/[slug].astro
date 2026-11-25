@@ -76,6 +76,19 @@ const showHero = Boolean(image && featuredAsset && !featuredAlreadyInBody && !is
 const heroSrcset = showHero && featuredAsset && images
   ? displayVariants(featuredAsset).map((v: { key: string; width: number }) => `${variantUrl(images, v)} ${v.width}w`).join(', ')
   : undefined;
+const article = post && {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).href,
+  headline: heading,
+  description,
+  inLanguage: language,
+  image: image || undefined,
+  author: post.author_name ? { '@type': 'Person', name: authorLabel(post.author_name) } : undefined,
+  publisher: { '@type': 'Organization', name: 'Rivers of Chile' },
+  datePublished: post.published_at || undefined,
+  dateModified: post.updated_at || undefined
+};
 ---
 <BaseLayout
   title={title}
@@ -84,6 +97,7 @@ const heroSrcset = showHero && featuredAsset && images
   type={type === 'post' ? 'article' : 'website'}
   image={image}
 >
+  {article && <script type="application/ld+json" set:html={JSON.stringify(article).replace(/</g, '\\u003c')} />}
   <article class="prose">
     <div class="prose-header">
     <h1 class="page-title">{heading}</h1>
@@ -92,7 +106,7 @@ const heroSrcset = showHero && featuredAsset && images
         {post.kind === 'river' && post.class_label && <span>{es ? 'Clase' : 'Class'} {post.class_label}</span>}
         {post.region && <span> · {es ? taxonomyName(regionGuideLabel(post)) : regionGuideLabel(post)}</span>}
         {post.author_name && <span> · {authorLabel(post.author_name)}</span>}
-        {post.published_at && <span> · {post.published_at.slice(0, 10)}</span>}
+        {post.published_at && <span> · <time datetime={post.published_at}>{post.published_at.slice(0, 10)}</time></span>}
       </p>
     )}
     {post && (post.class_label || post.region || post.country || post.season || post.put_in || post.take_out) && (

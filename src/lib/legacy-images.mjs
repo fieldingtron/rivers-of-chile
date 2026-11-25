@@ -400,3 +400,19 @@ function applyHeroSizes(html) {
   });
   return html.slice(0, match.index) + updated + html.slice(match.index + original.length);
 }
+
+/** Prefer an editor's selection, then a photograph already published with this guide. */
+export function guidePhoto(manifest, item) {
+  const chosen = item.featured_image_url;
+  if (chosen && !isPlaceholderFeatured(chosen, assetFor(manifest, chosen))) return chosen;
+  const candidates = [];
+  for (const match of (item.content || '').matchAll(/<img\b[^>]*?\ssrc\s*=\s*(["'])(.*?)\1/gi)) {
+    const url = match[2];
+    const asset = assetFor(manifest, url);
+    if (!asset || /(?:logo|avatar|favicon|banner|topo|mapa?|croquis|spacer)/i.test(url.split('/').pop())) continue;
+    const sizes = (asset.variants || []).filter(v => v.width >= 320 && v.height >= 180);
+    if (!sizes.length) continue;
+    candidates.push({ url, wide: sizes.some(v => v.width >= 640 && v.width >= v.height) });
+  }
+  return (candidates.find(candidate => candidate.wide) || candidates[0])?.url;
+}

@@ -17,11 +17,14 @@ const {
   title,
   description = es ? 'Guía de kayak en aguas bravas de Chile, con descripciones de los ríos, información de acceso y fotografías.' : 'Kayakers guide to the whitewater of Chile: river descriptions, access notes, and photographs.',
   canonical = new URL(Astro.url.pathname, base).href,
-  image,
+  image: pageImage,
   type = 'website'
 } = Astro.props;
 
 const siteName = 'Rivers of Chile';
+const image = new URL(pageImage || '/images/beauty-Renaico-aspect-ratio-1280-720.jpg', base).href;
+const homepage = /^\/(?:es\/?)?$/.test(Astro.url.pathname);
+const website = { '@context': 'https://schema.org', '@type': 'WebSite', name: siteName, url: new URL('/', base).href, inLanguage: ['en', 'es'] };
 const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 ---
 
@@ -32,7 +35,7 @@ const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
-{(!production || auxiliary) && <meta name="robots" content={production ? "noindex, follow" : "noindex, nofollow"} />}
+<meta name="robots" content={!production ? "noindex, nofollow" : auxiliary ? "noindex, follow" : "max-image-preview:large"} />
 <link rel="canonical" href={canonical} />
 
 {languages.map(({code}) => <link rel="alternate" hreflang={code} href={new URL(languageRoutes[code], base)} />)}
@@ -43,9 +46,10 @@ const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:site_name" content={siteName} />
-{image && <meta property="og:image" content={image} />}
+<meta property="og:image" content={image} />
 
-<meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
-{image && <meta name="twitter:image" content={image} />}
+<meta name="twitter:image" content={image} />
+{homepage && <script type="application/ld+json" set:html={JSON.stringify(website)} />}

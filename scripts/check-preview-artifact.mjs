@@ -15,6 +15,9 @@ const page = read('about/index.html');
 const category = read('category/chile/index.html');
 const missing = read('404.html');
 
+const structured = [...river.matchAll(/<script type="application\/ld\+json"[^>]*>(.*?)<\/script>/gs)].map(m => JSON.parse(m[1]));
+assert.ok(structured.some(data => data['@type'] === 'Article' && data.headline && data.inLanguage === 'en'));
+assert.match(home, /<meta property="og:image" content="https:\/\//);
 const production = process.env.RIVER_PRODUCTION === '1';
 if (production) {
   assert.doesNotMatch(read('_headers'), /X-Robots-Tag/i);
@@ -34,10 +37,10 @@ for (const html of [home, home2, home3, river, page]) assert.match(html, /Home 1
 for (const html of [home, home2, home3, page]) assert.doesNotMatch(html, /beta preview|Search engines are asked/i, 'Visible beta text found');
 assert.match(river, /<h1[^>]*>\s*Rio Niblinto de Malleco/i, 'River route did not render its heading');
 assert.match(river, /Reserva Nacional Malleco/i, 'River body did not render');
-assert.match(river, /riversofchile-images\.pages\.dev\//, 'River images were not rewritten to the R2 image origin');
 assert.doesNotMatch(river, /migrated-media/, 'Built river page still contains /migrated-media/ in a URL');
 
 const colorado = read('rio-colorado/index.html');
+assert.match(colorado, /riversofchile-images\.pages\.dev\//, 'River images were not rewritten to the R2 image origin');
 assert.match(colorado, /id="lightbox"/, 'Rio Colorado is missing the lightbox');
 assert.match(colorado, /data-lightbox/, 'Rio Colorado images are not wired to the lightbox');
 assert.match(colorado, /srcset="/, 'Rio Colorado images are missing srcset');

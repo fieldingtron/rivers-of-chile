@@ -16,6 +16,13 @@ function baseHeaders(contentType) {
   return h;
 }
 
+// Published photographs may appear in image search after the site cutover.
+function mediaHeaders(type) {
+  const headers = cacheHeaders(baseHeaders(type));
+  if (/^image\//i.test(type)) headers.delete('X-Robots-Tag');
+  return headers;
+}
+
 function cacheHeaders(h, immutable) {
   h.set('Cache-Control', immutable
     ? 'public, max-age=31536000, immutable'
@@ -123,14 +130,14 @@ async function handle(context) {
         headers: cacheHeaders(baseHeaders('text/plain; charset=utf-8'))
       });
     }
-    const h = cacheHeaders(baseHeaders(type));
+    const h = mediaHeaders(type);
     h.set('Content-Range', `bytes ${range.start}-${range.end}/${size}`);
     h.set('Content-Length', String(range.length));
     const body = method === 'HEAD' ? null : object.body;
     return new Response(body, { status: 206, headers: h });
   }
 
-  const h = cacheHeaders(baseHeaders(type));
+  const h = mediaHeaders(type);
   h.set('Content-Length', String(size));
   if (method === 'HEAD') {
     return new Response(null, { status: 200, headers: h });

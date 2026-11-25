@@ -8,7 +8,7 @@ import { taxonomyName } from './spanish';
 import fs from 'node:fs';
 import path from 'node:path';
 import { registerFiles, registeredCount, fileById, assetById, publicUrlFor, registerAvatar } from './file-registry.mjs';
-import { loadImageManifest, publicBase, pickDisplay, publicObjectKey } from './legacy-images.mjs';
+import { guidePhoto, loadImageManifest, publicBase, pickDisplay, publicObjectKey } from './legacy-images.mjs';
 
 const DIRECTUS_URL = import.meta.env.DIRECTUS_URL || 'https://content.fieldsmarshall.com';
 const DIRECTUS_BUILD_TOKEN = process.env.DIRECTUS_BUILD_TOKEN?.trim();
@@ -246,6 +246,8 @@ export async function getPosts(language: Language = defaultLanguage): Promise<Po
   await loadFileLibrary();
   await loadAvatars();
   applyFileFields(items);
+  const photos = loadImageManifest();
+  for (const item of items) item.featured_image_url = guidePhoto(photos, item);
   return localizedItems(requirePublished(items, 'roc_posts'), language, 'posts').sort((a, b) => a.title.localeCompare(b.title));
 }
 
