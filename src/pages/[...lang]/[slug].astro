@@ -70,12 +70,13 @@ const facts = post ? [
   {label: es ? 'Distancia' : 'Distance', value: post.length_km != null ? post.length_km + ' km' : null},
   {label: es ? 'Pendiente' : 'Gradient', value: post.gradient}
 ].filter(f => f.value) : [];
-const heading = guideHeading(item.slug, item.title);
+const isRiverMap = item.slug === 'map-of-chile';
+const heading = isRiverMap ? (es ? 'Regiones fluviales de Chile' : 'River regions of Chile') : guideHeading(item.slug, item.title);
 const description = guideDescription(item, heading, es);
 const legacyTitle = item.seo_title?.replace(/\s*[-|]\s*(?:peruwhitewater\.com|rivers of chile)\s*$/i, '').trim();
 const title = post?.kind === 'river'
   ? (es ? heading + ' — Guía de kayak' : heading + ' kayaking guide')
-  : legacyTitle || heading;
+  : isRiverMap ? heading : legacyTitle || heading;
 const images = loadImageManifest();
 const selection = post?.kind === 'river' ? riverPhoto(post.slug) : undefined;
 const featured = post?.featured_image_url || undefined;
@@ -154,8 +155,7 @@ const article = post && {
       </figure>
     )}
     {post?.kind === 'river' && body.trim() && <h2 class="run-heading">{es ? 'El recorrido' : 'The run'}</h2>}
-    {item.slug === 'map-of-chile' && <RegionMap />}
-    {item.slug === 'map-of-chile' ? <details><summary>{es ? 'Ver el mapa original de la guía' : 'View the original guidebook map'}</summary><div class="article-body" set:html={body} /></details> : <div class="article-body" set:html={es ? guideLinks(body) : reviewedEnglishLinks(guideLinks(body), item.slug)} />}
+    {isRiverMap ? <RegionMap /> : <div class="article-body" set:html={es ? guideLinks(body) : reviewedEnglishLinks(guideLinks(body), item.slug)} />}
     {related && <div class="related-rivers">
       {related.nearby.length > 0 && <section>
         <h2>{es ? 'Más ríos de la región' : 'More rivers in this region'}</h2>

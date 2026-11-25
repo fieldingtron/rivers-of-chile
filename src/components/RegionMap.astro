@@ -6,12 +6,23 @@ import { taxonomyName } from '../lib/spanish';
 import { createSiteUI } from './site-ui';
 const { language, spanish, href, t } = createSiteUI(Astro.url.pathname);
 const regions = regionList((await getPosts(language)).filter(post => post.kind === 'river'));
+// Natural Earth populated places, projected in the same coordinates as the region outlines.
+const cities = [
+  { name: 'Valparaíso', lat: -33.0458, lon: -71.6230, offset: -7 },
+  { name: 'Santiago', lat: -33.4481, lon: -70.6690, offset: 7 },
+  { name: 'Talca', lat: -35.4550, lon: -71.6700, offset: 0 },
+  { name: 'Concepción', lat: -36.8300, lon: -73.0500, offset: 0 },
+  { name: 'Temuco', lat: -38.7300, lon: -72.5800, offset: 0 },
+  { name: 'Valdivia', lat: -39.7950, lon: -73.2450, offset: 0 },
+  { name: 'Puerto Montt', lat: -41.4700, lon: -72.9300, offset: 0 },
+  { name: 'Coyhaique', lat: -45.5700, lon: -72.0700, offset: 0 }
+];
 const label = (name: string) => spanish ? taxonomyName(name) : name;
 ---
 <section class="region-atlas">
   <p>{t('Choose a region to browse its river guides by difficulty.', 'Selecciona una región para explorar sus ríos por dificultad.')}</p>
   <div class="map-grid">
-    <svg viewBox="0 0 355 580" aria-label={t('River guide regions of Chile', 'Regiones de la guía de ríos de Chile')} role="group">
+    <svg viewBox="-65 0 427 568" aria-label={t('River guide regions of Chile', 'Regiones de la guía de ríos de Chile')} role="group">
       {outlines.map(outline => {
         const index = regions.findIndex(r => r.slug === outline.slug);
         const r = regions[index];
@@ -24,6 +35,18 @@ const label = (name: string) => spanish ? taxonomyName(name) : name;
           <text x="205" y={row+5}>{label(r.label)}</text>
         </a>;
       })}
+      <g class="cities" role="group" aria-label={t('Cities', 'Ciudades')}>
+        {cities.map(city => {
+          const x = (city.lon + 76) * 23;
+          const y = (-31.8 - city.lat) * 32;
+          const row = y + city.offset;
+          return <g>
+            <path d={`M24,${row} H41 L${x},${y}`} />
+            <circle cx={x} cy={y} r="3.4" />
+            <text x="20" y={row + 4} text-anchor="end">{city.name}</text>
+          </g>;
+        })}
+      </g>
     </svg>
     <div><h2>{t('Regions', 'Regiones')}</h2>
       <ul>{regions.map(r => <li><a href={href('/category/' + r.slug + '/')}><strong>{label(r.label)}</strong><span>{r.count} {t('guides','guías')}</span></a></li>)}</ul>
@@ -38,6 +61,10 @@ const label = (name: string) => spanish ? taxonomyName(name) : name;
   .context { fill:#b9c9c6; }
   .leader { stroke:#51746c; stroke-width:1; fill:none; }
   svg text { font:600 12px system-ui; fill:#133d38; }
+  .cities { pointer-events:none; }
+  .cities path { stroke:#765746; stroke-width:1; fill:none; }
+  .cities circle { fill:#964320; stroke:#fff; stroke-width:1.25; }
+  .cities text { fill:#573726; font-weight:600; }
   svg a:hover .land, svg a:focus .land { fill:#a45329; }
   svg a:hover text, svg a:focus text { text-decoration:underline; }
   h2 { margin-top:0; }
