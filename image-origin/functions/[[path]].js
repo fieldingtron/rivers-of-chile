@@ -17,9 +17,9 @@ function baseHeaders(contentType) {
 }
 
 // Published photographs may appear in image search after the site cutover.
-function mediaHeaders(type) {
+function mediaHeaders(type, production) {
   const headers = cacheHeaders(baseHeaders(type));
-  if (/^image\//i.test(type)) headers.delete('X-Robots-Tag');
+  if (production && /^image\//i.test(type)) headers.delete('X-Robots-Tag');
   return headers;
 }
 
@@ -107,6 +107,7 @@ async function handle(context) {
 
   const size = Number(found.head.size) || 0;
   const type = found.head.httpMetadata?.contentType || 'application/octet-stream';
+  const production = context.env.RIVER_PRODUCTION === '1';
   const rangeHeader = context.request.headers.get('Range');
 
   if (rangeHeader) {
@@ -130,14 +131,14 @@ async function handle(context) {
         headers: cacheHeaders(baseHeaders('text/plain; charset=utf-8'))
       });
     }
-    const h = mediaHeaders(type);
+    const h = mediaHeaders(type, production);
     h.set('Content-Range', `bytes ${range.start}-${range.end}/${size}`);
     h.set('Content-Length', String(range.length));
     const body = method === 'HEAD' ? null : object.body;
     return new Response(body, { status: 206, headers: h });
   }
 
-  const h = mediaHeaders(type);
+  const h = mediaHeaders(type, production);
   h.set('Content-Length', String(size));
   if (method === 'HEAD') {
     return new Response(null, { status: 200, headers: h });

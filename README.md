@@ -6,7 +6,7 @@ pattern as VPNReviewz: Directus on the NAS, Astro at build time, images on R2.
 
 ## Search indexing at migration
 
-The default build is the noindex Pages beta. Set the GitHub Actions repository variable `RIVER_PRODUCTION=1` for the build serving the public www domain at cutover. This sets production canonical links, language alternates, sitemap URLs, robots.txt and indexing headers. Keep separate preview builds on the default setting.
+The default build is the noindex Pages beta. After the custom domains point to Astro, run `node scripts/river-indexing.mjs public` from the Peru Astro repository to enable search indexing on both sites and their image servers. Use `preview` to restore noindex or add `--dry-run` to inspect the commands. The command uses the signed-in GitHub CLI account to set both repositories’ RIVER_PRODUCTION variables and run their deployments. This sets production canonical links, language alternates, sitemap URLs, robots.txt and indexing headers. Keep separate preview builds on the default setting.
 
 ## Beta hosts (no DNS changes)
 
