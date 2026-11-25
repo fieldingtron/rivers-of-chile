@@ -1,0 +1,14 @@
+name: Queue Chile beta update
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [directus-rebuild]
+
+permissions: {}
+jobs:
+  record:
+    # The workflow run itself is the queue marker. No runner or site build is needed.
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo Queued

@@ -1,3 +1,4 @@
+import { riverPhoto } from './river-photos';
 import { avatarFor } from './file-registry.mjs';
 import { loadImageManifest, assetFor, variantUrl, featuredImageUrl, displayVariants, pickDisplay } from './legacy-images.mjs';
 import type { PostItem } from './directus';
@@ -24,7 +25,9 @@ export function regionLabel(post: PostItem): string {
 
 export function regionList(posts: PostItem[]) {
   const counts = new Map<string, number>();
-  for (const p of posts) if (p.region && REGIONS[p.region]) counts.set(p.region, (counts.get(p.region) || 0) + 1);
+  for (const post of posts) {
+    for (const slug of guideRegions(post)) counts.set(slug, (counts.get(slug) || 0) + 1);
+  }
   return [...counts.entries()]
     .map(([slug, count]) => ({ slug, count, ...REGIONS[slug] }))
     .sort((a, b) => a.order - b.order); // north (V) to south (XI)
@@ -68,7 +71,7 @@ export function imageCount(post: PostItem): number {
 
 /** "Popular" = real guides with a photo, a written excerpt and plenty of photography. */
 export function popularRivers(posts: PostItem[], n: number): PostItem[] {
-  const rivers = posts.filter((p) => p.kind === 'river' && p.featured_image_url && p.slug);
+  const rivers = posts.filter((p) => p.kind === 'river' && p.featured_image_url && p.slug && !('representative' in (riverPhoto(p.slug) ?? {})));
   const scored = rivers
     .map((p) => ({ p, s: imageCount(p) * 3 + Math.min((p.content || '').length / 1500, 8) + (p.class_label ? 1 : 0) }))
     .sort((a, b) => b.s - a.s);
@@ -99,11 +102,10 @@ export function classBuckets(posts: PostItem[]) {
 }
 
 export const SITE_NAV = [
-  { href: '/category/chile/', label: 'Rivers' },
-  { href: '/map-of-chile/', label: 'Map' },
-  { href: '/history-of-first-descents/', label: 'First descents' },
-  { href: '/dedication/', label: 'Dedication' },
-  { href: '/about-authors/', label: 'Authors' }
+  { href: '/rivers/', label: 'Rivers' },
+  { href: '/region/', label: 'Region' },
+  { href: '/class/', label: 'Difficulty' },
+  { href: '/map-of-chile/', label: 'Map' }
 ];
 
 const REGION_GUIDE: Record<string, string> = {
@@ -150,4 +152,19 @@ function authorKey(name?: string | null): string {
 /** Local author portrait if we have one; Directus has no avatar field. */
 export function authorPhoto(name?: string | null): string | undefined {
   return avatarFor(name) || AUTHOR_PHOTOS[authorKey(name)];
+}
+
+// Preserve the original guide's region memberships, including runs in two regions.
+export function guideRegions(post: PostItem): string[] {
+  if (post.country && post.country.toLowerCase() !== 'chile') return [];
+  return [...new Set([post.region, ...(post.legacy_categories || [])])]
+    .filter((slug): slug is string => Boolean(slug && REGIONS[slug]));
+}
+
+export function guideClasses(post: PostItem): string[] {
+  const categories = (post.legacy_categories || []).filter(slug => /^class-[1-6]$/.test(slug));
+  if (categories.length) return categories;
+  const min = Number(post.class_min || post.class_max);
+  const max = Number(post.class_max || post.class_min);
+  return [1, 2, 3, 4, 5, 6].filter(n => n >= min && n <= max).map(n => 'class-' + n);
 }

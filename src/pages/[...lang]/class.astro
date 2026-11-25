@@ -1,0 +1,6 @@
+---
+import BrowseCategories from '../../components/BrowseCategories.astro';
+import { languagePaths } from '../../lib/languages';
+export function getStaticPaths() { return languagePaths(); }
+---
+<BrowseCategories by="class" />

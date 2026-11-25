@@ -17,7 +17,12 @@ const { language, isNotFound, languageRoutes } = createSiteUI(Astro.url.pathname
       const secure = location.protocol === 'https:' ? '; Secure' : '';
       document.cookie = key + '=' + value + '; Path=/; Max-Age=31536000; SameSite=Lax' + secure;
     };
-    const withLocation = (route) => route + location.search + location.hash;
+    const withLocation = (route) => {
+      const url = new URL(route, location.href);
+      for (const [key, value] of new URLSearchParams(location.search)) url.searchParams.set(key, value);
+      url.hash = location.hash;
+      return url.href;
+    };
     const preference = read(storage);
     const chosen = languages.some(({ code }) => code === preference);
     const dismissed = read(dismissal) === '1';

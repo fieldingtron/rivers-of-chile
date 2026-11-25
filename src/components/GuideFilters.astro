@@ -1,0 +1,64 @@
+---
+import type { PostItem } from '../lib/directus';
+import { regionList, guideClasses } from '../lib/home';
+import { taxonomyName } from '../lib/spanish';
+import { createSiteUI } from './site-ui';
+interface Props { posts: PostItem[]; showRegion?: boolean; }
+const { posts, showRegion } = Astro.props;
+const { t, spanish } = createSiteUI(Astro.url.pathname);
+const grades = [...new Set(posts.flatMap(guideClasses))].sort();
+const numerals = ['I','II','III','IV','V','VI'];
+---
+<form id="guide-filters" hidden data-empty={t('No matching guides.', 'No hay guías que coincidan.')} data-count={t('Matching guides', 'Guías encontradas')}>
+  <label>{t('River name', 'Nombre del río')}<input type="search" name="river" /></label>
+  {showRegion && <label>{t('Region', 'Región')}<select name="region"><option value="">{t('All regions', 'Todas las regiones')}</option>
+    {regionList(posts).map(r => <option value={r.slug}>{spanish ? taxonomyName(r.label) : r.label}</option>)}</select></label>}
+  <label>{t('Difficulty', 'Dificultad')}<select name="grade"><option value="">{t('Any class', 'Todas las clases')}</option>
+    {grades.map(slug => <option value={slug}>{t('Class', 'Clase')} {numerals[Number(slug.slice(6))-1]}</option>)}</select></label>
+  <output aria-live="polite"></output>
+</form>
+<script>
+  const form = document.querySelector<HTMLFormElement>('#guide-filters');
+  if (form) {
+    const cards = document.querySelectorAll<HTMLElement>('li[data-grades]');
+    const controls = Array.from(form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input,select'));
+    const fold = (s: string) => s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
+    function apply() {
+      if (!form) return;
+      const criteria = new FormData(form);
+      let count = 0;
+      cards.forEach(card => {
+        const matches = (key: string, values: string) => !criteria.get(key) || values.split(' ').includes(String(criteria.get(key)));
+        card.hidden = !matches('region', card.dataset.regions || '') || !matches('grade', card.dataset.grades || '') ||
+          !fold(card.dataset.title || '').includes(fold(String(criteria.get('river') || '').trim()));
+        if (!card.hidden) count++;
+      });
+      form.querySelector('output')!.value = count ? form.dataset.count + ' · ' + count : form.dataset.empty!;
+    }
+    function restore() {
+      const query = new URLSearchParams(location.search);
+      controls.forEach(control => { control.value = query.get(control.name) || ''; });
+      apply();
+    }
+    form.addEventListener('submit', e => e.preventDefault());
+    form.addEventListener('input', () => {
+      const url = new URL(location.href);
+      for (const c of controls) {
+        if (c.value) url.searchParams.set(c.name, c.value);
+        else url.searchParams.delete(c.name);
+      }
+      history.replaceState(null, '', url);
+      window.dispatchEvent(new Event('hashchange'));
+      apply();
+    });
+    restore();
+    window.addEventListener('popstate', restore);
+    form.hidden = false;
+  }
+</script>
+<style>
+  form:not([hidden]) { display:flex; align-items:end; flex-wrap:wrap; gap:.75rem 1.25rem; padding:1rem; background:var(--card); border:1px solid var(--line); border-radius:.6rem; }
+  label { display:grid; gap:.3rem; font:600 .9rem system-ui; }
+  input, select { max-width:100%; padding:.45rem .6rem; font:1rem system-ui; }
+  output { font:.9rem system-ui; color:var(--muted); }
+</style>

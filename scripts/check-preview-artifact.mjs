@@ -33,7 +33,7 @@ if (production) {
 }
 assert.match(home, /Rivers of Chile/i, 'Home page missing site name');
 assert.match(home, /Popular Rivers/, 'Home 1 missing Popular Rivers');
-for (const html of [home, home2, home3, river, page]) assert.match(html, /Home 1[\s\S]*Home 2[\s\S]*Home 3/, 'Missing Home 1/2/3 nav links');
+for (const html of [home, home2, home3, river, page]) assert.match(html, /Look 1[\s\S]*Look 2[\s\S]*Look 3/, 'Missing look selector');
 for (const html of [home, home2, home3, page]) assert.doesNotMatch(html, /beta preview|Search engines are asked/i, 'Visible beta text found');
 assert.match(river, /<h1[^>]*>\s*Rio Niblinto de Malleco/i, 'River route did not render its heading');
 assert.match(river, /Reserva Nacional Malleco/i, 'River body did not render');
@@ -70,7 +70,7 @@ const esHome = read('es/index.html');
 assert.match(esHome, /<html lang="es"/);
 assert.match(esHome, /Ríos populares/);
 assert.match(esHome, /🇨🇱/);
-assert.match(esHome, /href="\/es\/rivers\/#region"/);
+assert.match(esHome, /href="\/es\/region\/"/);
 for (const file of files.filter((file) => file.endsWith('.html') && !file.startsWith('es/'))) {
   const translated = read(file === '404.html' ? 'es/404/index.html' : 'es/' + file);
   assert.match(translated, /hreflang="es"/, file);

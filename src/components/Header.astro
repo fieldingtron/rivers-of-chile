@@ -1,16 +1,14 @@
 ---
 import { createSiteUI } from './site-ui';
 import LanguagePicker from './LanguagePicker.astro';
-const navigationLabels: Record<string, string> = {"Region": "Región", "Difficulty": "Dificultad", "Map": "Mapa", "First descents": "Primeros descensos", "Dedication": "Dedicatoria", "Authors": "Autores"};
-const { t, href, spanish } = createSiteUI(Astro.url.pathname);
+const navigationLabels: Record<string, string> = {"Rivers": "Ríos", "Region": "Región", "Difficulty": "Dificultad", "Map": "Mapa", "First descents": "Primeros descensos", "Dedication": "Dedicatoria", "Authors": "Autores"};
+const { t, href } = createSiteUI(Astro.url.pathname);
 const path = Astro.url.pathname;
 const links = [
-  { href: '/rivers/#region', label: 'Region' },
-  { href: '/rivers/#difficulty', label: 'Difficulty' },
+  { href: '/rivers/', label: 'Rivers' },
+  { href: '/region/', label: 'Region' },
+  { href: '/class/', label: 'Difficulty' },
   { href: '/map-of-chile/', label: 'Map' },
-  { href: '/history-of-first-descents/', label: 'First descents' },
-  { href: '/dedication/', label: 'Dedication' },
-  { href: '/about-authors/', label: 'Authors' }
 ];
 import HomeLinks from './HomeLinks.astro';
 ---

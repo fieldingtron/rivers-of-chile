@@ -9,6 +9,7 @@ export default defineConfig({
     hooks: { 'astro:build:done': ({ dir }) => writeFileSync(new URL('_headers', dir),
       process.env.RIVER_PRODUCTION === '1' ? '# Production indexing uses page metadata.\n' : '/*\n  X-Robots-Tag: noindex, nofollow\n') }
   }, sitemap({ filter: url => !/\/(?:home-[23]|404|rio-claro-puente-las-pinas)\/?$/.test(new URL(url).pathname) })],
+  devToolbar: { enabled: false },
   output: 'static',
   build: {
     format: 'directory'

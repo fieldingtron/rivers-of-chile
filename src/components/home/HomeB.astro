@@ -1,8 +1,9 @@
 ---
 import { createSiteUI } from '../site-ui';
+import Footer from '../Footer.astro';
 import LanguagePicker from '../LanguagePicker.astro';
 import { taxonomyName } from '../../lib/spanish';
-const navigationLabels: Record<string, string> = {"Rivers": "Ríos", "Map": "Mapa", "First descents": "Primeros descensos", "Dedication": "Dedicatoria", "Authors": "Autores"};
+const navigationLabels: Record<string, string> = {"Rivers": "Ríos", "Region":"Región", "Difficulty":"Dificultad", "Map": "Mapa", "First descents": "Primeros descensos", "Dedication": "Dedicatoria", "Authors": "Autores"};
 const { t, href, spanish } = createSiteUI(Astro.url.pathname);
 import HomeLinks from '../HomeLinks.astro';
 import { regionLabel, regionList, excerptOf, imageAt, fullImage, popularRivers, SITE_NAV } from '../../lib/home';
@@ -30,7 +31,7 @@ const classes = [
     <h1>{t("Every river we’ve run,", "Los ríos que hemos bajado,")}<br />{t("from the Andes to the sea.", "desde los Andes hasta el mar.")}</h1>
     <div class="cta">
       <a class="btn primary" href={href("/map-of-chile/")}>{t("Explore the map", "Explorar el mapa")}</a>
-      <a class="btn" href={href("/category/chile/")}>{t("Find a river", "Buscar un río")}</a>
+      <a class="btn" href={href("/rivers/")}>{t("Find a river", "Buscar un río")}</a>
     </div>
   </div>
   <a class="credit" href={href(`/${hero.slug}/`)}>{hero.title} · {t("Class", "Clase")} {hero.class_label} →</a>
@@ -64,7 +65,7 @@ const classes = [
     </div>
   </section>
   <section class="block">
-    <div class="head"><h2>{t("Featured guides", "Guías destacadas")}</h2><a href={href("/category/chile/")}>{t("All rivers →", "Todos los ríos →")}</a></div>
+    <div class="head"><h2>{t("Featured guides", "Guías destacadas")}</h2><a href={href("/rivers/")}>{t("All rivers →", "Todos los ríos →")}</a></div>
     <div class="strip">
       {featured.slice(1).map((p: any) => (
         <a class="tile" href={href(`/${p.slug}/`)}>
@@ -86,7 +87,7 @@ const classes = [
     </div>
   </section>
 </main>
-<footer><span>{t("Rivers of Chile — a field guide.", "Rivers of Chile — guía de ríos.")}</span><nav><a href={href("/dedication/")}>{t("Dedication", "Dedicatoria")}</a><a href={href("/about-authors/")}>{t("Authors", "Autores")}</a><a href={href("/hardcopy-guidebook/")}>{t("Hardcopy guidebook", "Guía impresa")}</a><a href={href('/contact-us/')}>{t('Contact', 'Contacto')}</a> <LanguagePicker /></nav></footer>
+<Footer />
 <style>
   :global(body.v-b) { background: #0d1717; color: #e8efee; font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif; }
   .top { position: absolute; z-index: 5; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 22px 36px; flex-wrap: wrap; gap: 12px; }

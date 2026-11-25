@@ -111,7 +111,7 @@ main {
   margin-inline: auto;
 }
 
-.prose > :not(.hero):not(.article-body):not(.prose-header) {
+.prose > :where(:not(.hero):not(.article-body):not(.prose-header)) {
   width: min(var(--content-max), 100%);
   margin-inline: auto;
 }
@@ -234,3 +234,26 @@ main {
   max-width: 100% !important;
   height: auto !important;
 }
+
+.browse-links { display:flex; flex-wrap:wrap; gap:.65rem 1.3rem; margin:1rem 0 1.5rem; }
+.prose > .guide-opening, .prose > .related-rivers { width:100%; max-width:var(--hero-max); margin:1.5rem auto; }
+.guide-opening { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:1.5rem; align-items:start; }
+.guide-opening .river-feature { width:100%; margin:0; }
+.related-rivers section { margin:2rem 0; }
+.related-rivers .river-cards { padding:0; }
+@media(max-width:760px){ .guide-opening { grid-template-columns:1fr; } }
+
+:root[data-look="2"] {
+  --bg: #102120; --ink: #ebf4ef; --muted: #bdcec9; --card: #19322f;
+  --line: #44615b; --accent: #efd199; --accent-ink: #18241b;
+  --font-body: "Avenir Next", system-ui, sans-serif;
+}
+[data-look="2"] main a { color: var(--accent); }
+[data-look="2"] .site-header { background: #0d1919; }
+[data-look="2"] :is(.river-cards .difficulty, .summary-grid > div, .form-note) { background: var(--card); }
+:root[data-look="3"] {
+  --bg: #f7f2e8; --card: #fffaf0; --ink: #28231f; --line: #c8bba6;
+  --accent: #79432a; --muted: #695d50;
+}
+[data-look="3"] .site-header { background: #342c25; border-bottom: 4px double #dacaaf; }
+[data-look="3"] .prose-header { border-bottom: 3px double var(--line); }

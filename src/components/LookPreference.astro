@@ -1,0 +1,45 @@
+<script is:inline>
+  (() => {
+    const url = new URL(location.href);
+    const route = url.pathname.replace(/^\/es(?=\/|$)/, '').replace(/\/$/, '');
+    const home = route === '' || /^\/home-[23]$/.test(route);
+    const value = url.searchParams.get('look');
+    let saved;
+    try { saved = localStorage.getItem('roc-look'); } catch {}
+    const look = home ? (route.slice(-1) || '1') :
+      [value, saved].find(v => ['1', '2', '3'].includes(v)) || '1';
+    document.documentElement.dataset.look = look;
+    try { localStorage.setItem('roc-look', look); } catch {}
+    document.addEventListener('DOMContentLoaded', () => {
+      function update(link) {
+        const choice = link.dataset.lookChoice;
+        if (choice === look) link.setAttribute('aria-current', 'true');
+        if (!link.getAttribute('href') || link.getAttribute('href').startsWith('#')) return;
+        const target = new URL(link.href, location.href);
+        if (target.origin !== location.origin) return;
+        if (choice && !home) {
+          const next = new URL(location.href);
+          next.searchParams.set('look', choice);
+          link.href = next.href;
+        } else if (!choice && look !== '1' && target.pathname.endsWith('/')) {
+          if (/^\/(?:es\/)?$/.test(target.pathname)) target.pathname += 'home-' + look + '/';
+          else if (!/\/home-[23]\/$/.test(target.pathname)) target.searchParams.set('look', look);
+          link.href = target.href;
+        }
+      }
+      document.querySelectorAll('a[href]').forEach(link => {
+        if (link instanceof HTMLAnchorElement) update(link);
+      });
+      window.addEventListener('hashchange', () => {
+        document.querySelectorAll('a[data-look-choice]').forEach(update);
+      });
+      // Home search results are created after the visitor types.
+      new MutationObserver(records => {
+        for (const record of records) for (const node of record.addedNodes) {
+          if (node instanceof HTMLAnchorElement) update(node);
+          node.querySelectorAll?.('a[href]').forEach(update);
+        }
+      }).observe(document.body, { childList: true, subtree: true });
+    });
+  })();
+</script>

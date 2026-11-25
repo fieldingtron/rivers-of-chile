@@ -2,9 +2,16 @@
 import { languages, languageForPath, languagePrefix } from '../../lib/languages';
 import { taxonomyName, localizedBodyLinks } from '../../lib/spanish';
 import { publicSlug, guideHeading, guideLinks, guideDescription } from '../../lib/guide-seo';
+import { reviewedEnglishLinks } from '../../lib/reviewed-links.mjs';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import RegionMap from '../../components/RegionMap.astro';
 import VisitorForm from '../../components/VisitorForm.astro';
 import Comments from '../../components/Comments.astro';
+import RiverFeaturedPhoto from '../../components/RiverFeaturedPhoto.astro';
+import { riverPhoto } from '../../lib/river-photos';
+import RiverCards from '../../components/RiverCards.astro';
+import { relatedGuides } from '../../lib/related-guides';
+import { pageDate } from '../../lib/page-date';
 import Lightbox from '../../components/Lightbox.astro';
 import { getPosts, getPages, getComments, type CommentItem, getCategories, RESERVED_SLUGS, type PostItem, type PageItem } from '../../lib/directus';
 import { loadImageManifest, prepareArticleImages, featuredImageUrl, publicBase, HERO_SIZES, assetFor, pickDisplay, displayVariants, variantUrl, isPlaceholderFeatured } from '../../lib/legacy-images.mjs';
@@ -15,10 +22,11 @@ export async function getStaticPaths() {
   const routes = await Promise.all(languages.map(async ({ code, prefix }) => {
     const lang = prefix.slice(1) || undefined;
     const [posts, pages, comments] = await Promise.all([getPosts(code), getPages(code), getComments()]);
+    const rivers = posts.filter(p => p.kind === 'river');
     const used = new Set(RESERVED_SLUGS);
     const publicSlugs = new Set(RESERVED_SLUGS);
     const pageSlugs = new Set(pages.map((p) => p.slug));
-    const paths: { params: { lang: string | undefined; slug: string }; props: { type: 'post' | 'page'; item: PostItem | PageItem; comments: CommentItem[] } }[] = [];
+    const paths: { params: { lang: string | undefined; slug: string }; props: Props }[] = [];
 
     for (const item of [...pages, ...posts]) {
       if (!item.slug || used.has(item.slug)) continue;
@@ -29,7 +37,7 @@ export async function getStaticPaths() {
       const type = pageSlugs.has(item.slug) ? 'page' : 'post';
       paths.push({
         params: { lang, slug },
-        props: { type, item, comments: comments.filter(c => c[type]?.slug === item.slug) }
+        props: { type, item, related: type === 'post' && (item as PostItem).kind === 'river' ? relatedGuides(item as PostItem, rivers) : undefined, comments: comments.filter(c => c[type]?.slug === item.slug) }
       });
     }
     return paths;
@@ -41,18 +49,27 @@ interface Props {
   type: 'post' | 'page';
   item: PostItem | PageItem;
   comments: CommentItem[];
+  related?: ReturnType<typeof relatedGuides>;
 }
 
 const language = languageForPath(Astro.url.pathname);
 const prefix = languagePrefix(language);
 const es = language === 'es';
-const { type, item, comments } = Astro.props;
+const { type, item, comments, related } = Astro.props;
 const post = type === 'post' ? (item as PostItem) : null;
 const categories = post ? await getCategories(es) : [];
 const catNames = post
   ? (post.legacy_categories || []).map((slug) => categories.find((c) => c.slug === slug)).filter(Boolean)
   : [];
 const openLinksInNewWindow = !es && item.slug === '22-teacups-22-tazas-rio-claro';
+const facts = post ? [
+  {label: es ? 'Clase' : 'Class', value: post.class_label, archive: catNames.find(c => c?.type === 'class')?.slug},
+  {label: es ? 'Región' : 'Region', value: post.region && (es ? taxonomyName(regionGuideLabel(post)) : regionGuideLabel(post)), archive: catNames.find(c => c?.slug === post.region)?.slug},
+  {label: es ? 'País' : 'Country', value: post.country && post.country.charAt(0).toUpperCase() + post.country.slice(1)},
+  {label: es ? 'Temporada' : 'Season', value: post.season},
+  {label: es ? 'Distancia' : 'Distance', value: post.length_km != null ? post.length_km + ' km' : null},
+  {label: es ? 'Pendiente' : 'Gradient', value: post.gradient}
+].filter(f => f.value) : [];
 const heading = guideHeading(item.slug, item.title);
 const description = guideDescription(item, heading, es);
 const legacyTitle = item.seo_title?.replace(/\s*[-|]\s*(?:peruwhitewater\.com|rivers of chile)\s*$/i, '').trim();
@@ -60,6 +77,7 @@ const title = post?.kind === 'river'
   ? (es ? heading + ' — Guía de kayak' : heading + ' kayaking guide')
   : legacyTitle || heading;
 const images = loadImageManifest();
+const selection = post?.kind === 'river' ? riverPhoto(post.slug) : undefined;
 const featured = post?.featured_image_url || undefined;
 const image = featuredImageUrl(images, featured) || featured || undefined;
 const preparedBody = prepareArticleImages(rewriteDirectusAssets(item.content || '', publicBase(images)), images);
@@ -100,26 +118,28 @@ const article = post && {
   <article class="prose">
     <div class="prose-header">
     <h1 class="page-title">{heading}</h1>
-    {post && (
-      <p class="meta-line">
-        {post.kind === 'river' && post.class_label && <span>{es ? 'Clase' : 'Class'} {post.class_label}</span>}
-        {post.region && <span> · {es ? taxonomyName(regionGuideLabel(post)) : regionGuideLabel(post)}</span>}
-        {post.author_name && <span> · {authorLabel(post.author_name)}</span>}
-        {post.published_at && <span> · <time datetime={post.published_at}>{post.published_at.slice(0, 10)}</time></span>}
-      </p>
-    )}
-    {post && (post.class_label || post.region || post.country || post.season || post.put_in || post.take_out) && (
-      <dl class="summary-grid">
-        {post.class_label && <div><dt>{es ? 'Clase' : 'Class'}</dt><dd>{post.class_label}</dd></div>}
-        {post.region && <div><dt>{es ? 'Región' : 'Region'}</dt><dd>{es ? taxonomyName(regionGuideLabel(post)) : regionGuideLabel(post)}</dd></div>}
-        {post.country && <div><dt>{es ? 'País' : 'Country'}</dt><dd>{post.country.charAt(0).toUpperCase() + post.country.slice(1)}</dd></div>}
-        {post.season && <div><dt>{es ? 'Temporada' : 'Season'}</dt><dd>{post.season}</dd></div>}
-        {post.put_in && <div><dt>{es ? 'Embarque' : 'Put-in'}</dt><dd>{post.put_in}</dd></div>}
-        {post.take_out && <div><dt>{es ? 'Desembarque' : 'Take-out'}</dt><dd>{post.take_out}</dd></div>}
-      </dl>
-    )}
+    {post && <p class="meta-line">
+      {post.author_name && authorLabel(post.author_name)}
+      {post.author_name && post.published_at && ' · '}
+      {post.published_at && <time datetime={post.published_at}>{pageDate(post.published_at, language)}</time>}
+    </p>}
     </div>
-    {showHero && (
+    {post && <div class="guide-opening">
+      {selection && <RiverFeaturedPhoto photo={selection} es={es} />}
+      <div>
+        {facts.length > 0 && <dl class="summary-grid">{facts.map(fact => <div>
+          <dt>{fact.label}</dt><dd>{fact.archive ? <a href={prefix+'/category/'+fact.archive+'/'}>{fact.value}</a> : fact.value}</dd>
+        </div>)}</dl>}
+        {(post.put_in || post.take_out) && <section>
+          <h2>{es ? 'Accesos' : 'River access'}</h2>
+          <dl class="summary-grid">
+            {post.put_in && <div><dt>{es ? 'Embarque' : 'Put-in'}</dt><dd>{post.put_in}</dd></div>}
+            {post.take_out && <div><dt>{es ? 'Desembarque' : 'Take-out'}</dt><dd>{post.take_out}</dd></div>}
+          </dl>
+        </section>}
+      </div>
+    </div>}
+    {!selection && showHero && (
       <figure class="hero">
         <img
           src={featuredDisplay && images ? variantUrl(images, featuredDisplay) : image}
@@ -133,7 +153,19 @@ const article = post && {
         />
       </figure>
     )}
-    <div class="article-body" set:html={guideLinks(body)} />
+    {post?.kind === 'river' && body.trim() && <h2 class="run-heading">{es ? 'El recorrido' : 'The run'}</h2>}
+    {item.slug === 'map-of-chile' && <RegionMap />}
+    {item.slug === 'map-of-chile' ? <details><summary>{es ? 'Ver el mapa original de la guía' : 'View the original guidebook map'}</summary><div class="article-body" set:html={body} /></details> : <div class="article-body" set:html={es ? guideLinks(body) : reviewedEnglishLinks(guideLinks(body), item.slug)} />}
+    {related && <div class="related-rivers">
+      {related.nearby.length > 0 && <section>
+        <h2>{es ? 'Más ríos de la región' : 'More rivers in this region'}</h2>
+        <RiverCards posts={related.nearby} hideRegion />
+      </section>}
+      {related.similar.length > 0 && <section>
+        <h2><a href={prefix+'/category/'+related.grade+'/'}>{(es ? 'Más ríos de clase ' : 'More Class ') + related.grade?.slice(6) + (es ? '' : ' rivers')}</a></h2>
+        <RiverCards posts={related.similar} />
+      </section>}
+    </div>}
     {catNames.length > 0 && (
       <p class="meta-line">
         {es ? 'Categorías:' : 'Categories:'}

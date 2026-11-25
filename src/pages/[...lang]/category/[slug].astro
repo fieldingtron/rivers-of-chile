@@ -1,6 +1,9 @@
 ---
 import { languageForPath, languages, languagePrefix } from '../../../lib/languages';
-import { publicSlug, guideHeading } from '../../../lib/guide-seo';
+import GuideFilters from '../../../components/GuideFilters.astro';
+import { guideRegions, guideClasses } from '../../../lib/home';
+import RiverCards from "../../../components/RiverCards.astro";
+import { guideHeading, publicSlug } from '../../../lib/guide-seo';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCategories, getPosts } from '../../../lib/directus';
 
@@ -15,7 +18,11 @@ export async function getStaticPaths() {
         params: { lang, slug: category.slug },
         props: {
           category,
-          posts: posts.filter((p) => (p.legacy_categories || []).includes(category.slug))
+          posts: posts.filter(p => {
+            if (p.kind === 'river' && category.type === 'region') return guideRegions(p).includes(category.slug);
+            if (p.kind === 'river' && category.type === 'class') return guideClasses(p).includes(category.slug);
+            return p.legacy_categories?.includes(category.slug);
+          })
         }
       }));
   }));
@@ -32,20 +39,16 @@ const description = es
   ? `Explora las entradas sobre ${category.name}${listing ? ', entre ellas ' + listing : ''}.`
   : `Browse entries for ${category.name}${listing ? ', including ' + listing : ''}.`;
 ---
-<BaseLayout breadcrumb={category.name} title={category.name} description={description}>
+<BaseLayout title={category.name} description={description}>
   <h1 class="page-title">{category.name}</h1>
-  <p class="lede">{posts.length} {es ? (posts.length === 1 ? 'entrada' : 'entradas') : (posts.length === 1 ? 'entry' : 'entries')}.</p>
-  <ul class="river-list">
-    {posts.map((post) => (
-      <li>
-        <a href={`${prefix}/${publicSlug(post.slug)}/`}>
-          <strong>{guideHeading(post.slug, post.title)}</strong>
-          <div class="meta">
-            {post.class_label && <span>{es ? 'Clase' : 'Class'} {post.class_label}</span>}
-            {post.author_name && <span> · {post.author_name}</span>}
-          </div>
-        </a>
-      </li>
-    ))}
-  </ul>
+  <p class="lede">{posts.length} {es ? (posts.length === 1 ? 'entrada' : 'entradas') : (posts.length === 1 ? 'entry' : 'entries')}</p>
+  <nav class="browse-links" aria-label={es ? 'Explorar ríos' : 'Browse rivers'}>
+    <a href={prefix + '/region/'}>{es ? 'Por región' : 'By region'}</a>
+    <a href={prefix + '/class/'}>{es ? 'Por dificultad' : 'By difficulty'}</a>
+    <a href={prefix + '/map-of-chile/'}>{es ? 'Mapa de ríos' : 'River map'}</a>
+  </nav>
+  {posts.some(p => p.kind !== 'river') && <ul>{posts.filter(p => p.kind !== 'river').map(p =>
+    <li><a href={prefix+'/'+publicSlug(p.slug)+'/'}>{p.title}</a></li>)}</ul>}
+  {category.type === 'region' && <GuideFilters posts={posts.filter(p => p.kind === 'river')} />}
+  <RiverCards posts={posts.filter(p => p.kind === 'river')} hideRegion={category.type === 'region'} />
 </BaseLayout>

@@ -1,3 +1,4 @@
+import { riverPhoto } from './river-photos';
 import { defaultLanguage, type Language } from './languages';
 import { taxonomyName } from './spanish';
 /**
@@ -109,7 +110,20 @@ const FILE_MAP: Record<string, string> = {
   roc_media: 'media.json'
 };
 
+// A static build should read each collection once. Local development reads it on demand.
+const buildReads = new Map<string, Promise<unknown[]>>();
 async function fetchDirectus<T>(collection: string): Promise<T[]> {
+  if (import.meta.env.DEV) return readCollection<T>(collection);
+  let pending = buildReads.get(collection);
+  if (!pending) {
+    pending = readCollection(collection);
+    buildReads.set(collection, pending);
+  }
+  // Image and translation helpers can modify records while rendering a language.
+  return structuredClone(await pending) as T[];
+}
+
+async function readCollection<T>(collection: string): Promise<T[]> {
   const required = REQUIRED_CONTENT.has(collection);
   const remoteBuild = HOSTED_BUILD || Boolean(DIRECTUS_BUILD_TOKEN);
   if (HOSTED_BUILD && !DIRECTUS_BUILD_TOKEN) {
@@ -247,7 +261,10 @@ export async function getPosts(language: Language = defaultLanguage): Promise<Po
   await loadAvatars();
   applyFileFields(items);
   const photos = loadImageManifest();
-  for (const item of items) item.featured_image_url = guidePhoto(photos, item);
+  for (const item of items) {
+    const selection = item.kind === 'river' ? riverPhoto(item.slug) : undefined;
+    item.featured_image_url = selection?.image ?? guidePhoto(photos, item);
+  }
   return localizedItems(requirePublished(items, 'roc_posts'), language, 'posts').sort((a, b) => a.title.localeCompare(b.title));
 }
 
@@ -293,7 +310,9 @@ export const RESERVED_SLUGS = new Set([
   'category',
   'tag',
   'news',
-  'rivers',
+  'region',
+  'class',
+  'photo-credits',
   'robots.txt',
   'sitemap',
   'sitemap-index',

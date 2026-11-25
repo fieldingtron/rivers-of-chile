@@ -1,14 +1,16 @@
 ---
 import { createSiteUI } from '../site-ui';
+import Footer from '../Footer.astro';
 import LanguagePicker from '../LanguagePicker.astro';
+import { guideHeading } from '../../lib/guide-seo';
 import { taxonomyName } from '../../lib/spanish';
 const { t, href, spanish } = createSiteUI(Astro.url.pathname);
 import HomeLinks from '../HomeLinks.astro';
-import { regionGuideLabel, excerptOf, initials, authorLabel, imageAt, popularRivers, classBadgeColor, authorPhoto } from '../../lib/home';
+import { regionLabel, regionGuideLabel, excerptOf, initials, authorLabel, imageAt, popularRivers, classBadgeColor, authorPhoto } from '../../lib/home';
 const { posts } = Astro.props;
 const rivers = posts.filter((p: any) => p.kind === 'river');
 const popular = popularRivers(posts, 9);
-const index = rivers.map((p: any) => ({ t: p.title, s: href(`/${p.slug}/`), r: (spanish ? taxonomyName(regionGuideLabel(p)) : regionGuideLabel(p)), c: p.class_label || '' }));
+const index = rivers.map((p: any) => ({ t: guideHeading(p.slug,p.title), area: regionLabel(p), s: href(`/${p.slug}/`), r: (spanish ? taxonomyName(regionGuideLabel(p)) : regionGuideLabel(p)), c: p.class_label || '' }));
 ---
 <header class="nav">
   <div class="nav-in">
@@ -17,12 +19,11 @@ const index = rivers.map((p: any) => ({ t: p.title, s: href(`/${p.slug}/`), r: (
       <h1>Rivers of Chile</h1>
     </a>
     <nav>
-      <a href={href("/rivers/#region")}>{t("Region", "Región")}</a>
-      <a href={href("/rivers/#difficulty")}>{t("Difficulty", "Dificultad")}</a>
+      <a href={href("/rivers/")}>{t("Rivers", "Ríos")}</a>
+      <a href={href("/region/")}>{t("Region", "Región")}</a>
+      <a href={href("/class/")}>{t("Difficulty", "Dificultad")}</a>
       <a href={href("/map-of-chile/")}>{t("Map", "Mapa")}</a>
       <a href="#search">{t("Search", "Buscar")}</a>
-      <a href={href("/dedication/")}>{t("Dedication", "Dedicatoria")}</a>
-      <a href={href("/about-authors/")}>{t("Authors", "Autores")}</a>
       <HomeLinks compact /><LanguagePicker compact />
     </nav>
   </div>
@@ -30,14 +31,14 @@ const index = rivers.map((p: any) => ({ t: p.title, s: href(`/${p.slug}/`), r: (
 <section class="strip">
   <div class="strip-in">
     <form id="search" class="search" role="search" onsubmit="return false">
-      <input id="q" type="search" placeholder={t("Search Posts....","Buscar en las guías…")} autocomplete="off" aria-label={t("Search posts","Buscar en las guías")} />
+      <input id="q" type="search" placeholder={t("Search rivers, regions or class…","Busca por río, región o clase…")} autocomplete="off" aria-label={t("Search river guides","Buscar guías de ríos")} />
       <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="m16 16 5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
     </form>
     <ul id="results" class="results" hidden></ul>
   </div>
 </section>
 <main>
-  <div class="head"><h2>{t("Popular Rivers", "Ríos populares")}</h2></div>
+  <div class="head"><h2>{t("Popular Rivers", "Ríos populares")}</h2><a href={href("/rivers/")}>{t("All river guides","Todas las guías de ríos")}</a></div>
   <div class="grid">
     {popular.map((p: any) => {
       const photo = authorPhoto(p.author_name);
@@ -69,15 +70,16 @@ const index = rivers.map((p: any) => ({ t: p.title, s: href(`/${p.slug}/`), r: (
     })}
   </div>
 </main>
-<footer class="foot-bar"><span>{t("Rivers of Chile — a field guide.", "Rivers of Chile — guía de ríos.")}</span><nav><a href={href("/dedication/")}>{t("Dedication", "Dedicatoria")}</a><a href={href("/about-authors/")}>{t("Authors", "Autores")}</a><a href={href("/hardcopy-guidebook/")}>{t("Hardcopy guidebook", "Guía impresa")}</a><a href={href('/contact-us/')}>{t('Contact', 'Contacto')}</a> <LanguagePicker /></nav></footer>
+<Footer />
 <script type="application/json" id="idx" set:html={JSON.stringify(index).replaceAll('<', '\\u003c')} />
 <script define:vars={{ spanish }}>
   const idx = JSON.parse(document.getElementById('idx').textContent);
   const q = document.getElementById('q'), out = document.getElementById('results');
+  const fold = value => value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
   q.addEventListener('input', () => {
-    const v = q.value.trim().toLowerCase();
+    const v = fold(q.value.trim());
     if (v.length < 2) { out.hidden = true; out.innerHTML = ''; return; }
-    const hits = idx.filter((r) => (r.t + ' ' + r.r + (spanish ? ' clase ' : ' class ') + r.c).toLowerCase().includes(v)).slice(0, 8);
+    const hits = idx.filter((r) => fold(r.t + ' ' + r.r + ' ' + r.area + (spanish ? ' clase ' : ' class ') + r.c).includes(v)).slice(0, 8);
     out.replaceChildren(...hits.map((r) => {
       const li = document.createElement('li'), link = document.createElement('a');
       const name = document.createElement('b'), meta = document.createElement('span');

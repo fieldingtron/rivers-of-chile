@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCategories, getPosts } from '../lib/directus';
+import { languageForPath } from '../lib/languages';
+import { regionLabel, regionList, guideRegions, guideClasses } from '../lib/home';
+import { riverPhoto } from '../lib/river-photos';
+import { createSiteUI } from './site-ui';
+
+interface Props { by: 'region' | 'class'; }
+const { by } = Astro.props;
+const { t, href, spanish } = createSiteUI(Astro.url.pathname);
+const [categories, posts] = await Promise.all([getCategories(spanish), getPosts(languageForPath(Astro.url.pathname))]);
+const rivers = posts.filter(p => p.kind === 'river');
+const order = regionList(rivers).map(r => r.slug);
+const groups = categories
+  .filter(c => by === 'region' ? c.type === 'region' : /^class-\d+$/.test(c.slug))
+  .map(category => ({ category, members: rivers.filter(p => (by === 'region' ? guideRegions(p) : guideClasses(p)).includes(category.slug)) }))
+  .filter(g => g.members.length)
+  .sort((a,b) => by === 'region' ? order.indexOf(a.category.slug) - order.indexOf(b.category.slug) : a.category.name.localeCompare(b.category.name, spanish ? 'es' : 'en', {numeric:true}));
+const title = by === 'region' ? t('Rivers by region', 'Ríos por región') : t('Rivers by difficulty', 'Ríos por dificultad');
+const description = by === 'region' ? t('Browse whitewater guides by region in Chile.', 'Explora las guías de aguas bravas de Chile por región.') : t('Browse river guides in Chile by whitewater class.', 'Explora las guías de ríos de Chile por clase de dificultad.');
+const details: Record<string, string> = {
+  'class-2': t('Straightforward rapids with clear channels.', 'Rápidos sencillos con pasos claros.'),
+  'class-3': t('Intermediate. Irregular waves and narrow passages call for controlled turns and the ability to choose a line through a rapid.', 'Intermedio. Las olas irregulares y los pasos estrechos exigen controlar los giros y elegir una trayectoria dentro del rápido.'),
+  'class-4': t('Advanced. Powerful currents push toward obstacles, and paddlers need to make precise moves in turbulent water.', 'Avanzado. La fuerza de la corriente puede llevar la embarcación hacia obstáculos. Hay que maniobrar con precisión en aguas turbulentas.'),
+  'class-5': t('Expert. Long or steep rapids can link one difficult move to the next, with few places to recover and difficult rescues.', 'Experto. Los rápidos largos o de gran pendiente pueden encadenar maniobras exigentes, con pocas oportunidades de recuperación y rescates difíciles.')
+};
+const used = new Set<string>();
+const cards = groups.map(({category, members}) => {
+  const cover = members.find(p => !used.has(p.slug) && riverPhoto(p.slug) && !('representative' in riverPhoto(p.slug)!)) || members[0];
+  used.add(cover.slug);
+  return {category, total:members.length, place: by === 'region' ? regionLabel(cover) : null, image:riverPhoto(cover.slug)?.listing};
+});
+---
+<BaseLayout title={title} description={description}>
+  <h1 class="page-title">{title}</h1>
+  <ul class="categories">
+    {cards.map(({category,total,image,place}) => <li><a href={href('/category/' + category.slug + '/')}>
+      {image && <img src={image} alt="" width="480" height="320" loading="lazy" decoding="async" />}
+      <span><strong>{category.name}</strong>{place && <span>{place}</span>}{details[category.slug] && <span class="detail">{details[category.slug]}</span>}<small>{total} {total === 1 ? t('guide','guía') : t('guides','guías')}</small></span>
+    </a></li>)}
+  </ul>
+  {by === 'class' && <p class="lede">{t('A river’s class can change with water level. Each guide describes the particular stretch it covers.', 'La dificultad puede variar con el caudal. Cada guía describe un tramo concreto del río.')} <a href={spanish ? 'https://www.americanwhitewater.org/es/explore/safety/international-scale-of-river-difficulty/' : 'https://www.americanwhitewater.org/explore/safety/international-scale-of-river-difficulty/'}>{t('International Scale of River Difficulty', 'Escala internacional de dificultad de los ríos')}</a></p>}
+  <a href={href('/rivers/')}>{t('All river guides', 'Todas las guías de ríos')}</a>
+</BaseLayout>
+<style>
+  .categories { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr)); gap:1.25rem; list-style:none; padding:0; margin:1.5rem 0; }
+  .categories a { display:block; height:100%; overflow:hidden; background:var(--card); border:1px solid var(--line); border-radius:10px; text-decoration:none; color:var(--ink); }
+  .categories a:hover,.categories a:focus-visible { border-color:var(--accent); }
+  .categories img { width:100%; height:auto; aspect-ratio:1.65; object-fit:cover; display:block; }
+  .categories a > span { display:grid; gap:.3rem; padding:1rem; }
+  .categories strong { font-size:var(--step-1); line-height:1.2; }
+  .detail { font-size: 1rem; line-height: 1.5; }
+  .categories small { font:.88rem var(--font-ui); color:var(--muted); }
+</style>

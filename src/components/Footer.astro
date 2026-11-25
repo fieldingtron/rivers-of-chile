@@ -1,15 +1,27 @@
 ---
 import { createSiteUI } from './site-ui';
 import LanguagePicker from './LanguagePicker.astro';
-const { t, href, spanish } = createSiteUI(Astro.url.pathname);
+const { t, href } = createSiteUI(Astro.url.pathname);
+const groups = [
+  [[ '/history-of-first-descents/', 'First descents', 'Primeros descensos' ], [ '/hardcopy-guidebook/', 'Printed guidebook', 'Guía impresa' ]],
+  [[ '/about-authors/', 'Authors', 'Autores' ], [ '/dedication/', 'Dedication', 'Dedicatoria' ], [ '/photo-credits/', 'Photo credits', 'Créditos fotográficos' ], [ '/contact-us/', 'Contact', 'Contacto' ]]
+];
 ---
-<footer class="site-footer">
-  <div class="site-footer-inner">
-    <p>{t("Rivers of Chile — a field guide.", "Rivers of Chile — guía de ríos.")}</p>
-    <nav class="site-nav" aria-label={t("Footer","Pie de página")}>
-      <a href={href("/dedication/")}>{t("Dedication", "Dedicatoria")}</a>
-      <a href={href("/about-authors/")}>{t("Authors", "Autores")}</a>
-      <a href={href("/hardcopy-guidebook/")}>{t("Hardcopy guidebook", "Guía impresa")}</a>
-    <a href={href('/contact-us/')}>{t('Contact', 'Contacto')}</a> <LanguagePicker /></nav>
+<footer class="field-footer">
+  <div class="inner">
+    <strong>Rivers of Chile</strong>
+    <nav aria-label={t('Footer', 'Pie de página')}>
+      {groups.map(group => <div>{group.map(([path, en, es]) => <a href={href(path)}>{t(en, es)}</a>)}</div>)}
+    </nav>
+    <LanguagePicker compact />
   </div>
 </footer>
+<style>
+  .field-footer { background: #17242c; color: #fff; font: 0.92rem/1.5 system-ui,sans-serif; }
+  .inner { max-width: 1180px; margin: auto; display: flex; align-items: start; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem 2rem; padding: 2rem 1.25rem; }
+  strong { font-size: 1.15rem; }
+  nav, nav div { display: flex; flex-wrap: wrap; gap: .55rem 1.1rem; }
+  nav { flex-direction: column; }
+  nav a { color: inherit; text-decoration: none; }
+  nav a:hover, nav a:focus-visible { text-decoration: underline; }
+</style>

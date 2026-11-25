@@ -1,8 +1,9 @@
 ---
 import { createSiteUI } from '../site-ui';
+import Footer from '../Footer.astro';
 import LanguagePicker from '../LanguagePicker.astro';
 import { taxonomyName } from '../../lib/spanish';
-const navigationLabels: Record<string, string> = {"Rivers": "Ríos", "Map": "Mapa", "First descents": "Primeros descensos", "Dedication": "Dedicatoria", "Authors": "Autores"};
+const navigationLabels: Record<string, string> = {"Rivers": "Ríos", "Region":"Región", "Difficulty":"Dificultad", "Map": "Mapa", "First descents": "Primeros descensos", "Dedication": "Dedicatoria", "Authors": "Autores"};
 const { t, href, spanish } = createSiteUI(Astro.url.pathname);
 import HomeLinks from '../HomeLinks.astro';
 import { regionLabel, regionList, excerptOf, imageAt, initials, authorLabel, popularRivers, SITE_NAV } from '../../lib/home';
@@ -59,7 +60,7 @@ const rows = [...rivers].sort((a: any, b: any) => a.title.localeCompare(b.title)
     </table>
     <p id="count" class="count"></p>
   </section>
-  <footer><span>{t("Rivers of Chile — a field guide.", "Rivers of Chile — guía de ríos.")}</span><nav><a href={href("/dedication/")}>{t("Dedication", "Dedicatoria")}</a><a href={href("/about-authors/")}>{t("Authors", "Autores")}</a><a href={href("/hardcopy-guidebook/")}>{t("Hardcopy guidebook", "Guía impresa")}</a><a href={href('/contact-us/')}>{t('Contact', 'Contacto')}</a> <LanguagePicker /></nav></footer>
+  <Footer />
 </div>
 <script define:vars={{ spanish }}>
   const rowsEl = [...document.querySelectorAll('#rows tr')];

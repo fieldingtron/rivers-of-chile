@@ -1,0 +1,41 @@
+---
+import type { PostItem } from '../lib/directus';
+import { publicSlug, guideHeading } from '../lib/guide-seo';
+import { regionLabel, guideRegions, guideClasses } from '../lib/home';
+import { createSiteUI } from './site-ui';
+
+import { riverPhoto } from '../lib/river-photos';
+interface Props { posts: PostItem[]; hideRegion?: boolean; }
+const { posts, hideRegion } = Astro.props;
+const { href, t } = createSiteUI(Astro.url.pathname);
+---
+<ul class="river-cards">
+  {posts.map(post => {
+    const photo = riverPhoto(post.slug);
+    const image = photo?.listing;
+    return <li data-regions={guideRegions(post).join(' ')} data-grades={guideClasses(post).join(' ')} data-title={guideHeading(post.slug, post.title)}>
+      <a href={href('/' + publicSlug(post.slug) + '/')}>
+        {image && <img src={image} alt="" width="330" height="200" loading="lazy" decoding="async" />}
+        <div class="details">
+          <span class="name">{guideHeading(post.slug, post.title)}</span>
+          {!hideRegion && <span class="place">{regionLabel(post)}</span>}
+          {post.class_label && <span class="difficulty">{t('Class','Clase')} {post.class_label}</span>}
+          {photo && 'representative' in photo && <small>{t('Representative photo','Foto de referencia')} · {photo.location}</small>}
+        </div>
+      </a>
+    </li>;
+  })}
+</ul>
+<style>
+  .river-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%, 17rem),1fr)); gap:1.5rem; padding:0; margin:1rem 0 2rem; list-style:none; }
+  .river-cards li { min-width:0; }
+  a { display:block; height:100%; overflow:hidden; border:1px solid var(--line); border-radius:10px; background:var(--card); color:var(--ink); text-decoration:none; }
+  a:hover, a:focus-visible { border-color:var(--accent); }
+  a:hover .name, a:focus-visible .name { color:var(--accent); text-decoration:underline; }
+  img { display:block; width:100%; aspect-ratio:1.65; height:auto; object-fit:cover; }
+  .details { display:grid; grid-template-columns:1fr auto; gap:.4rem .75rem; padding:.9rem 1rem 1rem; align-items:center; }
+  .name { grid-column:1/-1; font:600 var(--step-1)/1.2 var(--font-heading); }
+  .place,.difficulty { font:500 .85rem/1.35 var(--font-ui); color:var(--muted); }
+  .difficulty { justify-self:start; color:var(--accent); background:#edf3ee; border-radius:.3rem; padding:.2rem .45rem; }
+  .details small { grid-column:1/-1; color:var(--muted); font:.8rem var(--font-ui); }
+</style>

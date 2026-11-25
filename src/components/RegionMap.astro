@@ -1,0 +1,49 @@
+---
+import outlines from '../../data/guide-region-outlines.json';
+import { getPosts } from '../lib/directus';
+import { regionList } from '../lib/home';
+import { taxonomyName } from '../lib/spanish';
+import { createSiteUI } from './site-ui';
+const { language, spanish, href, t } = createSiteUI(Astro.url.pathname);
+const regions = regionList((await getPosts(language)).filter(post => post.kind === 'river'));
+const label = (name: string) => spanish ? taxonomyName(name) : name;
+---
+<section class="region-atlas">
+  <p>{t('Choose a region to browse its river guides by difficulty.', 'Selecciona una región para explorar sus ríos por dificultad.')}</p>
+  <div class="map-grid">
+    <svg viewBox="0 0 355 580" aria-label={t('River guide regions of Chile', 'Regiones de la guía de ríos de Chile')} role="group">
+      {outlines.map(outline => {
+        const index = regions.findIndex(r => r.slug === outline.slug);
+        const r = regions[index];
+        if (!r) return <path d={outline.path} class="context" />;
+        const [x,y] = outline.anchor;
+        const row = Math.max(y, 20 + index * 38);
+        return <a href={href('/category/' + r.slug + '/')} aria-label={label(r.label)}>
+          <path d={outline.path} class="land" />
+          <path d={`M${x},${y} L187,${row} H200`} class="leader" />
+          <text x="205" y={row+5}>{label(r.label)}</text>
+        </a>;
+      })}
+    </svg>
+    <div><h2>{t('Regions', 'Regiones')}</h2>
+      <ul>{regions.map(r => <li><a href={href('/category/' + r.slug + '/')}><strong>{label(r.label)}</strong><span>{r.count} {t('guides','guías')}</span></a></li>)}</ul>
+      <small>{t('Guide regions use historic boundaries. Region VIII includes Ñuble.', 'Las regiones de la guía siguen los límites históricos. La Región VIII incluye Ñuble.')} <a href="https://www.naturalearthdata.com/">Natural Earth</a></small>
+    </div>
+  </div>
+</section>
+<style>
+  .map-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.8fr); gap:clamp(1rem,4vw,3.5rem); align-items:start; }
+  svg { width:100%; max-height:42rem; background:#e6f1f1; border-radius:.75rem; }
+  .land { fill:#32756b; stroke:white; stroke-width:1; }
+  .context { fill:#b9c9c6; }
+  .leader { stroke:#51746c; stroke-width:1; fill:none; }
+  svg text { font:600 12px system-ui; fill:#133d38; }
+  svg a:hover .land, svg a:focus .land { fill:#a45329; }
+  svg a:hover text, svg a:focus text { text-decoration:underline; }
+  h2 { margin-top:0; }
+  ul { padding:0; list-style:none; }
+  li a { display:flex; justify-content:space-between; gap:1rem; padding:.45rem 0; border-bottom:1px solid var(--line); text-decoration:none; color:var(--ink); }
+  li a:hover { text-decoration:underline; }
+  li span, small { color:var(--muted); font:.9rem/1.5 system-ui; }
+  @media(max-width:600px) { .map-grid {grid-template-columns:1fr;} svg {max-height:32rem;} }
+</style>

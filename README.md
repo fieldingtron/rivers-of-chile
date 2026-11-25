@@ -108,11 +108,11 @@ The Astro site is maintained on `main`. The previous Next.js app is available on
 
 GitHub Actions workflow `.github/workflows/deploy-riversofchile.yml` builds against
 live Directus and direct-uploads to the `riversofchile` Pages project (`--branch=main`).
-It runs on:
-
-- a push to `main` that changes site code
-- manual **Run workflow** (`workflow_dispatch`)
-- `repository_dispatch` with `event_type: directus-rebuild`, after a 60-second debounce
+The scheduler checks at 20 past each hour. It builds once if main or the content queue
+has changed since the last successful upload. An empty hour skips the build. Edits
+made during a build are picked up by the next check. Directus dispatches and the
+manual **Queue Chile beta update** action only mark work for the hourly check.
+Use `pnpm dev` for immediate local previews.
 
 Required repository secrets (never commit these):
 
