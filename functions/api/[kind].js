@@ -65,7 +65,7 @@ export async function onRequestPost({ request, env, params }) {
     const collection = site + (kind === 'comment' ? '_comments' : '_contact_messages');
     if (!env.DIRECTUS_FORM_TOKEN) return respond(503,'failed','configuration');
     const result = await fetch('https://content.fieldsmarshall.com/items/' + collection, {
-      method: 'POST', redirect: 'error',
+      method: 'POST', redirect: 'manual',
       headers: { 'Content-Type':'application/json', 'User-Agent':'RiverSites/1.0', Authorization: 'Bearer ' + env.DIRECTUS_FORM_TOKEN },
       body: JSON.stringify(payload)
     });
