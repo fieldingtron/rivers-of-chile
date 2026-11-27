@@ -9,7 +9,9 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 COMMON = ("title", "content", "seo_title", "seo_description")
-FIELDS = {"pages": COMMON, "posts": COMMON + ("excerpt", "put_in", "take_out", "gradient", "season")}
+ARTICLE_FIELDS = ("excerpt", "put_in", "take_out", "gradient", "season")
+ARTICLE_KEYS = ", ".join(f"'{field}'" for field in ARTICLE_FIELDS)
+FIELDS = {"pages": COMMON, "posts": COMMON + ARTICLE_FIELDS}
 TABLES = {"pages": "roc_i18n.roc_page_translations", "posts": "roc_i18n.roc_post_translations"}
 
 
@@ -22,10 +24,14 @@ def sql(query):
 def pending(language):
     batch = []
     for kind, fields in FIELDS.items():
+        english = f"jsonb_build_object({', '.join(f"'{f}', p.{f}" for f in fields)})"
+        if kind == "pages":
+            extras = ", ".join(f"'{f}', to_jsonb(p)->'article_data'->>{repr(f)}" for f in ARTICLE_FIELDS)
+            english += f" || CASE WHEN p.page_template='roc_article' THEN jsonb_build_object({extras}) ELSE '{{}}'::jsonb END"
         rows = sql(f"""
           SELECT row_to_json(q) FROM (
             SELECT s.kind, s.slug, s.language, s.state, s.source_checksum,
-                   jsonb_build_object({', '.join(f"'{f}', p.{f}" for f in fields)}) AS english
+                   {english} AS english
             FROM roc_i18n.translation_status s JOIN public.roc_{kind} p ON p.id=s.parent_id
             WHERE s.kind='{kind}' AND s.language='{language}' AND s.state IN ('missing','changed') ORDER BY s.slug
           ) q;
@@ -50,13 +56,25 @@ def apply(path, language):
         if row.get("language") != language:
             raise ValueError(f"Wrong language for {kind}/{slug}")
         translation = row["translation"]
-        if (set(translation) - set(fields) or not all(isinstance(v, str) or v is None for v in translation.values())
+        allowed_fields = COMMON + ARTICLE_FIELDS
+        if (set(translation) - set(allowed_fields) or not all(isinstance(v, str) or v is None for v in translation.values())
                 or not translation.get("title") or not isinstance(translation.get("content"), str) or (row.get("english", {}).get("content") and not translation["content"].strip())):
             raise ValueError(f"Invalid translation: {kind}/{slug}")
         data = json.dumps({**translation, "slug": slug, "source_checksum": row["source_checksum"]}, ensure_ascii=False)
         # A hex literal safely transports arbitrary HTML, quotes and Unicode through psql.
         literal = "convert_from(decode('" + data.encode().hex() + "','hex'),'UTF8')::jsonb"
         table = TABLES[kind]
+        article_update = ""
+        if kind == "pages":
+            extras = ", ".join(f"'{f}', v->>{repr(f)}" for f in ARTICLE_FIELDS)
+            article_update = f"""
+              IF EXISTS (SELECT FROM public.roc_pages WHERE id=source_id AND page_template='roc_article') THEN
+                UPDATE {table} SET article_data=jsonb_build_object({extras})
+                WHERE parent_id=source_id AND language='{language}';
+              ELSIF v ?| ARRAY[{ARTICLE_KEYS}] THEN
+                RAISE EXCEPTION 'Unexpected article fields on page %', v->>'slug';
+              END IF;
+            """
         statements.append(f"""
           DO $save$
           DECLARE v jsonb := {literal}; source_id integer;
@@ -68,6 +86,7 @@ def apply(path, language):
             VALUES (source_id, '{language}', 'published', v->>'source_checksum', {', '.join("v->>'"+f+"'" for f in fields)})
             ON CONFLICT (parent_id,language) DO UPDATE SET translated_at=now(), status=excluded.status, source_checksum=excluded.source_checksum,
                   {', '.join(f'{f}=excluded.{f}' for f in fields)};
+            {article_update}
           END $save$;
         """)
     sql("\n".join(statements + ["COMMIT;"]))
@@ -78,10 +97,12 @@ def export(language):
     directory = ROOT / "data" / language
     directory.mkdir(parents=True, exist_ok=True)
     for kind, fields in FIELDS.items():
+        translated = f"jsonb_build_object({', '.join(f"'{f}', t.{f}" for f in fields)})"
+        if kind == "pages":
+            translated += " || coalesce(nullif(to_jsonb(t)->'article_data', 'null'::jsonb), '{}'::jsonb)"
         result = sql(f"""
-          SELECT coalesce(json_object_agg(s.slug, jsonb_strip_nulls(jsonb_build_object(
-              {', '.join(f"'{f}', t.{f}" for f in fields) }
-          )) ORDER BY s.slug), '{{}}') FROM roc_i18n.translation_status s
+          SELECT coalesce(json_object_agg(s.slug, jsonb_strip_nulls({translated}) ORDER BY s.slug), '{{}}')
+          FROM roc_i18n.translation_status s
           JOIN {TABLES[kind]} t ON t.parent_id=s.parent_id AND t.language=s.language
           WHERE s.kind='{kind}' AND s.language='{language}' AND s.state='current';
         """)

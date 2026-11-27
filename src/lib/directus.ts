@@ -98,6 +98,33 @@ export interface PageItem {
   published_at?: string;
   updated_at?: string;
   author_wp_id?: number;
+  featured_image?: string | null;
+  article_data?: Partial<PostItem> | null;
+}
+
+const ARTICLE_PAGE_TEMPLATE = 'roc_article';
+
+function isArticlePage(page: PageItem): boolean {
+  return page.page_template === ARTICLE_PAGE_TEMPLATE;
+}
+
+function articleFromPage(page: PageItem): PostItem {
+  return {
+    ...page.article_data,
+    id: page.article_data?.id,
+    wp_id: page.wp_id,
+    status: page.status,
+    kind: 'article',
+    title: page.title,
+    slug: page.slug,
+    content: page.content,
+    seo_title: page.seo_title,
+    seo_description: page.seo_description,
+    published_at: page.published_at,
+    updated_at: page.updated_at,
+    author_wp_id: page.author_wp_id,
+    featured_image: page.featured_image
+  };
 }
 
 const FILE_MAP: Record<string, string> = {
@@ -243,12 +270,17 @@ function applyFileFields<T extends { featured_image?: string | null; featured_im
 // Each reviewed export is a locale directory. No private database access is required at build time.
 const editions = import.meta.glob<Record<string, Partial<PostItem>>>('../../data/*/{posts,pages}.json', {eager: true, import: 'default'});
 
-function localizedItems<T extends PageItem | PostItem>(items: T[], language: Language, kind: 'posts' | 'pages'): T[] {
+function localizedItems<T extends PageItem | PostItem>(
+  items: T[], language: Language, kind: 'posts' | 'pages', articleFallback?: 'posts' | 'pages'
+): T[] {
   if (language === defaultLanguage) return items;
   const translations = editions[`../../data/${language}/${kind}.json`];
   if (!translations) throw new Error(`Missing reviewed ${language} export for ${kind}`);
   return items.map((item) => {
-    const translated = translations[item.slug];
+    const fallback = articleFallback && 'kind' in item && (item.kind === 'article' || item.kind === 'news')
+      ? editions[`../../data/${language}/${articleFallback}.json`]?.[item.slug]
+      : undefined;
+    const translated = translations[item.slug] ?? fallback;
     if (translated?.title && typeof translated.content === 'string') return { ...item, ...translated };
     return { ...item, seo_title: null, seo_description: null, excerpt: '', content:
       '<p>La traducción de esta página aún no está disponible. Puedes leer el original seleccionando English.</p>' };
@@ -256,16 +288,35 @@ function localizedItems<T extends PageItem | PostItem>(items: T[], language: Lan
 }
 
 export async function getPosts(language: Language = defaultLanguage): Promise<PostItem[]> {
+  // The migration can commit between these reads. Prefer the page when both
+  // copies were read across that transition and verify its original identity.
   const items = await fetchDirectus<PostItem>('roc_posts');
+  const pages = await fetchDirectus<PageItem>('roc_pages');
+  const articlePages = requirePublished(pages, 'roc_pages').filter(isArticlePage);
+  const movedSlugs = new Set<string>();
+  for (const page of articlePages) {
+    const previous = items.find(item => item.slug === page.slug);
+    if (!Number.isInteger(page.article_data?.id) || movedSlugs.has(page.slug) ||
+        (previous && (previous.kind === 'river' || previous.id !== page.article_data?.id))) {
+      throw new Error('Conflicting ROC article slug: ' + page.slug);
+    }
+    movedSlugs.add(page.slug);
+  }
+  const posts = items.filter(item => !movedSlugs.has(item.slug));
+  for (const item of posts) item.kind ??= 'river';
   await loadFileLibrary();
   await loadAvatars();
-  applyFileFields(items);
+  const articles = articlePages.map(articleFromPage);
+  applyFileFields([...posts, ...articles]);
   const photos = loadImageManifest();
-  for (const item of items) {
+  for (const item of [...posts, ...articles]) {
     const selection = item.kind === 'river' ? riverPhoto(item) : undefined;
     item.featured_image_url = selection?.image ?? guidePhoto(photos, item);
   }
-  return localizedItems(requirePublished(items, 'roc_posts'), language, 'posts').sort((a, b) => a.title.localeCompare(b.title));
+  return [
+    ...localizedItems(requirePublished(posts, 'roc_posts'), language, 'posts', 'pages'),
+    ...localizedItems(articles, language, 'pages', 'posts')
+  ].sort((a, b) => a.title.localeCompare(b.title));
 }
 
 async function loadAvatars(): Promise<void> {
@@ -280,7 +331,7 @@ async function loadAvatars(): Promise<void> {
 export async function getPages(language: Language = defaultLanguage): Promise<PageItem[]> {
   const items = await fetchDirectus<PageItem>('roc_pages');
   await loadFileLibrary();
-  return localizedItems(requirePublished(items, 'roc_pages'), language, 'pages');
+  return localizedItems(requirePublished(items.filter(item => !isArticlePage(item)), 'roc_pages'), language, 'pages');
 }
 
 export async function getCategories(es = false): Promise<CategoryItem[]> {

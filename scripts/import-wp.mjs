@@ -121,7 +121,9 @@ async function main() {
   await insertMissing('roc_regions', REGIONS, 'slug');
   await insertMissing('roc_categories', snapshot.categories, 'wp_id');
   await insertMissing('roc_tags', snapshot.tags, 'wp_id');
-  await insertMissing('roc_posts', snapshot.posts, 'wp_id');
+  const pages = await existingKeys('roc_pages', 'wp_id');
+  const posts = snapshot.posts.filter(post => post.kind === 'river' || !pages.has(String(post.wp_id)));
+  await insertMissing('roc_posts', posts, 'wp_id');
   await insertMissing('roc_pages', snapshot.pages, 'wp_id');
   console.log('Import complete.');
 }

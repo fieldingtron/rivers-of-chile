@@ -38,7 +38,9 @@ export async function getStaticPaths() {
       const type = pageSlugs.has(item.slug) ? 'page' : 'post';
       paths.push({
         params: { lang, slug },
-        props: { type, item, related: type === 'post' && (item as PostItem).kind === 'river' ? relatedGuides(item as PostItem, rivers) : undefined, comments: comments.filter(c => c[type]?.slug === item.slug) }
+        props: { type, item, related: type === 'post' && (item as PostItem).kind === 'river' ? relatedGuides(item as PostItem, rivers) : undefined, comments: comments.filter(c =>
+          c[type]?.slug === item.slug || (type === 'post' && (item as PostItem).kind !== 'river' && c.page?.slug === item.slug)
+        ) }
       });
     }
     const history = paths.find(({ props }) => props.type === 'page' && props.item.slug === 'history-of-first-descents');
