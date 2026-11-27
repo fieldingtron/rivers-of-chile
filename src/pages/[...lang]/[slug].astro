@@ -9,6 +9,10 @@ import RegionMap from '../../components/RegionMap.astro';
 import VisitorForm from '../../components/VisitorForm.astro';
 import Comments from '../../components/Comments.astro';
 import RiverFeaturedPhoto from '../../components/RiverFeaturedPhoto.astro';
+import RiverGuideOpening from '../../components/RiverGuideOpening.astro';
+import { gradeLabel, gradeTags, classNumeral, guideIntro, guideWaterSource } from '../../lib/river-guide.mjs';
+import { guideRegion, bullileoBody } from '../../lib/guide-regions';
+import '../../styles/river-guide.css';
 import { riverPhoto, riverPhotoAlt } from '../../lib/river-photos';
 import RiverCards from '../../components/RiverCards.astro';
 import { relatedGuides } from '../../lib/related-guides';
@@ -17,7 +21,7 @@ import Lightbox from '../../components/Lightbox.astro';
 import { getPosts, getPages, getComments, type CommentItem, getCategories, RESERVED_SLUGS, type PostItem, type PageItem } from '../../lib/directus';
 import { loadImageManifest, prepareArticleImages, featuredImageUrl, publicBase, HERO_SIZES, assetFor, pickDisplay, displayVariants, variantUrl, isPlaceholderFeatured } from '../../lib/legacy-images.mjs';
 import { rewriteDirectusAssets } from '../../lib/file-registry.mjs';
-import { regionGuideLabel, authorLabel } from '../../lib/home';
+import { regionGuideLabel, regionLabel, authorLabel } from '../../lib/home';
 
 export async function getStaticPaths() {
   const routes = await Promise.all(languages.map(async ({ code, prefix }) => {
@@ -69,12 +73,14 @@ const prefix = languagePrefix(language);
 const es = language === 'es';
 const { type, item, comments, related, descentGuidePaths } = Astro.props;
 const post = type === 'post' ? (item as PostItem) : null;
+const river = post?.kind === 'river' ? post : null;
+const bullileo = river?.slug === 'rio-bullileo';
 const categories = post ? await getCategories(es) : [];
 const catNames = post
   ? (post.legacy_categories || []).map((slug) => categories.find((c) => c.slug === slug)).filter(Boolean)
   : [];
 const openLinksInNewWindow = !es && item.slug === '22-teacups-22-tazas-rio-claro';
-const facts = post ? [
+const facts = post && !river ? [
   {label: es ? 'Clase' : 'Class', value: post.class_label, archive: catNames.find(c => c?.type === 'class')?.slug},
   {label: es ? 'Región' : 'Region', value: post.region && (es ? taxonomyName(regionGuideLabel(post)) : regionGuideLabel(post)), archive: catNames.find(c => c?.slug === post.region)?.slug},
   {label: es ? 'País' : 'Country', value: post.country && post.country.charAt(0).toUpperCase() + post.country.slice(1)},
@@ -83,7 +89,7 @@ const facts = post ? [
   {label: es ? 'Pendiente' : 'Gradient', value: post.gradient}
 ].filter(f => f.value) : [];
 const isRiverMap = item.slug === 'map-of-chile';
-const heading = isRiverMap ? (es ? 'Regiones fluviales de Chile' : 'River regions of Chile') : guideHeading(item.slug, item.title);
+const heading = isRiverMap ? (es ? 'Regiones fluviales de Chile' : 'River regions of Chile') : bullileo ? 'Río Bullileo' : guideHeading(item.slug, item.title);
 const description = guideDescription(item, heading, es);
 const legacyTitle = item.seo_title?.replace(/\s*[-|]\s*(?:peruwhitewater\.com|rivers of chile)\s*$/i, '').trim();
 const title = post?.kind === 'river'
@@ -91,9 +97,28 @@ const title = post?.kind === 'river'
   : isRiverMap ? heading : legacyTitle || heading;
 const images = loadImageManifest();
 const selection = post?.kind === 'river' ? riverPhoto(post) : undefined;
+const region = river ? guideRegion(river) : undefined;
+const place = region === 'nuble' ? 'Ñuble' : region && river ? regionLabel({ ...river, region }) : undefined;
+const grade = river ? gradeLabel(river) : undefined;
+const classArchive = river && gradeTags(river).filter(tag => categories.some(category => category.slug === tag)).at(-1);
+const regionArchive = region && categories.some(category => category.slug === region) ? region : undefined;
+const intro = bullileo
+  ? es
+    ? 'Aguas abajo del embalse Bullileo, cerca de Parral, el descenso comienza con unos 2 km de fuerte pendiente. Sigue un tramo más tranquilo antes de que el río vuelva a ganar pendiente cerca de la confluencia con el Longaví.'
+    : 'Below Embalse Bullileo near Parral, the run opens with about 2 km of steep creeking. A gentler middle stretch follows before the river steepens again near the confluence with the Longaví.'
+  : river ? guideIntro(river.content, language, es ? undefined : river.excerpt) : undefined;
+const length = bullileo ? (es ? '9,5 km (según la guía)' : '9.5 km (reported)')
+  : river?.length_km && Number(river.length_km) > 0 ? new Intl.NumberFormat(language).format(river.length_km) + ' km' : undefined;
+const guideFacts = [
+  { label: es ? 'Dificultad' : 'Difficulty', value: grade && (es ? 'Clase ' : 'Class ') + grade, href: classArchive ? prefix + '/category/' + classArchive + '/' : undefined },
+  { label: es ? 'Longitud del tramo' : 'Run length', value: length },
+  { label: es ? 'Origen del caudal' : 'Water source', value: bullileo ? (es ? 'Descarga del embalse y caudal natural' : 'Dam release and natural flow') : guideWaterSource(river?.content, es) },
+  { label: es ? 'Región' : 'Region', value: place, href: regionArchive ? prefix + '/category/' + regionArchive + '/' : undefined }
+].filter((fact): fact is { label: string; value: string; href?: string } => Boolean(fact.value));
 const featured = post?.featured_image_url || undefined;
 const image = selection?.image || featuredImageUrl(images, featured) || featured || undefined;
-const preparedBody = prepareArticleImages(rewriteDirectusAssets(item.content || '', publicBase(images)), images);
+const rawBody = item.content || '';
+const preparedBody = prepareArticleImages(rewriteDirectusAssets(bullileo ? bullileoBody(rawBody) : rawBody, publicBase(images)), images);
 const body = item.slug === 'contact-us' ? '' : localizedBodyLinks(preparedBody, prefix);
 const linkedBody = es ? guideLinks(body) : reviewedEnglishLinks(guideLinks(body), item.slug);
 const articleBody = descentGuidePaths ? formatFirstDescents(linkedBody, descentGuidePaths) : linkedBody;
@@ -122,6 +147,7 @@ const article = post && {
 };
 ---
 <BaseLayout
+  mainClass={river ? 'river-guide-main' : undefined}
   openLinksInNewWindow={openLinksInNewWindow}
   title={title}
   breadcrumb={heading}
@@ -131,17 +157,27 @@ const article = post && {
   imageAlt={selection ? riverPhotoAlt(selection, es) : undefined}
 >
   {article && <script type="application/ld+json" set:html={JSON.stringify(article).replace(/</g, '\\u003c')} />}
-  <article class="prose">
-    <div class="prose-header">
-    <h1 class="page-title">{heading}</h1>
-    {post && <p class="meta-line">
-      {post.author_name && authorLabel(post.author_name)}
-      {post.author_name && post.published_at && ' · '}
-      {post.published_at && <time datetime={post.published_at}>{pageDate(post.published_at, language)}</time>}
-    </p>}
+  <article class:list={['prose', river && 'river-guide']}>
+    <div class={river ? 'guide-opening-frame' : 'prose-header'}>
+      {river ? (
+        <RiverGuideOpening heading={heading} intro={intro} facts={guideFacts} es={es}>
+          {selection && <RiverFeaturedPhoto slot="photo" photo={selection} es={es} caption={bullileo ? 'Río Bullileo' : undefined} />}
+          {!selection && image && (
+            <figure slot="photo" class="guide-fallback-photo">
+              <a href={image} data-lightbox data-full={image} data-caption={heading}>
+                <img src={image} alt={heading} decoding="async" fetchpriority="high" />
+              </a>
+            </figure>
+          )}
+        </RiverGuideOpening>
+      ) : <h1 class="page-title">{heading}</h1>}
+      {post && (post.author_name || post.published_at) && <p class="meta-line">
+        {post.author_name && authorLabel(post.author_name)}
+        {post.author_name && post.published_at && ' · '}
+        {post.published_at && <time datetime={post.published_at}>{pageDate(post.published_at, language)}</time>}
+      </p>}
     </div>
-    {post && <div class="guide-opening">
-      {selection && <RiverFeaturedPhoto photo={selection} es={es} />}
+    {post && (facts.length > 0 || post.put_in || post.take_out) && <div class={river ? undefined : 'guide-opening'}>
       <div>
         {facts.length > 0 && <dl class="summary-grid">{facts.map(fact => <div>
           <dt>{fact.label}</dt><dd>{fact.archive ? <a href={prefix+'/category/'+fact.archive+'/'}>{fact.value}</a> : fact.value}</dd>
@@ -155,7 +191,7 @@ const article = post && {
         </section>}
       </div>
     </div>}
-    {!selection && showHero && (
+    {!river && showHero && (
       <figure class="hero">
         <img
           src={featuredDisplay && images ? variantUrl(images, featuredDisplay) : image}
@@ -173,12 +209,12 @@ const article = post && {
     {isRiverMap ? <RegionMap /> : <div class:list={['article-body', { 'first-descents': descentGuidePaths }]} set:html={articleBody} />}
     {related && <div class="related-rivers">
       {related.nearby.length > 0 && <section>
-        <h2>{es ? 'Más ríos de la región' : 'More rivers in this region'}</h2>
-        <RiverCards posts={related.nearby} hideRegion />
+        <h2>{place ? (es ? 'Más ríos en ' : 'More rivers in ') + place : (es ? 'Más ríos de la región' : 'More rivers in this region')}</h2>
+        <RiverCards posts={related.nearby} hideRegion related />
       </section>}
       {related.similar.length > 0 && <section>
-        <h2><a href={prefix+'/category/'+related.grade+'/'}>{(es ? 'Más ríos de clase ' : 'More Class ') + related.grade?.slice(6) + (es ? '' : ' rivers')}</a></h2>
-        <RiverCards posts={related.similar} />
+        <h2><a href={prefix+'/category/'+related.grade+'/'}>{(es ? 'Más ríos de clase ' : 'More Class ') + classNumeral(related.grade) + (es ? '' : ' rivers')}</a></h2>
+        <RiverCards posts={related.similar} related />
       </section>}
     </div>}
     {catNames.length > 0 && (

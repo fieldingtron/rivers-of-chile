@@ -18,6 +18,7 @@ interface Props {
   type?: 'website' | 'article';
   image?: string;
   imageAlt?: string;
+  mainClass?: string;
 }
 
 const { title, description, canonical, type, image, imageAlt } = Astro.props;
@@ -32,7 +33,7 @@ const { title, description, canonical, type, image, imageAlt } = Astro.props;
   </head>
   <body>
     <Header />
-    <main>
+    <main class={Astro.props.mainClass}>
       <slot />
     </main>
     <Footer />

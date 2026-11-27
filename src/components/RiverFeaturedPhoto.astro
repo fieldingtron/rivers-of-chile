@@ -3,18 +3,21 @@ import { riverPhotoAlt, riverPhotoLocation, type RiverPhoto } from '../lib/river
 interface Props {
   photo: RiverPhoto;
   es: boolean;
+  caption?: string;
 }
-const { photo, es } = Astro.props;
+const { photo, es, caption } = Astro.props;
 const location = riverPhotoLocation(photo, es);
 const match = es ? photo.matchEs || photo.match : photo.match;
-const alt = riverPhotoAlt(photo, es);
+const alt = caption && !photo.representative ? caption : riverPhotoAlt(photo, es);
+const simpleCaption = caption && !photo.representative && !photo.licenseUrl && !photo.credit;
+const label = simpleCaption ? caption : photo.title;
 ---
 <figure class="river-feature">
-  <a href={photo.full} data-lightbox data-full={photo.full} data-caption={photo.title}>
+  <a href={photo.full} data-lightbox data-full={photo.full} data-caption={label}>
     <img src={photo.image} alt={alt} width={photo.width} height={photo.height} decoding="async" fetchpriority="high" />
     <span>{es ? 'Ver foto completa' : 'View full photo'}</span>
   </a>
-  {photo.source && <figcaption>
+  {simpleCaption ? <figcaption>{caption}</figcaption> : photo.source && <figcaption>
     <a href={photo.source}>{photo.licenseUrl ? photo.title : 'Rivers of Chile'}</a>
     {photo.credit && <> · {photo.credit}</>}
     {photo.licenseUrl && <> · <a href={photo.licenseUrl} rel="license">{photo.license}</a> · {es ? 'Recorte horizontal' : 'Landscape crop'}</>}
@@ -24,7 +27,7 @@ const alt = riverPhotoAlt(photo, es);
     </div>}
     {photo.original && <a href={photo.original}>{es ? 'Archivo original' : 'Original file'}</a>}
   </figcaption>}
-  {photo.description && <figcaption class="file-caption">{photo.description}</figcaption>}
+  {!simpleCaption && photo.description && <figcaption class="file-caption">{photo.description}</figcaption>}
 </figure>
 <style>
   .river-feature { max-width: 1100px; margin: 1rem auto; }

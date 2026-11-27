@@ -1,0 +1,26 @@
+---
+interface Fact { label: string; value: string; href?: string }
+interface Reach { name: string; detail: string }
+interface Props { heading: string; intro?: string; facts: Fact[]; reaches?: Reach[]; es: boolean }
+const { heading, intro, facts, reaches, es } = Astro.props;
+---
+<header class="guide-top">
+  <div class="guide-media">
+    <h1 class="page-title">{heading}</h1>
+    <slot name="photo" />
+  </div>
+  {(intro || facts.length > 0 || reaches?.length) && <div class="guide-detail">
+    {intro && <p class="guide-intro">{intro}</p>}
+    {facts.length > 0 && <dl class="guide-facts">
+      {facts.map(({ label, value, href }) => <div>
+        <dt>{label}</dt><dd>{href ? <a href={href}>{value}</a> : value}</dd>
+      </div>)}
+    </dl>}
+    {reaches?.length && <section class="guide-reaches">
+      <h2>{es ? 'Tramos del río' : 'River reaches'}</h2>
+      <dl>
+        {reaches.map(({ name, detail }) => <div><dt>{name}</dt><dd>{detail}</dd></div>)}
+      </dl>
+    </section>}
+  </div>}
+</header>

@@ -71,6 +71,8 @@ export interface PostItem {
   class_min?: number | null;
   class_max?: number | null;
   class_label?: string | null;
+  class_grade?: string | null;
+
   put_in?: string | null;
   take_out?: string | null;
   length_km?: number | null;
