@@ -71,7 +71,7 @@ export function imageCount(post: PostItem): number {
 
 /** "Popular" = real guides with a photo, a written excerpt and plenty of photography. */
 export function popularRivers(posts: PostItem[], n: number): PostItem[] {
-  const rivers = posts.filter((p) => p.kind === 'river' && p.featured_image_url && p.slug && !('representative' in (riverPhoto(p.slug) ?? {})));
+  const rivers = posts.filter((p) => p.kind === 'river' && p.featured_image_url && p.slug && !riverPhoto(p)?.representative);
   const scored = rivers
     .map((p) => ({ p, s: imageCount(p) * 3 + Math.min((p.content || '').length / 1500, 8) + (p.class_label ? 1 : 0) }))
     .sort((a, b) => b.s - a.s);

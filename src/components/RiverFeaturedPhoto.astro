@@ -1,26 +1,30 @@
 ---
-import { riverPhoto } from '../lib/river-photos';
+import { riverPhotoAlt, riverPhotoLocation, type RiverPhoto } from '../lib/river-photos';
 interface Props {
-  photo: NonNullable<ReturnType<typeof riverPhoto>>;
+  photo: RiverPhoto;
   es: boolean;
 }
 const { photo, es } = Astro.props;
-const location = 'locationEs' in photo ? (es ? photo.locationEs : photo.location) : '';
-const match = 'matchEs' in photo ? (es ? photo.matchEs : photo.match) : '';
+const location = riverPhotoLocation(photo, es);
+const match = es ? photo.matchEs || photo.match : photo.match;
+const alt = riverPhotoAlt(photo, es);
 ---
 <figure class="river-feature">
   <a href={photo.full} data-lightbox data-full={photo.full} data-caption={photo.title}>
-    <img src={photo.image} alt={photo.title} width={photo.width} height={photo.height} decoding="async" fetchpriority="high" />
+    <img src={photo.image} alt={alt} width={photo.width} height={photo.height} decoding="async" fetchpriority="high" />
     <span>{es ? 'Ver foto completa' : 'View full photo'}</span>
   </a>
-  <figcaption>
+  {photo.source && <figcaption>
     <a href={photo.source}>{photo.licenseUrl ? photo.title : 'Rivers of Chile'}</a>
     {photo.credit && <> · {photo.credit}</>}
-    {photo.licenseUrl && <> · <a href={photo.licenseUrl}>{photo.license}</a> · {es ? 'Recorte horizontal' : 'Landscape crop'}</>}
-    {photo.upscaled && <> · {es ? 'Ampliación 2× con IA' : '2× AI upscale'}</>}
-    {location && <div>{location} · {match}</div>}
-    {'original' in photo && <a href={photo.original}>{es ? 'Archivo original' : 'Original file'}</a>}
-  </figcaption>
+    {photo.licenseUrl && <> · <a href={photo.licenseUrl} rel="license">{photo.license}</a> · {es ? 'Recorte horizontal' : 'Landscape crop'}</>}
+    {location && <div>
+      {photo.representative && <>{es ? 'Foto de referencia' : 'Representative photo'} · </>}
+      {location}{match && <> · {match}</>}
+    </div>}
+    {photo.original && <a href={photo.original}>{es ? 'Archivo original' : 'Original file'}</a>}
+  </figcaption>}
+  {photo.description && <figcaption class="file-caption">{photo.description}</figcaption>}
 </figure>
 <style>
   .river-feature { max-width: 1100px; margin: 1rem auto; }
@@ -28,4 +32,5 @@ const match = 'matchEs' in photo ? (es ? photo.matchEs : photo.match) : '';
   .river-feature img { display: block; width: 100%; height: auto; }
   .river-feature span { position: absolute; right: .75rem; bottom: .75rem; background: #193d48; color: white; padding: .4rem .7rem; font: 500 .85rem system-ui; }
   .river-feature figcaption { margin: .45rem auto; text-align: center; font: .84rem/1.5 system-ui; }
+  .river-feature .file-caption { white-space: pre-line; overflow-wrap: anywhere; }
 </style>

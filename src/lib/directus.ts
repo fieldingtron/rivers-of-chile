@@ -262,7 +262,7 @@ export async function getPosts(language: Language = defaultLanguage): Promise<Po
   applyFileFields(items);
   const photos = loadImageManifest();
   for (const item of items) {
-    const selection = item.kind === 'river' ? riverPhoto(item.slug) : undefined;
+    const selection = item.kind === 'river' ? riverPhoto(item) : undefined;
     item.featured_image_url = selection?.image ?? guidePhoto(photos, item);
   }
   return localizedItems(requirePublished(items, 'roc_posts'), language, 'posts').sort((a, b) => a.title.localeCompare(b.title));

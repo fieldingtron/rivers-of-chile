@@ -4,14 +4,14 @@ import { publicSlug, guideHeading } from '../lib/guide-seo';
 import { regionLabel, guideRegions, guideClasses } from '../lib/home';
 import { createSiteUI } from './site-ui';
 
-import { riverPhoto } from '../lib/river-photos';
+import { riverPhoto, riverPhotoLocation } from '../lib/river-photos';
 interface Props { posts: PostItem[]; hideRegion?: boolean; }
 const { posts, hideRegion } = Astro.props;
-const { href, t } = createSiteUI(Astro.url.pathname);
+const { href, t, spanish } = createSiteUI(Astro.url.pathname);
 ---
 <ul class="river-cards">
   {posts.map(post => {
-    const photo = riverPhoto(post.slug);
+    const photo = riverPhoto(post);
     const image = photo?.listing;
     return <li data-regions={guideRegions(post).join(' ')} data-grades={guideClasses(post).join(' ')} data-title={guideHeading(post.slug, post.title)}>
       <a href={href('/' + publicSlug(post.slug) + '/')}>
@@ -20,7 +20,7 @@ const { href, t } = createSiteUI(Astro.url.pathname);
           <span class="name">{guideHeading(post.slug, post.title)}</span>
           {!hideRegion && <span class="place">{regionLabel(post)}</span>}
           {post.class_label && <span class="difficulty">{t('Class','Clase')} {post.class_label}</span>}
-          {photo && 'representative' in photo && <small>{t('Representative photo','Foto de referencia')} · {photo.location}</small>}
+          {photo?.representative && <small>{t('Representative photo','Foto de referencia')} · {riverPhotoLocation(photo, spanish)}</small>}
         </div>
       </a>
     </li>;

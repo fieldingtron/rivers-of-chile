@@ -3,7 +3,7 @@
     "title": "takes 2 hours to hike in Class 3 / 4 waterfalls",
     "source": "https://www.riversofchile.com/22-teacups-22-tazas-rio-claro/",
     "full": "https://riversofchile-images.pages.dev/imgp0700-480x640-cf35a3ae23f8a220ec3f.jpg",
-    "credit": "",
+    "credit": "Fields Marshall, 2007 · Website author",
     "license": "Guide archive",
     "licenseUrl": "",
     "location": "22 teacups – 22 tazas – Rio Claro",
@@ -169,7 +169,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-baker-lower.webp",
     "locationEs": "Tramo inferior del río Baker, cerca de Tortel",
-    "matchEs": "Tramo inferior"
+    "matchEs": "Tramo inferior",
+    "directusKey": "roc-feature-624ac620556c6f8451d9c1e8.jpg"
   },
   "rio-blanco-cautin": {
     "title": "Mellow rapids at put in",
@@ -341,7 +342,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-cachapoal-lower.webp",
     "locationEs": "Río Cachapoal en Coya",
-    "matchEs": "Localidad descrita en la guía"
+    "matchEs": "Localidad descrita en la guía",
+    "directusKey": "roc-feature-a4fa01ee413aa5d54b23ce4b.jpg"
   },
   "rio-cachapoal-upper": {
     "title": "Río Cachapoal en Coya",
@@ -360,7 +362,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-cachapoal-upper.webp",
     "locationEs": "Río Cachapoal en Coya, aguas abajo del tramo superior",
-    "matchEs": "Aguas abajo del tramo superior"
+    "matchEs": "Aguas abajo del tramo superior",
+    "directusKey": "roc-feature-a4fa01ee413aa5d54b23ce4b.jpg"
   },
   "rio-calbuco": {
     "title": "Rio Calbuco",
@@ -464,7 +467,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-cautin.webp",
     "locationEs": "Río Cautín",
-    "matchEs": "Tramo exacto sin confirmar"
+    "matchEs": "Tramo exacto sin confirmar",
+    "directusKey": "roc-feature-b6d44a39c1beb7bc1f40eccd.jpg"
   },
   "rio-chalquilvin": {
     "title": "Rio Chalquilvin",
@@ -517,7 +521,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-cisnes-upper.webp",
     "locationEs": "Río Cisnes",
-    "matchEs": "Tramo exacto sin confirmar"
+    "matchEs": "Tramo exacto sin confirmar",
+    "directusKey": "roc-feature-6d1286c9bb3c6ce27509d9a6.jpg"
   },
   "rio-clarillo": {
     "title": "A typical drop on the Clarillo",
@@ -587,7 +592,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-cochrane.webp",
     "locationEs": "Río Cochrane en la Reserva Nacional Lago Cochrane",
-    "matchEs": "Aguas arriba del tramo de la guía"
+    "matchEs": "Aguas arriba del tramo de la guía",
+    "directusKey": "roc-feature-c17fddc234459cea2b92b306.jpg"
   },
   "rio-codihue": {
     "title": "Class five lead up to the waterfall",
@@ -640,7 +646,8 @@
     "upscaled": true,
     "listing": "/river-photos/listing/rio-colorado-aconcagua.webp",
     "locationEs": "Confluencia de los ríos Colorado y Aconcagua",
-    "matchEs": "Fotografía histórica de la confluencia al final del recorrido"
+    "matchEs": "Fotografía histórica de la confluencia al final del recorrido",
+    "directusKey": "roc-feature-1cf6461c30148667f9dcf083.png"
   },
   "rio-corcovado": {
     "title": "Kayaker Eva Luna Ramirez",
@@ -1220,7 +1227,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-manihuales.webp",
     "locationEs": "Río Mañihuales, Aysén",
-    "matchEs": "Tramo exacto sin confirmar"
+    "matchEs": "Tramo exacto sin confirmar",
+    "directusKey": "roc-feature-97bef48d6b860f0c79211f19.jpg"
   },
   "rio-manio": {
     "title": "Momo Castillo Lower Mañio",
@@ -1682,7 +1690,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-teno.webp",
     "locationEs": "Río Teno, Maule",
-    "matchEs": "Tramo exacto sin confirmar"
+    "matchEs": "Tramo exacto sin confirmar",
+    "directusKey": "roc-feature-3a11a82cc284649bfbf0e106.jpg"
   },
   "rio-tolten": {
     "title": "Rio Tolten",
@@ -1786,7 +1795,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-volcan-lower.webp",
     "locationEs": "Río Volcán, Cajón del Maipo",
-    "matchEs": "Tramo exacto sin confirmar"
+    "matchEs": "Tramo exacto sin confirmar",
+    "directusKey": "roc-feature-3abd9d6343445df5cdb70fad.jpg"
   },
   "rio-yeso": {
     "title": "Brent Heitzenroder scouting a tight spot on the Yeso",
@@ -1924,7 +1934,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-bio-bio-el-nacimiento.webp",
     "locationEs": "Nacimiento del Biobío en la laguna Galletué",
-    "matchEs": "Nacimiento descrito en la guía"
+    "matchEs": "Nacimiento descrito en la guía",
+    "directusKey": "roc-feature-44e6205db00bf07a7f285981.jpg"
   },
   "rio-bio-bio-lower": {
     "title": "Narrow stretch of river visible from the road",
@@ -2011,7 +2022,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-claro-puente-las-pinas.webp",
     "locationEs": "Río Claro en Puente Negro, O’Higgins",
-    "matchEs": "Aguas abajo de Puente Las Piñas"
+    "matchEs": "Aguas abajo de Puente Las Piñas",
+    "directusKey": "roc-feature-289c8b17d459414dd92fc0ed.jpg"
   },
   "rio-claro-tinguiririca": {
     "title": "Río Claro (Tinguiririca)",
@@ -2030,7 +2042,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-claro-tinguiririca.webp",
     "locationEs": "Río Claro en Puente Negro, O’Higgins",
-    "matchEs": "Aguas abajo de Puente Las Piñas"
+    "matchEs": "Aguas abajo de Puente Las Piñas",
+    "directusKey": "roc-feature-289c8b17d459414dd92fc0ed.jpg"
   },
   "rio-colorado": {
     "title": "Rio Colorado",
@@ -2135,7 +2148,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-manso-nahual-huapi.webp",
     "locationEs": "Cascada Los Alerces, Nahuel Huapi",
-    "matchEs": "Lugar de embarque descrito en la guía"
+    "matchEs": "Lugar de embarque descrito en la guía",
+    "directusKey": "roc-feature-325613e84dc94cba0c89f397.jpg"
   },
   "rio-palena": {
     "title": "Confluence of Rio Frio and Rio Palena (3184505589)",
@@ -2154,7 +2168,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-palena.webp",
     "locationEs": "Confluencia de los ríos Frío y Palena",
-    "matchEs": "Río identificado"
+    "matchEs": "Río identificado",
+    "directusKey": "roc-feature-8a8d7dfe39376cdb52a5c715.jpg"
   },
   "rio-pangal": {
     "title": "Machalí, Pangal. - panoramio (6)",
@@ -2173,7 +2188,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-pangal.webp",
     "locationEs": "Valle del río Pangal, Machalí",
-    "matchEs": "Tramo exacto sin confirmar"
+    "matchEs": "Tramo exacto sin confirmar",
+    "directusKey": "roc-feature-b05210ae0f6b51a995b2a5e0.jpg"
   },
   "rio-petrohue-lower": {
     "title": "Saltos del Petrohué-Chile5",
@@ -2192,7 +2208,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-petrohue-lower.webp",
     "locationEs": "Saltos del Petrohué, junto al embarque alternativo",
-    "matchEs": "Lugar de acceso descrito en la guía"
+    "matchEs": "Lugar de acceso descrito en la guía",
+    "directusKey": "roc-feature-164dcdb399a84ce8a6e45b8a.jpg"
   },
   "rio-petrohue-upper": {
     "title": "Saltos del Petrohué-Chile4",
@@ -2211,7 +2228,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-petrohue-upper.webp",
     "locationEs": "Saltos del Petrohué",
-    "matchEs": "Lugar descrito en la guía"
+    "matchEs": "Lugar descrito en la guía",
+    "directusKey": "roc-feature-b9b5a891b32d04ac22b84985.jpg"
   },
   "rio-renaico": {
     "title": "Río Renaico",
@@ -2247,7 +2265,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-simpson-cajon-de-farrellones.webp",
     "locationEs": "Río Simpson cerca de Coyhaique",
-    "matchEs": "Tramo exacto sin confirmar"
+    "matchEs": "Tramo exacto sin confirmar",
+    "directusKey": "roc-feature-654b8a774bbc3077e8cd8073.jpg"
   },
   "rio-simpson-lower": {
     "title": "Río Simpson",
@@ -2266,7 +2285,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-simpson-lower.webp",
     "locationEs": "Río Simpson, Aysén",
-    "matchEs": "Tramo exacto sin confirmar"
+    "matchEs": "Tramo exacto sin confirmar",
+    "directusKey": "roc-feature-aaa40bc382c1c7f65e4158df.jpg"
   },
   "rio-volcan-upper": {
     "title": "Driving to Morado",
@@ -2285,7 +2305,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/rio-volcan-upper.webp",
     "locationEs": "Río Volcán, Cajón del Maipo",
-    "matchEs": "Tramo exacto sin confirmar"
+    "matchEs": "Tramo exacto sin confirmar",
+    "directusKey": "roc-feature-3abd9d6343445df5cdb70fad.jpg"
   },
   "salto-del-nilahue": {
     "title": "Kayaker descending Salto del Nilahue",
@@ -2320,7 +2341,8 @@
     "upscaled": false,
     "listing": "/river-photos/listing/trancura-lower.webp",
     "locationEs": "Rafting en el río Trancura",
-    "matchEs": "Tramo exacto sin confirmar"
+    "matchEs": "Tramo exacto sin confirmar",
+    "directusKey": "roc-feature-c1cb7c728c9d847e9c60eca5.jpg"
   },
   "estero-coilaco": {
     "title": "Representative photograph · Río Palguín",

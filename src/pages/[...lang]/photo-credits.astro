@@ -2,22 +2,23 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getPosts } from '../../lib/directus';
 import { languagePaths, languageForPath } from '../../lib/languages';
-import { riverPhoto } from '../../lib/river-photos';
+import { riverPhoto, riverPhotoLocation } from '../../lib/river-photos';
 import { guideHeading, publicSlug } from '../../lib/guide-seo';
 import { createSiteUI } from '../../components/site-ui';
 export const getStaticPaths = languagePaths;
-const { t, href } = createSiteUI(Astro.url.pathname);
+const { t, href, spanish } = createSiteUI(Astro.url.pathname);
 const posts = (await getPosts(languageForPath(Astro.url.pathname))).filter(p => p.kind === 'river');
 const title = t('Photo credits','Créditos fotográficos');
 ---
 <BaseLayout title={title}>
   <article class="prose"><h1>{title}</h1>
     {posts.map(post => {
-      const photo = riverPhoto(post.slug);
+      const photo = riverPhoto(post);
       return photo && <section id={publicSlug(post.slug)}>
         <h2><a href={href('/'+publicSlug(post.slug)+'/')}>{guideHeading(post.slug,post.title)}</a></h2>
-        <p><a href={photo.source}>{t('Photo source','Fuente de la foto')}</a> · {photo.credit || t('Photographer unrecorded','Autoría sin registrar')} · {photo.licenseUrl ? <a href={photo.licenseUrl} rel="license">{photo.license}</a> : t('Guide archive','Archivo de la guía')}
-        {'representative' in photo && <> · {t('Representative photo','Foto de referencia')} · {photo.location}</>}</p>
+        {photo.source && <p><a href={photo.source}>{t('Photo source','Fuente de la foto')}</a> · {photo.credit || t('Photographer unrecorded','Autoría sin registrar')} · {photo.licenseUrl ? <a href={photo.licenseUrl} rel="license">{photo.license}</a> : t('Guide archive','Archivo de la guía')}
+        {photo.representative && <> · {t('Representative photo','Foto de referencia')} · {riverPhotoLocation(photo, spanish)}</>}</p>}
+        {photo.description && <p>{photo.description}</p>}
       </section>;
     })}
   </article>

@@ -71,7 +71,14 @@ assert.match(esHome, /<html lang="es"/);
 assert.match(esHome, /Ríos populares/);
 assert.match(esHome, /🇨🇱/);
 assert.match(esHome, /href="\/es\/region\/"/);
-for (const file of files.filter((file) => file.endsWith('.html') && !file.startsWith('es/'))) {
+const oldTeacups = '22-teacups-22-tazas-rio-claro';
+const currentTeacups = '22-teacups-rio-claro';
+for (const prefix of ['', 'es/']) {
+  assert.ok(redirects.includes(`/${prefix}${oldTeacups}/ /${prefix}${currentTeacups}/ 301`), 'Expected legacy Teacups redirect');
+  assert.ok(read(`${prefix}${oldTeacups}/index.html`).includes(`content="0;url=/${prefix}${currentTeacups}/"`), 'Expected static Teacups fallback redirect');
+  assert.match(read(`${prefix}${currentTeacups}/index.html`), /hreflang="es"/);
+}
+for (const file of files.filter((file) => file.endsWith('.html') && !file.startsWith('es/') && file !== `${oldTeacups}/index.html`)) {
   const translated = read(file === '404.html' ? 'es/404/index.html' : 'es/' + file);
   assert.match(translated, /hreflang="es"/, file);
   assert.doesNotMatch(translated, /ZXQ\d|QXZ/, file);

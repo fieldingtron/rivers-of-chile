@@ -3,12 +3,13 @@ import { languages, languageForPath, languagePrefix } from '../../lib/languages'
 import { taxonomyName, localizedBodyLinks } from '../../lib/spanish';
 import { publicSlug, guideHeading, guideLinks, guideDescription } from '../../lib/guide-seo';
 import { reviewedEnglishLinks } from '../../lib/reviewed-links.mjs';
+import { formatFirstDescents } from '../../lib/first-descents.mjs';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RegionMap from '../../components/RegionMap.astro';
 import VisitorForm from '../../components/VisitorForm.astro';
 import Comments from '../../components/Comments.astro';
 import RiverFeaturedPhoto from '../../components/RiverFeaturedPhoto.astro';
-import { riverPhoto } from '../../lib/river-photos';
+import { riverPhoto, riverPhotoAlt } from '../../lib/river-photos';
 import RiverCards from '../../components/RiverCards.astro';
 import { relatedGuides } from '../../lib/related-guides';
 import { pageDate } from '../../lib/page-date';
@@ -40,6 +41,14 @@ export async function getStaticPaths() {
         props: { type, item, related: type === 'post' && (item as PostItem).kind === 'river' ? relatedGuides(item as PostItem, rivers) : undefined, comments: comments.filter(c => c[type]?.slug === item.slug) }
       });
     }
+    const history = paths.find(({ props }) => props.type === 'page' && props.item.slug === 'history-of-first-descents');
+    if (history) {
+      history.props.descentGuidePaths = new Map<string, string>(paths.flatMap(({ params, props }) =>
+        props.type === 'post' && (props.item as PostItem).kind === 'river'
+          ? [[props.item.slug, `${prefix}/${params.slug}/`]]
+          : []
+      ));
+    }
     return paths;
   }));
   return routes.flat();
@@ -50,12 +59,13 @@ interface Props {
   item: PostItem | PageItem;
   comments: CommentItem[];
   related?: ReturnType<typeof relatedGuides>;
+  descentGuidePaths?: Map<string, string>;
 }
 
 const language = languageForPath(Astro.url.pathname);
 const prefix = languagePrefix(language);
 const es = language === 'es';
-const { type, item, comments, related } = Astro.props;
+const { type, item, comments, related, descentGuidePaths } = Astro.props;
 const post = type === 'post' ? (item as PostItem) : null;
 const categories = post ? await getCategories(es) : [];
 const catNames = post
@@ -78,11 +88,13 @@ const title = post?.kind === 'river'
   ? (es ? heading + ' — Guía de kayak' : heading + ' kayaking guide')
   : isRiverMap ? heading : legacyTitle || heading;
 const images = loadImageManifest();
-const selection = post?.kind === 'river' ? riverPhoto(post.slug) : undefined;
+const selection = post?.kind === 'river' ? riverPhoto(post) : undefined;
 const featured = post?.featured_image_url || undefined;
-const image = featuredImageUrl(images, featured) || featured || undefined;
+const image = selection?.image || featuredImageUrl(images, featured) || featured || undefined;
 const preparedBody = prepareArticleImages(rewriteDirectusAssets(item.content || '', publicBase(images)), images);
 const body = item.slug === 'contact-us' ? '' : localizedBodyLinks(preparedBody, prefix);
+const linkedBody = es ? guideLinks(body) : reviewedEnglishLinks(guideLinks(body), item.slug);
+const articleBody = descentGuidePaths ? formatFirstDescents(linkedBody, descentGuidePaths) : linkedBody;
 const featuredAsset = featured ? assetFor(images, featured) : undefined;
 const featuredDisplay = featuredAsset ? pickDisplay(featuredAsset) : undefined;
 const featuredAlreadyInBody = !!(featuredAsset?.variants || []).some((v: { key?: string }) => {
@@ -100,7 +112,7 @@ const article = post && {
   headline: heading,
   description,
   inLanguage: language,
-  image: image || undefined,
+  image: image ? new URL(image, Astro.site).href : undefined,
   author: post.author_name ? { '@type': 'Person', name: authorLabel(post.author_name) } : undefined,
   publisher: { '@type': 'Organization', name: 'Rivers of Chile' },
   datePublished: post.published_at || undefined,
@@ -114,6 +126,7 @@ const article = post && {
   description={description}
   type={type === 'post' ? 'article' : 'website'}
   image={image}
+  imageAlt={selection ? riverPhotoAlt(selection, es) : undefined}
 >
   {article && <script type="application/ld+json" set:html={JSON.stringify(article).replace(/</g, '\\u003c')} />}
   <article class="prose">
@@ -155,7 +168,7 @@ const article = post && {
       </figure>
     )}
     {post?.kind === 'river' && body.trim() && <h2 class="run-heading">{es ? 'El recorrido' : 'The run'}</h2>}
-    {isRiverMap ? <RegionMap /> : <div class="article-body" set:html={es ? guideLinks(body) : reviewedEnglishLinks(guideLinks(body), item.slug)} />}
+    {isRiverMap ? <RegionMap /> : <div class:list={['article-body', { 'first-descents': descentGuidePaths }]} set:html={articleBody} />}
     {related && <div class="related-rivers">
       {related.nearby.length > 0 && <section>
         <h2>{es ? 'Más ríos de la región' : 'More rivers in this region'}</h2>
@@ -184,3 +197,20 @@ const article = post && {
   </article>
   {!openLinksInNewWindow && <Lightbox />}
 </BaseLayout>
+
+<style>
+  .first-descents > :global(hr) {
+    border: 0;
+    border-block-start: 1px solid var(--line);
+    margin: 1.25rem 0;
+  }
+
+  .first-descents :global(.descent-entry > h3) {
+    font-size: var(--step-1);
+    margin: 0 0 0.4rem;
+  }
+
+  .first-descents :global(.descent-entry > p:last-child) {
+    margin-bottom: 0;
+  }
+</style>

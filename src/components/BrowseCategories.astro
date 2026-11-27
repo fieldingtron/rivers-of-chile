@@ -27,9 +27,12 @@ const details: Record<string, string> = {
 };
 const used = new Set<string>();
 const cards = groups.map(({category, members}) => {
-  const cover = members.find(p => !used.has(p.slug) && riverPhoto(p.slug) && !('representative' in riverPhoto(p.slug)!)) || members[0];
+  const cover = members.find(p => {
+    const photo = riverPhoto(p);
+    return !used.has(p.slug) && photo && !photo.representative;
+  }) || members[0];
   used.add(cover.slug);
-  return {category, total:members.length, place: by === 'region' ? regionLabel(cover) : null, image:riverPhoto(cover.slug)?.listing};
+  return {category, total:members.length, place: by === 'region' ? regionLabel(cover) : null, image:riverPhoto(cover)?.listing};
 });
 ---
 <BaseLayout title={title} description={description}>

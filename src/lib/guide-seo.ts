@@ -1,6 +1,7 @@
 import { decodeHTML } from 'entities';
 
 const slugs: Record<string, string> = {
+  "22-teacups-22-tazas-rio-claro": "22-teacups-rio-claro",
   "rio-laja-2": "rio-laja-salto-las-chilcas",
   "rio-claro-tinguiririca-2": "rio-claro-puente-las-pinas"
 };

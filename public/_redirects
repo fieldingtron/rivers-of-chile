@@ -1,3 +1,7 @@
+/22-teacups-22-tazas-rio-claro /22-teacups-rio-claro/ 301
+/22-teacups-22-tazas-rio-claro/ /22-teacups-rio-claro/ 301
+/es/22-teacups-22-tazas-rio-claro /es/22-teacups-rio-claro/ 301
+/es/22-teacups-22-tazas-rio-claro/ /es/22-teacups-rio-claro/ 301
 # Site redirects. Edit these rules in the repository.
 
 /river/rio-macae /rio-macae/ 301
@@ -151,7 +155,7 @@
 /river/rio-llancahue /rio-llancahue/ 301
 /river/rio-nevado /rio-nevado/ 301
 /river/rio-plata /rio-plata/ 301
-/river/22-teacups-22-tazas-rio-claro /22-teacups-22-tazas-rio-claro/ 301
+/river/22-teacups-22-tazas-rio-claro /22-teacups-rio-claro/ 301
 /river/rio-desague /rio-desague/ 301
 /river/rio-turbio /rio-turbio/ 301
 /river/rio-melado /rio-melado/ 301
@@ -175,8 +179,8 @@
 /river/rio-claro-tinguiririca-2/ /rio-claro-puente-las-pinas/ 301
 
 # Retired WordPress and Astro tag archives
-/es/tag/22-falls /es/22-teacups-22-tazas-rio-claro/ 301
-/es/tag/22-falls/ /es/22-teacups-22-tazas-rio-claro/ 301
+/es/tag/22-falls /es/22-teacups-rio-claro/ 301
+/es/tag/22-falls/ /es/22-teacups-rio-claro/ 301
 /es/tag/89 /es/rio-azul/ 301
 /es/tag/89/ /es/rio-azul/ 301
 /es/tag/blanco-de-coihueco /es/rio-blanco-de-coihueco/ 301
@@ -293,8 +297,8 @@
 /es/tag/rio-blanco/ /es/rio-blanco-hornopiren/ 301
 /es/tag/rio-clarillo /es/rio-clarillo/ 301
 /es/tag/rio-clarillo/ /es/rio-clarillo/ 301
-/es/tag/rio-claro-22-saltos /es/22-teacups-22-tazas-rio-claro/ 301
-/es/tag/rio-claro-22-saltos/ /es/22-teacups-22-tazas-rio-claro/ 301
+/es/tag/rio-claro-22-saltos /es/22-teacups-rio-claro/ 301
+/es/tag/rio-claro-22-saltos/ /es/22-teacups-rio-claro/ 301
 /es/tag/rio-cochamo /es/rio-cochamo/ 301
 /es/tag/rio-cochamo/ /es/rio-cochamo/ 301
 /es/tag/rio-coihueco /es/rio-coihueco/ 301
@@ -385,8 +389,8 @@
 /es/tag/whitewater-guide /es/rivers/ 301
 /es/tag/whitewater-guide/ /es/rivers/ 301
 /es/tag/whitewater/ /es/rivers/ 301
-/tag/22-falls /22-teacups-22-tazas-rio-claro/ 301
-/tag/22-falls/ /22-teacups-22-tazas-rio-claro/ 301
+/tag/22-falls /22-teacups-rio-claro/ 301
+/tag/22-falls/ /22-teacups-rio-claro/ 301
 /tag/89 /rio-azul/ 301
 /tag/89/ /rio-azul/ 301
 /tag/blanco-de-coihueco /rio-blanco-de-coihueco/ 301
@@ -503,8 +507,8 @@
 /tag/rio-blanco/ /rio-blanco-hornopiren/ 301
 /tag/rio-clarillo /rio-clarillo/ 301
 /tag/rio-clarillo/ /rio-clarillo/ 301
-/tag/rio-claro-22-saltos /22-teacups-22-tazas-rio-claro/ 301
-/tag/rio-claro-22-saltos/ /22-teacups-22-tazas-rio-claro/ 301
+/tag/rio-claro-22-saltos /22-teacups-rio-claro/ 301
+/tag/rio-claro-22-saltos/ /22-teacups-rio-claro/ 301
 /tag/rio-cochamo /rio-cochamo/ 301
 /tag/rio-cochamo/ /rio-cochamo/ 301
 /tag/rio-coihueco /rio-coihueco/ 301
